@@ -1,0 +1,16 @@
+baseURL = 'https://johnmakarov.github.io/victors-blog/'
+languageCode = 'en-us'
+title = ''
+theme = 'my-blog-theme'
+
+[markup]
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+    ordered = false 
+  [markup.highlight]
+    style = "dracula"
+    lineNos = false
+    noClasses = true
+    tabWidth = 4
+    

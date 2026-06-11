@@ -1,0 +1,40 @@
+{{ define "main" }}
+  <div class="posts-header">
+    <span>Дата</span>
+    <span>Название</span>
+    <span>Состав</span>
+  </div>
+  
+  <div class="posts-container">
+    <div class="post-item">
+      <div class="post-data">{{ .Date.Format "02.01.2006" }}</div>
+      <h1>{{ .LinkTitle }}</h1>
+      
+      <div class="post-content">
+        {{ .Content }}
+      </div>
+
+      <div class="post-composition">
+        <nav class="toc-nav">
+          {{ .TableOfContents }}
+        </nav>
+      </div>
+    </div>
+  </div>
+
+<div class="read-more-container">
+    <h3 class="read-more-header">Читать ещё</h3>
+    <div class="read-more-posts">
+        {{ $allPosts := where .Site.RegularPages "Section" "posts" }}
+        {{ $randomPosts := $allPosts | shuffle | first 3 }}
+        {{ range $randomPosts }}
+            {{ if ne .RelPermalink $.RelPermalink }}
+            <a href="{{ .RelPermalink }}" class="read-more-post">
+                <div class="post-data">{{ .Date.Format "02.01.2006" }}</div>
+                <h4>{{ .Title }}</h4>
+            </a>
+            {{ end }}
+        {{ end }}
+    </div>
+</div>
+{{ end }}

@@ -1,0 +1,62 @@
+- generic [active] [ref=f27e1]:
+  - banner [ref=f27e2]:
+    - generic [ref=f27e3]:
+      - link "Telegram" [ref=f27e4] [cursor=pointer]:
+        - /url: https://t.me/spoon_of_quality/12
+      - link "Обо мне" [ref=f27e5] [cursor=pointer]:
+        - /url: /victors-blog/posts/about-me
+      - link "Еще одна кнопка" [ref=f27e6] [cursor=pointer]:
+        - /url: https://t.me/spoon_of_quality/12
+  - main [ref=f27e7]:
+    - generic [ref=f27e8]:
+      - generic [ref=f27e9]: Дата
+      - generic [ref=f27e10]: Название
+      - generic [ref=f27e11]: Чтение
+    - generic [ref=f27e12]:
+      - 'link "01.04.2026 Видим ошибку в консоли -> роняем тест новое import pytest from ui.core import browser from playwright.sync_api import ConsoleMessage import re @pytest.fixture(scope=&#34;function&#34;, autouse=True) def capture_console(): console_messages = [] … 1 мин" [ref=f27e13] [cursor=pointer]':
+        - /url: /victors-blog/posts/fail-test-when-see-error-in-console/
+        - generic [ref=f27e14]: 01.04.2026
+        - generic [ref=f27e15]:
+          - generic [ref=f27e16]:
+            - heading "Видим ошибку в консоли -> роняем тест" [level=2] [ref=f27e17]
+            - generic [ref=f27e18]: новое
+          - generic [ref=f27e19]: "import pytest from ui.core import browser from playwright.sync_api import ConsoleMessage import re @pytest.fixture(scope=&#34;function&#34;, autouse=True) def capture_console(): console_messages = [] …"
+        - generic [ref=f27e20]: 1 мин
+      - link "29.03.2026 Автоматическое логгирование шагов в Playwright Playwright - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Playwright. Пилим фикстурку Пишем тест … 1 мин" [ref=f27e22] [cursor=pointer]:
+        - /url: /victors-blog/posts/auto-logging-in-playwright/
+        - generic [ref=f27e23]: 29.03.2026
+        - generic [ref=f27e24]:
+          - heading "Автоматическое логгирование шагов в Playwright" [level=2] [ref=f27e26]
+          - generic [ref=f27e27]: Playwright - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Playwright. Пилим фикстурку Пишем тест …
+        - generic [ref=f27e28]: 1 мин
+      - link "29.03.2026 Автоматическое логгирование шагов в Selene Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Selene. Пилим фикстурку Пишем тест Запускаем … 1 мин" [ref=f27e30] [cursor=pointer]:
+        - /url: /victors-blog/posts/auto-logging-in-selene/
+        - generic [ref=f27e31]: 29.03.2026
+        - generic [ref=f27e32]:
+          - heading "Автоматическое логгирование шагов в Selene" [level=2] [ref=f27e34]
+          - generic [ref=f27e35]: Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Selene. Пилим фикстурку Пишем тест Запускаем …
+        - generic [ref=f27e36]: 1 мин
+      - link "29.03.2026 Достаем все возможные данные из faker Пишем код Используем Будет дополнено. 1 мин" [ref=f27e38] [cursor=pointer]:
+        - /url: /victors-blog/posts/get-all-data-from-faker/
+        - generic [ref=f27e39]: 29.03.2026
+        - generic [ref=f27e40]:
+          - heading "Достаем все возможные данные из faker" [level=2] [ref=f27e42]
+          - generic [ref=f27e43]: Пишем код Используем Будет дополнено.
+        - generic [ref=f27e44]: 1 мин
+      - link "29.03.2026 Разные envs под разные окружения Ставим зависимости Создаем .env файлы В .env.stage кладем В .env.prod кладем Описываем класс Settings Пишем фикстурку для получения данных Пишем тест Запускаем Будет дополнено. 1 мин" [ref=f27e46] [cursor=pointer]:
+        - /url: /victors-blog/posts/different-envs/
+        - generic [ref=f27e47]: 29.03.2026
+        - generic [ref=f27e48]:
+          - heading "Разные envs под разные окружения" [level=2] [ref=f27e50]
+          - generic [ref=f27e51]: Ставим зависимости Создаем .env файлы В .env.stage кладем В .env.prod кладем Описываем класс Settings Пишем фикстурку для получения данных Пишем тест Запускаем Будет дополнено.
+        - generic [ref=f27e52]: 1 мин
+  - contentinfo [ref=f27e54]:
+    - contentinfo [ref=f27e55]:
+      - generic [ref=f27e56]:
+        - link "Telegram" [ref=f27e57] [cursor=pointer]:
+          - /url: https://t.me/spoon_of_quality/12
+        - link "Обо мне" [ref=f27e58] [cursor=pointer]:
+          - /url: /victors-blog/posts/about-me
+        - link "Вверх!" [ref=f27e59] [cursor=pointer]:
+          - /url: "#"
+      - paragraph [ref=f27e61]: "2026"

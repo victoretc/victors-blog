@@ -1,0 +1,53 @@
+- generic [active] [ref=f28e1]:
+  - banner [ref=f28e2]:
+    - generic [ref=f28e3]:
+      - link "Telegram" [ref=f28e4] [cursor=pointer]:
+        - /url: https://t.me/spoon_of_quality/12
+      - link "Обо мне" [ref=f28e5] [cursor=pointer]:
+        - /url: /victors-blog/posts/about-me
+      - link "Еще одна кнопка" [ref=f28e6] [cursor=pointer]:
+        - /url: https://t.me/spoon_of_quality/12
+  - main [ref=f28e7]:
+    - generic [ref=f28e8]:
+      - 'link "01.04.2026 Видим ошибку в консоли -> роняем тест новое import pytest from ui.core import browser from playwright.sync_api import ConsoleMessage import re @pytest.fixture(scope=&#34;function&#34;, autouse=True) def capture_console(): console_messages = [] …" [ref=f28e9] [cursor=pointer]':
+        - /url: /victors-blog/posts/fail-test-when-see-error-in-console/
+        - generic [ref=f28e10]: 01.04.2026
+        - generic [ref=f28e11]:
+          - generic [ref=f28e12]:
+            - heading "Видим ошибку в консоли -> роняем тест" [level=2] [ref=f28e13]
+            - generic [ref=f28e14]: новое
+          - generic [ref=f28e15]: "import pytest from ui.core import browser from playwright.sync_api import ConsoleMessage import re @pytest.fixture(scope=&#34;function&#34;, autouse=True) def capture_console(): console_messages = [] …"
+      - link "29.03.2026 Автоматическое логгирование шагов в Playwright Playwright - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Playwright. Пилим фикстурку Пишем тест …" [ref=f28e16] [cursor=pointer]:
+        - /url: /victors-blog/posts/auto-logging-in-playwright/
+        - generic [ref=f28e17]: 29.03.2026
+        - generic [ref=f28e18]:
+          - heading "Автоматическое логгирование шагов в Playwright" [level=2] [ref=f28e20]
+          - generic [ref=f28e21]: Playwright - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Playwright. Пилим фикстурку Пишем тест …
+      - link "29.03.2026 Автоматическое логгирование шагов в Selene Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Selene. Пилим фикстурку Пишем тест Запускаем …" [ref=f28e22] [cursor=pointer]:
+        - /url: /victors-blog/posts/auto-logging-in-selene/
+        - generic [ref=f28e23]: 29.03.2026
+        - generic [ref=f28e24]:
+          - heading "Автоматическое логгирование шагов в Selene" [level=2] [ref=f28e26]
+          - generic [ref=f28e27]: Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Selene. Пилим фикстурку Пишем тест Запускаем …
+      - link "29.03.2026 Достаем все возможные данные из faker Пишем код Используем Будет дополнено." [ref=f28e28] [cursor=pointer]:
+        - /url: /victors-blog/posts/get-all-data-from-faker/
+        - generic [ref=f28e29]: 29.03.2026
+        - generic [ref=f28e30]:
+          - heading "Достаем все возможные данные из faker" [level=2] [ref=f28e32]
+          - generic [ref=f28e33]: Пишем код Используем Будет дополнено.
+      - link "29.03.2026 Разные envs под разные окружения Ставим зависимости Создаем .env файлы В .env.stage кладем В .env.prod кладем Описываем класс Settings Пишем фикстурку для получения данных Пишем тест Запускаем Будет дополнено." [ref=f28e34] [cursor=pointer]:
+        - /url: /victors-blog/posts/different-envs/
+        - generic [ref=f28e35]: 29.03.2026
+        - generic [ref=f28e36]:
+          - heading "Разные envs под разные окружения" [level=2] [ref=f28e38]
+          - generic [ref=f28e39]: Ставим зависимости Создаем .env файлы В .env.stage кладем В .env.prod кладем Описываем класс Settings Пишем фикстурку для получения данных Пишем тест Запускаем Будет дополнено.
+  - contentinfo [ref=f28e40]:
+    - contentinfo [ref=f28e41]:
+      - generic [ref=f28e42]:
+        - link "Telegram" [ref=f28e43] [cursor=pointer]:
+          - /url: https://t.me/spoon_of_quality/12
+        - link "Обо мне" [ref=f28e44] [cursor=pointer]:
+          - /url: /victors-blog/posts/about-me
+        - link "Вверх!" [ref=f28e45] [cursor=pointer]:
+          - /url: "#"
+      - paragraph [ref=f28e47]: "2026"

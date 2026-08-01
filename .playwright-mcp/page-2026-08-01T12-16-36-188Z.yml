@@ -1,0 +1,72 @@
+- generic [active] [ref=f17e1]:
+  - banner [ref=f17e2]:
+    - generic [ref=f17e3]:
+      - link "На главную" [ref=f17e4] [cursor=pointer]:
+        - /url: /victors-blog/
+      - link "Telegram" [ref=f17e5] [cursor=pointer]:
+        - /url: https://t.me/spoon_of_quality/12
+      - link "Обо мне" [ref=f17e6] [cursor=pointer]:
+        - /url: /victors-blog/posts/about-me
+  - main [ref=f17e7]:
+    - generic [ref=f17e8]:
+      - generic [ref=f17e9]: Дата
+      - generic [ref=f17e10]: Название
+      - generic [ref=f17e11]: Состав
+    - generic [ref=f17e13]:
+      - generic [ref=f17e14]: 01.04.2026
+      - heading "Видим ошибку в консоли -> роняем тест" [level=2] [ref=f17e15]
+      - code [ref=f17e19]:
+        - generic [ref=f17e20]: import pytest
+        - generic [ref=f17e22]: from ui.core import browser
+        - generic [ref=f17e24]: from playwright.sync_api import ConsoleMessage
+        - generic [ref=f17e26]: import re
+        - generic [ref=f17e30]: "@pytest.fixture(scope=\"function\", autouse=True)"
+        - generic [ref=f17e32]: "def capture_console():"
+        - generic [ref=f17e34]: console_messages = []
+        - generic [ref=f17e37]: "def on_console(msg: ConsoleMessage):"
+        - generic [ref=f17e39]: console_messages.append(msg)
+        - generic [ref=f17e42]: browser.page.on("console", on_console)
+        - generic [ref=f17e45]: yield
+        - generic [ref=f17e48]: check_console_errors(console_messages)
+        - generic [ref=f17e52]: CONSOLE_ERROR_EXCEPTIONS = []
+        - generic [ref=f17e56]: "def check_console_errors(console_messages: list[ConsoleMessage] | None):"
+        - generic [ref=f17e58]: "if console_messages:"
+        - generic [ref=f17e60]: errors = [msg for msg in console_messages if msg.type.lower() == "error"]
+        - generic [ref=f17e63]: "if not errors:"
+        - generic [ref=f17e65]: return None
+        - generic [ref=f17e68]: "for error in errors:"
+        - generic [ref=f17e70]: if not any(
+        - generic [ref=f17e72]: re.search(pattern, error.text, re.IGNORECASE)
+        - generic [ref=f17e74]: for pattern in CONSOLE_ERROR_EXCEPTIONS
+        - generic [ref=f17e76]: "):"
+        - generic [ref=f17e78]: pytest.fail(
+        - generic [ref=f17e80]: "f\"Обнаружена ошибка в консоли браузера ({error})\""
+        - generic [ref=f17e82]: )
+      - generic [ref=f17e84]:
+        - navigation:
+          - navigation
+    - generic [ref=f17e85]:
+      - heading "Читать ещё" [level=3] [ref=f17e86]
+      - generic [ref=f17e87]:
+        - link "29.03.2026 Разные envs под разные окружения" [ref=f17e88] [cursor=pointer]:
+          - /url: /victors-blog/posts/different-envs/
+          - generic [ref=f17e89]: 29.03.2026
+          - heading "Разные envs под разные окружения" [level=4] [ref=f17e90]
+        - link "29.03.2026 Автоматическое логгирование шагов в Selene" [ref=f17e91] [cursor=pointer]:
+          - /url: /victors-blog/posts/auto-logging-in-selene/
+          - generic [ref=f17e92]: 29.03.2026
+          - heading "Автоматическое логгирование шагов в Selene" [level=4] [ref=f17e93]
+        - link "29.03.2026 Достаем все возможные данные из faker" [ref=f17e94] [cursor=pointer]:
+          - /url: /victors-blog/posts/get-all-data-from-faker/
+          - generic [ref=f17e95]: 29.03.2026
+          - heading "Достаем все возможные данные из faker" [level=4] [ref=f17e96]
+  - contentinfo [ref=f17e97]:
+    - contentinfo [ref=f17e98]:
+      - generic [ref=f17e99]:
+        - link "Telegram" [ref=f17e100] [cursor=pointer]:
+          - /url: https://t.me/spoon_of_quality/12
+        - link "Обо мне" [ref=f17e101] [cursor=pointer]:
+          - /url: /victors-blog/posts/about-me
+        - link "Вверх!" [ref=f17e102] [cursor=pointer]:
+          - /url: "#"
+      - paragraph [ref=f17e104]: "2026"

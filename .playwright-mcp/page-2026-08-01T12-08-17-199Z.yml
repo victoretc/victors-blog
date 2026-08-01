@@ -1,0 +1,52 @@
+- generic [active] [ref=f11e1]:
+  - banner [ref=f11e2]:
+    - heading "Victor" [level=1] [ref=f11e3]
+    - generic [ref=f11e4]:
+      - link "Telegram" [ref=f11e5] [cursor=pointer]:
+        - /url: https://t.me/spoon_of_quality/12
+      - link "Обо мне" [ref=f11e6] [cursor=pointer]:
+        - /url: /victors-blog/posts/about-me
+      - link "Еще одна кнопка" [ref=f11e7] [cursor=pointer]:
+        - /url: https://t.me/spoon_of_quality/12
+  - main [ref=f11e8]:
+    - generic [ref=f11e9]:
+      - link "01.04.2026 Видим ошибку в консоли -> роняем тест Фикстурка, которая ловит ошибки в консоли браузера и роняет тест." [ref=f11e10] [cursor=pointer]:
+        - /url: /victors-blog/posts/fail-test-when-see-error-in-console/
+        - generic [ref=f11e11]: 01.04.2026
+        - generic [ref=f11e12]:
+          - heading "Видим ошибку в консоли -> роняем тест" [level=2] [ref=f11e13]
+          - generic [ref=f11e14]: Фикстурка, которая ловит ошибки в консоли браузера и роняет тест.
+      - 'link "29.03.2026 Автоматическое логгирование шагов в Playwright Рецепт автоматического логгирования шагов в Playwright: разбираем trace и прикладываем список шагов в Allure." [ref=f11e15] [cursor=pointer]':
+        - /url: /victors-blog/posts/auto-logging-in-playwright/
+        - generic [ref=f11e16]: 29.03.2026
+        - generic [ref=f11e17]:
+          - heading "Автоматическое логгирование шагов в Playwright" [level=2] [ref=f11e18]
+          - generic [ref=f11e19]: "Рецепт автоматического логгирования шагов в Playwright: разбираем trace и прикладываем список шагов в Allure."
+      - 'link "29.03.2026 Автоматическое логгирование шагов в Selene Рецепт автоматического логгирования шагов в Selene: настраиваем wait_decorator и получаем шаги в Allure." [ref=f11e20] [cursor=pointer]':
+        - /url: /victors-blog/posts/auto-logging-in-selene/
+        - generic [ref=f11e21]: 29.03.2026
+        - generic [ref=f11e22]:
+          - heading "Автоматическое логгирование шагов в Selene" [level=2] [ref=f11e23]
+          - generic [ref=f11e24]: "Рецепт автоматического логгирования шагов в Selene: настраиваем wait_decorator и получаем шаги в Allure."
+      - 'link "29.03.2026 Достаем все возможные данные из faker Собираем все возможные данные из faker: перебираем провайдеры и их методы." [ref=f11e25] [cursor=pointer]':
+        - /url: /victors-blog/posts/get-all-data-from-faker/
+        - generic [ref=f11e26]: 29.03.2026
+        - generic [ref=f11e27]:
+          - heading "Достаем все возможные данные из faker" [level=2] [ref=f11e28]
+          - generic [ref=f11e29]: "Собираем все возможные данные из faker: перебираем провайдеры и их методы."
+      - 'link "29.03.2026 Разные envs под разные окружения Держим разные настройки для разных окружений: .env файлы, pydantic-settings и pytest-фикстура." [ref=f11e30] [cursor=pointer]':
+        - /url: /victors-blog/posts/different-envs/
+        - generic [ref=f11e31]: 29.03.2026
+        - generic [ref=f11e32]:
+          - heading "Разные envs под разные окружения" [level=2] [ref=f11e33]
+          - generic [ref=f11e34]: "Держим разные настройки для разных окружений: .env файлы, pydantic-settings и pytest-фикстура."
+  - contentinfo [ref=f11e35]:
+    - contentinfo [ref=f11e36]:
+      - generic [ref=f11e37]:
+        - link "Telegram" [ref=f11e38] [cursor=pointer]:
+          - /url: https://t.me/spoon_of_quality/12
+        - link "Обо мне" [ref=f11e39] [cursor=pointer]:
+          - /url: /victors-blog/posts/about-me
+        - link "Вверх!" [ref=f11e40] [cursor=pointer]:
+          - /url: "#"
+      - paragraph [ref=f11e42]: "2026"

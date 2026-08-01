@@ -19,7 +19,7 @@
 </head>
 <body>
   <header>
-    <h1></h1>
+    
 
 <div class="header-container">
   
@@ -34,61 +34,96 @@
     
   
 
-  <div class="posts-header">
+  <div class="posts-header posts-header--list">
     <span>Дата</span>
     <span>Название</span>
+    <span class="posts-header-right">Чтение</span>
   </div>
 
   <div class="posts-container">
     
-      <a href="/victors-blog/posts/fail-test-when-see-error-in-console/" class="post-item">
+    
+      <a href="/victors-blog/posts/fail-test-when-see-error-in-console/" class="post-item post-item--list">
         <div class="post-data">01.04.2026</div>
-        <h1>Видим ошибку в консоли -&gt; роняем тест</h1>
-        <div class="post-content">
-          import pytest from ui.core import browser from playwright.sync_api import ConsoleMessage import re @pytest.fixture(scope=&amp;#34;function&amp;#34;, autouse=True) def capture_console(): console_messages = [] …
+        <div class="post-body">
+          <h2>Видим ошибку в консоли -&gt; роняем тест</h2>
+          <div class="post-content">
+            import pytest from ui.core import browser from playwright.sync_api import ConsoleMessage import re @pytest.fixture(scope=&amp;#34;function&amp;#34;, autouse=True) def capture_console(): console_messages = [] …
+          </div>
+        </div>
+        <div class="post-meta">
+          <span class="post-reading-time">1 мин</span>
         </div>
       </a>
     
-      <a href="/victors-blog/posts/about-me/" class="post-item">
+      <a href="/victors-blog/posts/about-me/" class="post-item post-item--list">
         <div class="post-data">31.03.2026</div>
-        <h1>Обо мне</h1>
-        <div class="post-content">
-          Основное QA Engineer с 5-летним опытом в автоматизации тестирования. Специализируюсь на внедрении автотестов и оптимизации процессов тестирования. Имею опыт работы в качестве единственного …
+        <div class="post-body">
+          <h2>Обо мне</h2>
+          <div class="post-content">
+            Тестировщик Тестировщик Тестировщик Тестировщик Тестировщик Тестировщик Тестировщик Тестировщик Тестировщик Тестировщик Тестировщик 
+          </div>
+        </div>
+        <div class="post-meta">
+          <span class="post-reading-time">1 мин</span>
         </div>
       </a>
     
-      <a href="/victors-blog/posts/auto-logging-in-playwright/" class="post-item">
+      <a href="/victors-blog/posts/auto-logging-in-playwright/" class="post-item post-item--list">
         <div class="post-data">29.03.2026</div>
-        <h1>Автоматическое логгирование шагов в Playwright</h1>
-        <div class="post-content">
-          Playwright - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Playwright.
-Пилим фикстурку import json …
+        <div class="post-body">
+          <h2>Автоматическое логгирование шагов в Playwright</h2>
+          <div class="post-content">
+            Playwright - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Playwright.
+Пилим фикстурку Пишем тест …
+          </div>
+        </div>
+        <div class="post-meta">
+          <span class="post-reading-time">1 мин</span>
         </div>
       </a>
     
-      <a href="/victors-blog/posts/auto-logging-in-selene/" class="post-item">
+      <a href="/victors-blog/posts/auto-logging-in-selene/" class="post-item post-item--list">
         <div class="post-data">29.03.2026</div>
-        <h1>Автоматическое логгирование шагов в Selene</h1>
-        <div class="post-content">
-          Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Selene.
-Пилим фикстурку import pytest import …
+        <div class="post-body">
+          <h2>Автоматическое логгирование шагов в Selene</h2>
+          <div class="post-content">
+            Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Selene.
+Пилим фикстурку Пишем тест Запускаем …
+          </div>
+        </div>
+        <div class="post-meta">
+          <span class="post-reading-time">1 мин</span>
         </div>
       </a>
     
-      <a href="/victors-blog/posts/get-all-data-from-faker/" class="post-item">
+      <a href="/victors-blog/posts/get-all-data-from-faker/" class="post-item post-item--list">
         <div class="post-data">29.03.2026</div>
-        <h1>Достаем все возможные данные из faker</h1>
-        <div class="post-content">
-          Пишем код from importlib import import_module from typing import Type from types import FunctionType import pkgutil from faker.providers import company, person import inspect from faker import Faker …
+        <div class="post-body">
+          <h2>Достаем все возможные данные из faker</h2>
+          <div class="post-content">
+            Пишем код Используем Будет дополнено.
+
+          </div>
+        </div>
+        <div class="post-meta">
+          <span class="post-reading-time">1 мин</span>
         </div>
       </a>
     
-      <a href="/victors-blog/posts/different-envs/" class="post-item">
+      <a href="/victors-blog/posts/different-envs/" class="post-item post-item--list">
         <div class="post-data">29.03.2026</div>
-        <h1>Разные envs под разные окружения</h1>
-        <div class="post-content">
-          Ставим зависимости poetry add pydantic-settings pytest-playwright Создаем .env файлы mkdir env touch env/.env.stage env/.env.prod В .env.stage кладем
-username=&amp;#34;standard_user&amp;#34; …
+        <div class="post-body">
+          <h2>Разные envs под разные окружения</h2>
+          <div class="post-content">
+            Ставим зависимости Создаем .env файлы В .env.stage кладем
+В .env.prod кладем
+Описываем класс Settings Пишем фикстурку для получения данных Пишем тест Запускаем Будет дополнено.
+
+          </div>
+        </div>
+        <div class="post-meta">
+          <span class="post-reading-time">1 мин</span>
         </div>
       </a>
     

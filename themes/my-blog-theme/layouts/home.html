@@ -1,18 +1,25 @@
 {{ define "main" }}
   {{ .Content }}
 
-  <div class="posts-header">
+  <div class="posts-header posts-header--list">
     <span>Дата</span>
     <span>Название</span>
+    <span class="posts-header-right">Чтение</span>
   </div>
 
   <div class="posts-container">
-    {{ range where site.RegularPages "Type" "posts" }}
-      <a href="{{ .RelPermalink }}" class="post-item">
-        <div class="post-data">{{ .Date.Format "02.01.2006" }}</div>
-        <h1>{{ .LinkTitle }}</h1>
-        <div class="post-content">
-          {{ .Plain | truncate 200 }}
+    {{ $posts := where site.RegularPages "Type" "posts" }}
+    {{ range $index, $post := $posts }}
+      <a href="{{ $post.RelPermalink }}" class="post-item post-item--list">
+        <div class="post-data">{{ $post.Date.Format "02.01.2006" }}</div>
+        <div class="post-body">
+          <h2>{{ $post.LinkTitle }}</h2>
+          <div class="post-content">
+            {{ partial "excerpt.html" $post }}
+          </div>
+        </div>
+        <div class="post-meta">
+          <span class="post-reading-time">{{ $post.ReadingTime }} мин</span>
         </div>
       </a>
     {{ end }}

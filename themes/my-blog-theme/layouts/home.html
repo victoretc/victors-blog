@@ -2,9 +2,9 @@
   {{ .Content }}
 
   <div class="posts-header posts-header--list">
-    <span>Дата</span>
-    <span>Название</span>
-    <span class="posts-header-right">Время на чтение</span>
+    <span>{{ i18n "date" }}</span>
+    <span>{{ i18n "title" }}</span>
+    <span class="posts-header-right">{{ i18n "reading_time" }}</span>
   </div>
 
   <div class="posts-container">
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="post-meta">
-          <span class="post-reading-time">{{ $post.ReadingTime }} мин</span>
+          <span class="post-reading-time">{{ $post.ReadingTime }} {{ i18n "minutes" $post.ReadingTime }}</span>
         </div>
       </a>
     {{ end }}

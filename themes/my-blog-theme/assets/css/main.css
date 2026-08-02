@@ -29,6 +29,51 @@ body {
 .about-button     { background: #FFC5C5; color: black; }
 .yet-button       { background: #FFFFC0; color: black; }
 
+.lang-switcher--term {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: #333;
+    margin-left: auto;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+.lang-switcher--term .term-sep { color: #ccc; }
+
+.lang-switcher--term a.term-opt,
+.lang-switcher--term span.term-opt {
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    font-size: 15px;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.4;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+.lang-switcher--term a.term-opt {
+    color: #2F6FED;
+    border-bottom: 1px dotted #2F6FED;
+}
+.lang-switcher--term a.term-opt:hover {
+    filter: none;
+    transform: none;
+    color: #1a4fc0;
+}
+.lang-switcher--term .term-opt--current {
+    color: #111;
+    font-weight: 700;
+    border-bottom: none;
+}
+
 .header-container a:hover {
     filter: brightness(0.95);
     transform: translateX(2px);

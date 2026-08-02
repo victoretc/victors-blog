@@ -1,0 +1,33 @@
+[home]
+other = "Home"
+
+[about]
+other = "About me"
+
+[another_button]
+other = "Another button"
+
+[back_to_top]
+other = "Back to top"
+
+[date]
+other = "Date"
+
+[title]
+other = "Title"
+
+[reading_time]
+other = "Reading time"
+
+[minutes]
+one = "minute"
+other = "minutes"
+
+[read_more]
+other = "Read more"
+
+[current_language]
+other = "You are reading in English"
+
+[switch_to]
+other = "Switch to"

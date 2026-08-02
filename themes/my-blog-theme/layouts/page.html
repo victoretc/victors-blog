@@ -1,8 +1,8 @@
 {{ define "main" }}
   <div class="posts-header">
-    <span>Дата</span>
-    <span>Название</span>
-    <span>Состав</span>
+    <span>{{ i18n "date" }}</span>
+    <span>{{ i18n "title" }}</span>
+    <span>{{ i18n "reading_time" }}</span>
   </div>
   
   <div class="posts-container">
@@ -23,7 +23,7 @@
   </div>
 
 <div class="read-more-container">
-    <h3 class="read-more-header">Читать ещё</h3>
+    <h3 class="read-more-header">{{ i18n "read_more" }}</h3>
     <div class="read-more-posts">
         {{ $allPosts := where .Site.RegularPages "Section" "posts" }}
         {{ $randomPosts := $allPosts | shuffle | first 3 }}

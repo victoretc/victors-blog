@@ -1,0 +1,35 @@
+[home]
+other = "На главную"
+
+[about]
+other = "Обо мне"
+
+[another_button]
+other = "Еще одна кнопка"
+
+[back_to_top]
+other = "Вверх!"
+
+[date]
+other = "Дата"
+
+[title]
+other = "Название"
+
+[reading_time]
+other = "Время на чтение"
+
+[minutes]
+one = "минута"
+few = "минуты"
+many = "минут"
+other = "минут"
+
+[read_more]
+other = "Читать ещё"
+
+[current_language]
+other = "Вы читаете на русском"
+
+[switch_to]
+other = "Переключиться на"

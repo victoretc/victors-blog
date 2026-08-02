@@ -19,6 +19,9 @@ other = "Title"
 [reading_time]
 other = "Reading time"
 
+[composition]
+other = "Contents"
+
 [minutes]
 one = "minute"
 other = "minutes"

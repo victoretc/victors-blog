@@ -19,6 +19,9 @@ other = "Название"
 [reading_time]
 other = "Время на чтение"
 
+[composition]
+other = "Состав"
+
 [minutes]
 one = "минута"
 few = "минуты"

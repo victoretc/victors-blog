@@ -24,6 +24,7 @@ Wrote this down for myself so it sits there handily.
 14. Inference
 15. LLM (a.k.a Large Language Model)
 
+AI = 
 
 Tools for evaluating LLM apps:
 1. https://docs.ragas.io/en/stable/
@@ -40,3 +41,9 @@ Sources:
 2. https://www.promptingguide.ai/techniques
 3. https://habr.com/ru/articles/779526/ | RAG (Retrieval Augmented Generation) — a simple and clear explanation
 4.
+
+
+1. https://www.media.mit.edu/tools/ai-glossary-dictionary/ 
+2. https://a16z.com/ai-glossary/
+3. https://en.wikipedia.org/wiki/Glossary_of_artificial_intelligence 
+4. https://www.zendesk.com/blog/ai/generative-ai/generative-ai-glossary/ 

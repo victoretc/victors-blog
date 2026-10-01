@@ -79,6 +79,36 @@ body {
     transform: translateX(2px);
 }
 
+.search-button {
+    --pf-background: #D3FFC0;
+    --pf-text: black;
+    --pf-border: dashed 2px black;
+    --pf-border-radius: 0 30px 30px 0;
+    --pf-input-height: 40px;
+    --pf-input-font-size: 20px;
+    --pf-font: 'JetBrains Mono', monospace;
+    display: inline-flex;
+    align-items: center;
+}
+
+.search-button:hover {
+    --pf-background: #b7ee9e;
+}
+
+pagefind-modal {
+    --pf-font: 'JetBrains Mono', monospace;
+    --pf-text: #111;
+    --pf-text-secondary: #555;
+    --pf-border: #cde8bd;
+    --pf-border-focus: #2E7D32;
+    --pf-mark: #2F6FED;
+    --pf-outline-focus: #2E7D32;
+    --pf-outline-width: 2px;
+    --pf-hover: #ecf8e4;
+    --pf-modal-max-width: 640px;
+    --pf-border-radius: 8px;
+}
+
 @media (max-width: 600px) {
     .header-container a {
         font-size: 20px;

@@ -6,7 +6,7 @@
 {{ if $css }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 {{ end }}
-{{ if or .Params.js (not .IsHome) }}
-{{ end }}
+<link href="{{ "pagefind/pagefind-component-ui.css" | relURL }}" rel="stylesheet">
+<script src="{{ "pagefind/pagefind-component-ui.js" | relURL }}" type="module"></script>
 {{ partialCached "head/css.html" . }}
 {{ partialCached "head/js.html" . }}

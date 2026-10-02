@@ -26,6 +26,28 @@
     src: url('../fonts/Drabina-Solid.woff2') format('woff2');
 }
 
+/* "Leporid" — заголовок статьи на обложке. Исходник Leporid/Leporid.ttf
+   (551 глиф, латиница + кириллица + цифры) пережат в woff2, 12 КБ. */
+@font-face {
+    font-family: 'Testo';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/Testo.woff2') format('woff2');
+}
+
+/* "Testo" — название поста на обложке. Исходник testo.otf (100 глифов):
+   полная кириллица и цифры, латиницы нет. Для английских заголовков браузер
+   посимвольно падает в следующий шрифт стека, поэтому в font-family он идёт
+   перед Handil Pro. */
+@font-face {
+    font-family: 'Testo';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/Testo.woff2') format('woff2');
+}
+
 :root {
     /* One spacing step for every block gap: between columns, between a cover
        and its heading, and between two posts in the list. */
@@ -120,7 +142,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: 35px;
+    border-radius: 0;
     background:
         radial-gradient(
             ellipse 70% 55% at 50% 50%,
@@ -142,30 +164,32 @@ body {
 .featured-link {
     position: relative;
     display: block;
-    width: min(1118px, 100%);
-    margin: 0 auto;
+    width: 100%;
     text-decoration: none;
     color: inherit;
 }
 
+/* Полноэкранный снимок — без скругления: картинка упирается в края окна.
+   overflow: hidden оставляю на обёртке, а не на <img>: если позже вернём
+   скругление, обрезаться оно будет одинаково во всех браузерах (у самого
+   заменяемого элемента Safari оставляет волосяную кайму по углам). */
 .featured-media {
     min-width: 0;
+    overflow: hidden;
+    border-radius: 0;
 }
 
-/* Высота первого экрана: 100svh, чтобы на мобильном не съедало адресную
-   строку. object-fit: cover держит композицию, не обрезая её пустыми полями.
-   Увеличения по наведению нет намеренно — фото и есть главный объект, а
-   масштаб сдвигал рамку и ломал ощущение неподвижной фотографии.
-   Из высоты вычтены поля страницы (40px сверху) и такой же запас снизу:
-   иначе снимок упирался в нижнюю кромку окна на любой высоте, кроме
-   «обычной», где его останавливал только max-height. */
+/* Снимок ровно во весь первый экран: 100svh (small viewport height), чтобы на
+   мобильном адресная строка не выдавливала нижнюю кромку. object-fit: cover
+   держит композицию и заполняет кадр без пустых полей. Увеличения по
+   наведению нет намеренно — фото и есть главный объект, а масштаб сдвигал
+   рамку и ломал ощущение неподвижной фотографии. */
 .featured-media .cover-image {
     display: block;
     width: 100%;
-    height: calc(100svh - 80px);
-    max-height: 860px;
+    height: 100svh;
     object-fit: cover;
-    border-radius: 35px;
+    border-radius: 0;
 }
 
 .featured-link:focus-visible {
@@ -214,16 +238,16 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* Название на снимке набрано Handil Pro — тем же шрифтом, что подписи и
-   метаданные, поэтому заголовок читается как часть интерфейса, а не как
-   отдельный плакатный акцент. Drabina остаётся у крупных заголовков
-   страницы, но внутрь фотографии больше не заходит. */
+/* Название на снимке набрано Testo — акцидентным кириллическим шрифтом.
+   Латиницы в Testo нет, поэтому английские заголовки посимвольно падают в
+   Handil Pro: стек подобран так, чтобы смешение читалось как часть набора,
+   а не как подмена шрифта. */
 .featured-title {
     margin: 0;
-    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
+    font-family: 'Testo', 'Handil Pro', 'JetBrains Mono', monospace;
     font-size: clamp(32px, 5.2vw, 60px);
     line-height: 1.1;
-    font-weight: 500;
+    font-weight: 400;
     color: #ffffff;
     max-width: 18ch;
     text-wrap: balance;
@@ -359,6 +383,65 @@ body {
 }
 
 /* ==========================================================================
+   HERO NAV — хэдер поверх полноэкранного снимка
+
+   Повторяет верхнюю панель референса (ManyChat COM): полупрозрачная плашка
+   с backdrop-blur, вписанная в поля 16px, с логотипом по центру. Содержимое
+   живёт в .hero-nav-bar; сейчас там только «ЛВ» шрифтом Drabina, остальные
+   слоты добавим позже.
+   ========================================================================== */
+
+.hero-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    padding: 16px;
+    pointer-events: none;
+}
+
+/* Плашка ловит клики, а прозрачная полоса вокруг — нет: иначе палец по краю
+   снимка попадал бы в панель, а не в ссылку-слайд. Ширина по содержимому,
+   поэтому панель не растягивается на весь экран, а жмётся к логотипу. */
+.hero-nav-bar {
+    width: fit-content;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    padding: 0 26px;
+    border-radius: 16px;
+    /* Стекло: тонкий верхний блик поверх тёмной полупрозрачной базы плюс
+       hairline-рамка. Однотонная заливка на светлом кадре тонула; градиент
+       даёт объём и держит контраст с текстом. */
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)),
+        rgba(12, 12, 14, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    pointer-events: auto;
+}
+
+.hero-nav-logo {
+    font-family: 'Drabina', 'Handil Pro', monospace;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: #f2f2f2;
+    text-decoration: none;
+}
+
+.hero-nav-logo:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 4px;
+}
+
+/* ==========================================================================
    SEARCH · FILTERS · CATEGORIES
 
    Design copied verbatim from the frontend app (components ClubFilters.vue and
@@ -390,6 +473,9 @@ body {
     max-width: 1118px;
     margin: 0 auto;
     align-items: start;
+    /* Боковые поля, которые раньше стояли на body. Теперь у body их нет —
+       снимок на первом экране должен упираться в края окна. */
+    padding: 0 40px;
 }
 
 .home-main {
@@ -409,9 +495,13 @@ body {
     gap: 10px;
 }
 
+/* align-items: flex-start, а не center. В колонке .search-col под поиском
+   живёт .no-results; когда он появляется, колонка становится выше строки, и
+   при center переключатель вида уезжал вниз — к середине выросшей строки.
+   По верху он остаётся на одной линии с поиском: обе плашки высотой 64px. */
 .search-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     width: 100%;
     min-width: 0;
@@ -547,6 +637,12 @@ body {
         padding-top: 12px;
         margin-top: -12px;
         background: #000;
+        /* Панель прилипает на 12px ниже кромки, и этот зазор над ней должен
+           оставаться чёрным, а не подсвечивать проезжающие карточки. Тень с
+           нулевым размытием закрашивает ровно полосу 0–12px над панелью и
+           едет вместе с ней; в обычном потоке над панелью тоже чёрный фон,
+           поэтому тень не видна. */
+        box-shadow: 0 -12px 0 #000;
     }
 
     .filters-section::after {
@@ -689,13 +785,10 @@ body.kind-home {
     max-width: none;
     background: #000;
     color: #f2f2f2;
-    /* Одинаковый отступ 40px со всех сторон: сверху он задаёт положение
-       hero-снимка, по бокам совпадает с ним, снизу дублируется запасом в
-       height: calc(100svh - 80px). Так картинка стоит в кадре симметрично,
-       а не «шире, чем выше». */
-    padding: 40px 40px 0;
-    /* Room to breathe under the last row of posts. */
-    padding-bottom: 120px;
+    /* Внешних полей у страницы нет: снимок на первом экране прижат к краям
+       окна со всех сторон. Боковые отступы контента живут на .home-layout,
+       поэтому картинка может быть шире сетки, не ломая раскладку ниже. */
+    padding: 0 0 120px;
 }
 
 /* Three equal columns: 1118 - 300 (categories) - 26 (gap) leaves 792px,
@@ -740,8 +833,13 @@ body.kind-home {
     outline-offset: 2px;
 }
 
+/* Радиус — на обёртке: тот же приём, что у hero. Снимок клипает контейнер,
+   поэтому углы чистые в любом браузере, а не только там, где border-radius на
+   replaced-элементе сглаживается без каймы. */
 .post-card-media {
     min-width: 0;
+    overflow: hidden;
+    border-radius: 35px;
 }
 
 .post-card-media .cover-image {
@@ -750,7 +848,7 @@ body.kind-home {
     height: auto;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: 35px;
+    border-radius: 0;
 }
 
 .post-card-meta {
@@ -799,7 +897,7 @@ body.kind-home {
     border-radius: 34px 34px 0 0;
 }
 
-.home-layout.is-list .post-card-media .cover-image {
+.home-layout.is-list .post-card-media {
     border-radius: 24px;
 }
 

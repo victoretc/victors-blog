@@ -107,25 +107,40 @@
   track.addEventListener('pointerdown', (event) => {
     if (event.pointerType !== 'mouse' || event.button !== 0) return;
     draggedRecently = false;
-    drag = { startX: event.clientX, startScroll: track.scrollLeft, moved: false };
+    drag = {
+      startX: event.clientX,
+      startScroll: track.scrollLeft,
+      startIndex: currentIndex(),
+      dx: 0,
+      moved: false,
+    };
   });
 
   window.addEventListener('pointermove', (event) => {
     if (!drag) return;
-    const dx = event.clientX - drag.startX;
-    if (!drag.moved && Math.abs(dx) > 4) {
+    drag.dx = event.clientX - drag.startX;
+    if (!drag.moved && Math.abs(drag.dx) > 6) {
       drag.moved = true;
       track.classList.add('is-dragging');
     }
-    if (drag.moved) track.scrollLeft = drag.startScroll - dx;
+    if (drag.moved) track.scrollLeft = drag.startScroll - drag.dx;
   });
 
   const endDrag = () => {
     if (!drag) return;
-    draggedRecently = drag.moved;
+    const { moved, startIndex, dx } = drag;
     drag = null;
     track.classList.remove('is-dragging');
-    if (draggedRecently) goTo(closestIndex());
+    draggedRecently = moved;
+    if (!moved) return;
+
+    // Порог — четверть ширины слайда: короткий сдвиг возвращает слайд на
+    // место, длинный листает на один в сторону жеста. Целимся от слайда,
+    // активного на старте, а не от scrollLeft: к моменту отпускания
+    // scroll-snap уже возвращает трек к границе и сбил бы расчёт.
+    const threshold = track.clientWidth * 0.25;
+    const step = Math.abs(dx) > threshold ? (dx < 0 ? 1 : -1) : 0;
+    goTo(startIndex + step);
   };
 
   window.addEventListener('pointerup', endDrag);
@@ -267,14 +282,27 @@
 
   // --- sticky search --------------------------------------------------------
   // The gradient under the bar only fades in once it has actually detached,
-  // which is why this is measured rather than assumed.
+  // which is why this is measured rather than assumed. Порог берём из CSS
+  // (top панели, 12px): прилипшая панель застывает именно на этом значении,
+  // а не на нуле, поэтому сравнение с 0 не давало класс is-sticky и градиент
+  // под поиском не появлялся.
 
   if (filters) {
+    let limit = 0;
+    const measure = () => {
+      const offset = parseFloat(getComputedStyle(filters).top);
+      limit = Number.isFinite(offset) ? offset + 1 : 0;
+    };
     const onScroll = () => {
-      filters.classList.toggle('is-sticky', filters.getBoundingClientRect().top <= 0);
+      filters.classList.toggle('is-sticky', filters.getBoundingClientRect().top <= limit);
     };
 
+    measure();
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      measure();
+      onScroll();
+    }, { passive: true });
   }
 })();

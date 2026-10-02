@@ -88,6 +88,16 @@
           </svg>
         </button>
       </div>
+
+      {{/* Хэдер поверх снимка: полупрозрачная плашка как в референсе, логотип
+           «ЛВ» шрифтом Drabina. Идёт последним, чтобы его z-index (4) был выше
+           управления (3) и затемнения (1). Остальные пункты добавим позже —
+           пока в плашке только логотип. */}}
+      <header class="hero-nav">
+        <div class="hero-nav-bar">
+          <a class="hero-nav-logo" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }}">ЛВ</a>
+        </div>
+      </header>
     </section>
   {{ end }}
 

@@ -1,25 +1,91 @@
 {{ define "main" }}
   {{ .Content }}
 
+  {{ $posts := where site.RegularPages "Type" "posts" }}
+
+  <!-- ВРЕМЕННО ЗАКОММЕНТИРОВАНО: шапка списка «Дата | Название | Время чтения».
+       У каждой карточки своя дата, название и время под фотографией, поэтому
+       эта строка колонок больше не нужна. Не удаляю — возможно понадобится.
   <div class="posts-header posts-header--list">
     <span>{{ i18n "date" }}</span>
     <span>{{ i18n "title" }}</span>
     <span class="posts-header-right">{{ i18n "reading_time" }}</span>
   </div>
+  -->
 
-  <div class="posts-container">
-    {{ $posts := where site.RegularPages "Type" "posts" }}
-    {{ range $index, $post := $posts }}
-      <a href="{{ $post.RelPermalink }}" class="post-item post-item--list">
-        <div class="post-data">{{ $post.Date.Format "02.01.2006" }}</div>
-        <div class="post-body">
-          <h2>{{ $post.LinkTitle }}</h2>
-          <div class="post-content">
-            {{ partial "excerpt.html" $post }}
-          </div>
+  <!-- БОЛЬШАЯ КАРТОЧКА. Показывается только если в frontmatter поста есть
+       featured = true. Листается стрелками, точками, клавиатурой и свайпом. -->
+  {{ $featured := where $posts "Params.featured" true }}
+  {{ with $featured }}
+    <section class="featured" aria-label="{{ i18n "featured" }}" data-featured>
+      <div class="featured-track" data-featured-track>
+        {{ range $index, $post := . }}
+          {{ $cover := partial "cover.html" (dict "page" $post "width" 1600 "height" 900 "variant" "hero") }}
+          <article class="featured-slide" data-featured-slide>
+            <a class="featured-link" href="{{ $post.RelPermalink }}">
+              {{ with $cover }}
+                <div class="featured-media">{{ . }}</div>
+              {{ end }}
+              <div class="featured-meta">
+                <span class="featured-date">{{ $post.Date.Format "02.01.2006" }}</span>
+                <h2 class="featured-title">{{ $post.LinkTitle }}</h2>
+                <span class="featured-time">{{ $post.ReadingTime }} {{ i18n "minutes" $post.ReadingTime }}</span>
+              </div>
+            </a>
+          </article>
+        {{ end }}
+      </div>
+
+      <div class="featured-controls">
+        <button
+          type="button"
+          class="featured-arrow"
+          data-featured-prev
+          aria-label="{{ i18n "featured_prev" }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="featured-dots">
+          {{ range $index, $post := . }}
+            <button
+              type="button"
+              class="featured-dot{{ if eq $index 0 }} is-active{{ end }}"
+              data-featured-dot="{{ $index }}"
+              aria-label="{{ i18n "featured_slide" }} {{ add $index 1 }}">
+            </button>
+          {{ end }}
         </div>
-        <div class="post-meta">
-          <span class="post-reading-time">{{ $post.ReadingTime }} {{ i18n "minutes" $post.ReadingTime }}</span>
+
+        <button
+          type="button"
+          class="featured-arrow"
+          data-featured-next
+          aria-label="{{ i18n "featured_next" }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="m9 4 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+  {{ end }}
+
+  <!-- Избранные посты живут в слайдере выше, поэтому в общую сетку они не
+       попадают — иначе одна и та же статья показывалась бы дважды. -->
+  <div class="post-grid">
+    {{ range where $posts "Params.featured" "!=" true }}
+      {{ $cover := partial "cover.html" (dict "page" . "width" 800 "height" 800 "variant" "list") }}
+      <a href="{{ .RelPermalink }}" class="post-card">
+        {{ with $cover }}
+          <div class="post-card-media">{{ . }}</div>
+        {{ end }}
+        <div class="post-card-meta">
+          <span class="post-card-date">{{ .Date.Format "02.01.2006" }}</span>
+          <h2 class="post-card-title">{{ .LinkTitle }}</h2>
+          <span class="post-card-time">{{ .ReadingTime }} {{ i18n "minutes" .ReadingTime }}</span>
         </div>
       </a>
     {{ end }}

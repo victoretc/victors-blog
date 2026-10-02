@@ -1,8 +1,10 @@
 +++
+cover = 'images/second.jpg'
 date = '2026-03-29T21:17:52+03:00'
 draft = false
 title = 'Автоматическое логгирование шагов в Playwright'
 translationKey = 'auto-logging-in-playwright'
+featured = true
 +++
 
 [Playwright](https://github.com/microsoft/playwright-python) - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в Playwright.

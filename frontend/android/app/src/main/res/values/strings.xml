@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">book-club-ui</string>
+    <string name="title_activity_main">book-club-ui</string>
+    <string name="package_name">guru.qa.bookclub</string>
+    <string name="custom_url_scheme">guru.qa.bookclub</string>
+</resources>

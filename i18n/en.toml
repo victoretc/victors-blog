@@ -10,6 +10,9 @@ other = "Another button"
 [back_to_top]
 other = "Back to top"
 
+[cover]
+other = "Cover"
+
 [date]
 other = "Date"
 
@@ -28,6 +31,18 @@ other = "minutes"
 
 [read_more]
 other = "Read more"
+
+[featured]
+other = "Featured posts"
+
+[featured_prev]
+other = "Previous slide"
+
+[featured_next]
+other = "Next slide"
+
+[featured_slide]
+other = "Go to slide"
 
 [current_language]
 other = "You are reading in English"

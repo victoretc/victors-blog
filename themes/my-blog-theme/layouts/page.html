@@ -1,15 +1,25 @@
 {{ define "main" }}
-  <div class="posts-header">
+  {{ $cover := partial "cover.html" (dict "page" . "width" 520 "height" 325 "variant" "hero") }}
+
+  <div class="posts-header posts-header--page">
     <span>{{ i18n "date" }}</span>
     <span>{{ i18n "title" }}</span>
     <span>{{ i18n "composition" }}</span>
   </div>
-  
+
   <div class="posts-container">
-    <div class="post-item">
+    <div class="post-item post-item--page">
       <div class="post-data">{{ .Date.Format "02.01.2006" }}</div>
-      <h2>{{ .LinkTitle }}</h2>
-      
+
+      <div class="post-hero-panel">
+        <div class="post-hero-body">
+          <h1>{{ .LinkTitle }}</h1>
+        </div>
+        {{ with $cover }}
+          <div class="post-hero-cover">{{ . }}</div>
+        {{ end }}
+      </div>
+
       <div class="post-content">
         {{ .Content }}
       </div>

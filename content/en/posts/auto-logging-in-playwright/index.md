@@ -1,8 +1,10 @@
 +++
+cover = 'images/second.jpg'
 date = '2026-03-29T21:17:52+03:00'
 draft = false
 title = 'Automatic step logging in Playwright'
 translationKey = 'auto-logging-in-playwright'
+featured = true
 +++
 
 [Playwright](https://github.com/microsoft/playwright-python) is a wonderful library that lets you write wonderful tests. Below is a recipe for automatic step logging in Playwright.

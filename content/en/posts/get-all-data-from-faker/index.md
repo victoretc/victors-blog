@@ -1,8 +1,10 @@
 +++
+cover = 'images/sixth.jpg'
 date = '2026-03-29T21:17:52+03:00'
 draft = false
 title = 'Getting all possible data from faker'
 translationKey = 'get-all-data-from-faker'
+featured = true
 +++
 
 ## Writing the code

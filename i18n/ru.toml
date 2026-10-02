@@ -10,6 +10,9 @@ other = "Еще одна кнопка"
 [back_to_top]
 other = "Вверх!"
 
+[cover]
+other = "Обложка"
+
 [date]
 other = "Дата"
 
@@ -30,6 +33,18 @@ other = "минут"
 
 [read_more]
 other = "Читать ещё"
+
+[featured]
+other = "Избранное"
+
+[featured_prev]
+other = "Предыдущий слайд"
+
+[featured_next]
+other = "Следующий слайд"
+
+[featured_slide]
+other = "Перейти к слайду"
 
 [current_language]
 other = "Вы читаете на русском"

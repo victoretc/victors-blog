@@ -1,4 +1,5 @@
 +++
+cover = 'images/fifth.jpg'
 date = '2026-04-01T09:42:22+03:00'
 draft = false
 title = 'See an error in the console -> fail the test'

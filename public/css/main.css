@@ -412,17 +412,17 @@ body {
     justify-content: center;
     height: 56px;
     padding: 0 26px;
-    border-radius: 16px;
-    /* Стекло: тонкий верхний блик поверх тёмной полупрозрачной базы плюс
-       hairline-рамка. Однотонная заливка на светлом кадре тонула; градиент
-       даёт объём и держит контраст с текстом. */
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04)),
-        rgba(12, 12, 14, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(18px) saturate(150%);
-    -webkit-backdrop-filter: blur(18px) saturate(150%);
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    /* Дымчатое стекло: лёгкая тёмная подложка всего в 0.24 альфы, поэтому
+       кадр под панелью читается цветом, а не тонет в чёрном. Сильный blur
+       (24px) со saturate делает фон мягким и насыщенным, hairline-рамка и
+       верхний внутренний блик дают кромке объём — панель «стоит» на фото,
+       а не приклеена к нему. */
+    background: rgba(16, 16, 20, 0.24);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     pointer-events: auto;
 }
 

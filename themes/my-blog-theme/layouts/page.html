@@ -1,6 +1,4 @@
 {{ define "main" }}
-  {{ $cover := partial "cover.html" (dict "page" . "width" 520 "height" 325 "variant" "hero") }}
-
   <div class="posts-header posts-header--page">
     <span>{{ i18n "date" }}</span>
     <span>{{ i18n "title" }}</span>
@@ -11,13 +9,13 @@
     <div class="post-item post-item--page">
       <div class="post-data">{{ .Date.Format "02.01.2006" }}</div>
 
+      {{/* Заголовок — обычный текст. Обложка здесь намеренно не выводится:
+           фотография живёт только на главной (слайд и карточки), а на странице
+           поста она была просто картинкой рядом с текстом без всякой роли. */}}
       <div class="post-hero-panel">
         <div class="post-hero-body">
           <h1>{{ .LinkTitle }}</h1>
         </div>
-        {{ with $cover }}
-          <div class="post-hero-cover">{{ . }}</div>
-        {{ end }}
       </div>
 
       <div class="post-content">

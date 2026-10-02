@@ -46,6 +46,36 @@ other = "Следующий слайд"
 [featured_slide]
 other = "Перейти к слайду"
 
+[search]
+other = "Найти пост"
+
+[search_button]
+other = "Найти"
+
+[search_view]
+other = "Вид карточек"
+
+[search_view_grid]
+other = "Плитка"
+
+[search_view_list]
+other = "Список"
+
+[categories]
+other = "Категории"
+
+[category_interesting]
+other = "Интересное"
+
+[category_trash]
+other = "Мусор"
+
+[category_all]
+other = "Все категории"
+
+[no_results]
+other = "Ничего не найдено"
+
 [current_language]
 other = "Вы читаете на русском"
 

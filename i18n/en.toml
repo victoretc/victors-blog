@@ -44,6 +44,36 @@ other = "Next slide"
 [featured_slide]
 other = "Go to slide"
 
+[search]
+other = "Find a post"
+
+[search_button]
+other = "Search"
+
+[search_view]
+other = "Card layout"
+
+[search_view_grid]
+other = "Tiles"
+
+[search_view_list]
+other = "List"
+
+[categories]
+other = "Categories"
+
+[category_interesting]
+other = "Interesting"
+
+[category_trash]
+other = "Trash"
+
+[category_all]
+other = "All categories"
+
+[no_results]
+other = "Nothing found"
+
 [current_language]
 other = "You are reading in English"
 

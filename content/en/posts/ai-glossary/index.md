@@ -1,4 +1,5 @@
 +++
+category = 'trash'
 cover = 'images/seventh.jpg'
 date = '2026-08-01T20:21:37+03:00'
 draft = true

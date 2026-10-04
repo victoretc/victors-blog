@@ -1,22 +1,395 @@
-<!doctype html><html lang=ru-ru dir=ltr><head><meta name=generator content="Hugo 0.150.0"><meta charset=utf-8><meta name=viewport content="width=device-width"><meta name=font-credits content="Handil Pro by Alifinart Studio — https://behance.net/alifinart"><title></title><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel=stylesheet><link href=/victors-blog/pagefind/pagefind-component-ui.css rel=stylesheet><script src=/victors-blog/pagefind/pagefind-component-ui.js type=module></script><link rel=stylesheet href=/victors-blog/css/main.min.1c5cc66294d4c2434285dd4b11e0894e7da8be74d0e8285b040278c27bb4c2ec.css integrity="sha256-HFzGYpTUwkNChd1LEeCJTn2ovnTQ6ChbBAJ4wnu0wuw=" crossorigin=anonymous><script src=/victors-blog/js/main.d028fde7482325a61f9542609d8ee8aae19941981d153308f8bb325ef34a4909.js integrity="sha256-0Cj950gjJaYflUJgnY7oquGZQZgdFTMI+LsyXvNKSQk=" crossorigin=anonymous defer></script></head><body class=kind-home><main><section class=featured aria-label=Избранное data-featured><div class=featured-track data-featured-track><article class=featured-slide data-featured-slide><a class=featured-link href=/victors-blog/posts/auto-logging-in-playwright/><div class=featured-media><img class=cover-image src=/victors-blog/images/second_hu_ed9b4b6a03c99e27.webp width=2000 height=1200 alt="Автоматическое логгирование шагов в Playwright" loading=lazy decoding=async></div><div class=featured-meta><span class=featured-meta-row><span class=featured-date>29.03.2026</span>
-<span class=featured-meta-dot aria-hidden=true></span>
-<span class=featured-time>1 минута</span></span><h2 class=featured-title>Автоматическое логгирование шагов в Playwright</h2></div></a></article><article class=featured-slide data-featured-slide><a class=featured-link href=/victors-blog/posts/get-all-data-from-faker/><div class=featured-media><img class=cover-image src=/victors-blog/images/sixth_hu_eb126dc39f9e7b5c.webp width=2000 height=1200 alt="Достаем все возможные данные из faker" loading=lazy decoding=async></div><div class=featured-meta><span class=featured-meta-row><span class=featured-date>29.03.2026</span>
-<span class=featured-meta-dot aria-hidden=true></span>
-<span class=featured-time>1 минута</span></span><h2 class=featured-title>Достаем все возможные данные из faker</h2></div></a></article></div><div class=featured-controls><button type=button class=featured-arrow data-featured-prev aria-label="Предыдущий слайд">
-<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class=featured-dots><button type=button class="featured-dot is-active" data-featured-dot=0 aria-label="Перейти к слайду 1">
-</button>
-<button type=button class=featured-dot data-featured-dot=1 aria-label="Перейти к слайду 2"></button></div><button type=button class=featured-arrow data-featured-next aria-label="Следующий слайд">
-<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 4 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><header class=hero-nav><div class=hero-nav-bar><a class=hero-nav-logo href=/victors-blog/ aria-label>ЛВ</a></div></header></section><div class=home-layout><aside class=cat-panel data-cat-panel><h2 class=cat-panel-title>Категории</h2><div class=cat-list><button type=button class="cat-item is-active" aria-pressed=true data-category>
-<span class=cat-name>Все категории</span>
-</button>
-<button type=button class=cat-item aria-pressed=false data-category=interesting>
-<span class=cat-name>Интересное</span>
-</button>
-<button type=button class=cat-item aria-pressed=false data-category=trash>
-<span class=cat-name>Мусор</span></button></div></aside><div class=home-main><section class=filters-section data-filters aria-label="Найти пост"><div class=search-row><div class=search-col><div class=search-bar><input type=text class=search-input placeholder="Найти пост" aria-label="Найти пост" autocomplete=off data-search-input>
-<button type=button class=search-btn aria-label=Найти data-search-submit>
-<svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></div><div class=no-results data-no-results hidden><p class=no-results-code>404</p><p class=no-results-title>Ничего не найдено</p></div></div><div class=view-toggle role=group aria-label="Вид карточек"><button type=button class="view-toggle-btn is-active" aria-label=Плитка aria-pressed=true data-view=grid>
-<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
-</button>
-<button type=button class=view-toggle-btn aria-label=Список aria-pressed=false data-view=list>
-<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="4" rx="2"/><rect x="3" y="10" width="18" height="4" rx="2"/><rect x="3" y="16" width="18" height="4" rx="2"/></svg></button></div></div></section><div class=post-grid data-post-grid><a href=/victors-blog/posts/fail-test-when-see-error-in-console/ class=post-card data-post data-title="Видим ошибку в консоли -> роняем тест" data-category=interesting data-featured=0><div class=post-card-media><img class=cover-image src=/victors-blog/images/fifth_hu_3564dd4cd8c64878.webp width=800 height=800 alt="Видим ошибку в консоли -> роняем тест" loading=lazy decoding=async></div><div class=post-card-meta><span class=post-card-date>01.04.2026</span><h2 class=post-card-title>Видим ошибку в консоли -> роняем тест</h2><span class=post-card-time>1 минута</span></div></a><a href=/victors-blog/posts/about-me/ class=post-card data-post data-title="Обо мне" data-category=interesting data-featured=0><div class=post-card-media><img class=cover-image src=/victors-blog/images/first_hu_e3666f7a80ea890a.webp width=800 height=800 alt="Обо мне" loading=lazy decoding=async></div><div class=post-card-meta><span class=post-card-date>31.03.2026</span><h2 class=post-card-title>Обо мне</h2><span class=post-card-time>1 минута</span></div></a><a href=/victors-blog/posts/auto-logging-in-playwright/ class=post-card data-post data-title="Автоматическое логгирование шагов в Playwright" data-category=trash data-featured=1 hidden><div class=post-card-media><img class=cover-image src=/victors-blog/images/second_hu_2faf420109f8ca60.webp width=800 height=800 alt="Автоматическое логгирование шагов в Playwright" loading=lazy decoding=async></div><div class=post-card-meta><span class=post-card-date>29.03.2026</span><h2 class=post-card-title>Автоматическое логгирование шагов в Playwright</h2><span class=post-card-time>1 минута</span></div></a><a href=/victors-blog/posts/auto-logging-in-selene/ class=post-card data-post data-title="Автоматическое логгирование шагов в Selene" data-category=interesting data-featured=0><div class=post-card-media><img class=cover-image src=/victors-blog/images/third_hu_7117d67efdc36732.webp width=800 height=800 alt="Автоматическое логгирование шагов в Selene" loading=lazy decoding=async></div><div class=post-card-meta><span class=post-card-date>29.03.2026</span><h2 class=post-card-title>Автоматическое логгирование шагов в Selene</h2><span class=post-card-time>1 минута</span></div></a><a href=/victors-blog/posts/get-all-data-from-faker/ class=post-card data-post data-title="Достаем все возможные данные из faker" data-category=interesting data-featured=1 hidden><div class=post-card-media><img class=cover-image src=/victors-blog/images/sixth_hu_1facc86cdca9cb63.webp width=800 height=800 alt="Достаем все возможные данные из faker" loading=lazy decoding=async></div><div class=post-card-meta><span class=post-card-date>29.03.2026</span><h2 class=post-card-title>Достаем все возможные данные из faker</h2><span class=post-card-time>1 минута</span></div></a><a href=/victors-blog/posts/different-envs/ class=post-card data-post data-title="Разные envs под разные окружения" data-category=interesting data-featured=0><div class=post-card-media><img class=cover-image src=/victors-blog/images/fourth_hu_c95cee366735dd23.webp width=800 height=800 alt="Разные envs под разные окружения" loading=lazy decoding=async></div><div class=post-card-meta><span class=post-card-date>29.03.2026</span><h2 class=post-card-title>Разные envs под разные окружения</h2><span class=post-card-time>1 минута</span></div></a></div></div></div></main></body></html>
+<!DOCTYPE html>
+<html lang="ru-ru" dir="ltr">
+<head>
+	<meta name="generator" content="Hugo 0.150.0"><script src="/victors-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=victors-blog/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+<meta name="font-credits" content="Handil Pro by Alifinart Studio — https://behance.net/alifinart">
+<title></title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+
+<link href="/victors-blog/pagefind/pagefind-component-ui.css" rel="stylesheet">
+<script src="/victors-blog/pagefind/pagefind-component-ui.js" type="module"></script>
+
+    <link rel="stylesheet" href="/victors-blog/css/main.css">
+
+
+      
+      <script src="/victors-blog/js/main.js" defer></script>
+
+
+</head>
+<body class="kind-home">
+  
+  <main>
+    
+  
+
+  
+
+  
+
+  
+  
+  
+    
+    
+    <section class="featured" aria-label="Избранное" data-featured>
+      <div class="featured-track" data-featured-track>
+        
+          
+          <article class="featured-slide" data-featured-slide>
+            <a class="featured-link" href="/victors-blog/posts/auto-logging-in-playwright/">
+              
+                <div class="featured-media"><img
+      class="cover-image"
+      src="/victors-blog/images/second_hu_ed9b4b6a03c99e27.webp"
+      width="2000"
+      height="1200"
+      alt="Автоматическое логгирование шагов в Playwright"
+      loading="lazy"
+      decoding="async"></div>
+              
+              <div class="featured-meta">
+                <span class="featured-meta-row">
+                  <span class="featured-date">29.03.2026</span>
+                  <span class="featured-meta-dot" aria-hidden="true"></span>
+                  <span class="featured-time">1 минута</span>
+                </span>
+                <h2 class="featured-title">Автоматическое логгирование шагов в Playwright</h2>
+              </div>
+            </a>
+
+          </article>
+        
+          
+          <article class="featured-slide" data-featured-slide>
+            <a class="featured-link" href="/victors-blog/posts/get-all-data-from-faker/">
+              
+                <div class="featured-media"><img
+      class="cover-image"
+      src="/victors-blog/images/sixth_hu_eb126dc39f9e7b5c.webp"
+      width="2000"
+      height="1200"
+      alt="Достаем все возможные данные из faker"
+      loading="lazy"
+      decoding="async"></div>
+              
+              <div class="featured-meta">
+                <span class="featured-meta-row">
+                  <span class="featured-date">29.03.2026</span>
+                  <span class="featured-meta-dot" aria-hidden="true"></span>
+                  <span class="featured-time">1 минута</span>
+                </span>
+                <h2 class="featured-title">Достаем все возможные данные из faker</h2>
+              </div>
+            </a>
+
+          </article>
+        
+      </div>
+
+      
+      <div class="featured-controls">
+        <button
+          type="button"
+          class="featured-arrow"
+          data-featured-prev
+          aria-label="Предыдущий слайд">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="featured-dots">
+          
+            <button
+              type="button"
+              class="featured-dot is-active"
+              data-featured-dot="0"
+              aria-label="Перейти к слайду 1">
+            </button>
+          
+            <button
+              type="button"
+              class="featured-dot"
+              data-featured-dot="1"
+              aria-label="Перейти к слайду 2">
+            </button>
+          
+        </div>
+
+        <button
+          type="button"
+          class="featured-arrow"
+          data-featured-next
+          aria-label="Следующий слайд">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="m9 4 8 8-8 8" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      
+      <header class="hero-nav">
+        <div class="hero-nav-bar">
+          <a class="hero-nav-logo" href="/victors-blog/" aria-label="">ЛК</a>
+        </div>
+      </header>
+    </section>
+  
+
+  
+  
+  
+
+  <div class="home-layout">
+    
+    <aside class="cat-panel" data-cat-panel>
+      <h2 class="cat-panel-title">Категории</h2>
+      <div class="cat-list">
+        <button type="button" class="cat-item is-active" aria-pressed="true" data-category="">
+          <span class="cat-name">Все категории</span>
+        </button>
+        
+          
+          <button type="button" class="cat-item" aria-pressed="false" data-category="interesting">
+            <span class="cat-name">Интересное</span>
+          </button>
+        
+          
+          <button type="button" class="cat-item" aria-pressed="false" data-category="trash">
+            <span class="cat-name">Мусор</span>
+          </button>
+        
+      </div>
+    </aside>
+
+    <div class="home-main">
+      <section class="filters-section" data-filters aria-label="Найти пост">
+        <div class="search-row">
+          
+          <div class="search-col">
+            <div class="search-bar">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Найти пост"
+                aria-label="Найти пост"
+                autocomplete="off"
+                data-search-input
+              />
+              <button type="button" class="search-btn" aria-label="Найти" data-search-submit>
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true" focusable="false">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="M21 21l-4.35-4.35" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="no-results" data-no-results hidden>
+              <p class="no-results-code">404</p>
+              <p class="no-results-title">Ничего не найдено</p>
+            </div>
+          </div>
+
+          <div class="view-toggle" role="group" aria-label="Вид карточек">
+            <button type="button" class="view-toggle-btn is-active" aria-label="Плитка"
+              aria-pressed="true" data-view="grid">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                <rect x="3" y="3" width="7" height="7" rx="2" />
+                <rect x="14" y="3" width="7" height="7" rx="2" />
+                <rect x="3" y="14" width="7" height="7" rx="2" />
+                <rect x="14" y="14" width="7" height="7" rx="2" />
+              </svg>
+            </button>
+            <button type="button" class="view-toggle-btn" aria-label="Список"
+              aria-pressed="false" data-view="list">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                <rect x="3" y="4" width="18" height="4" rx="2" />
+                <rect x="3" y="10" width="18" height="4" rx="2" />
+                <rect x="3" y="16" width="18" height="4" rx="2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      
+      <div class="post-grid" data-post-grid>
+        
+          
+          <a href="/victors-blog/posts/ai-glossary/" class="post-card" data-post
+            data-title="Глоссарий текущих дней (Чет про AI)"
+            data-category="trash"
+            data-featured="0"
+            >
+            
+              <div class="post-card-media"><img
+      class="cover-image"
+      src="/victors-blog/images/seventh_hu_9d83df707658f02d.webp"
+      width="800"
+      height="800"
+      alt="Глоссарий текущих дней (Чет про AI)"
+      loading="lazy"
+      decoding="async"></div>
+            
+            <div class="post-card-meta">
+              <span class="post-card-date">01.08.2026</span>
+              <h2 class="post-card-title">Глоссарий текущих дней (Чет про AI)</h2>
+              <span class="post-card-time">1 минута</span>
+            </div>
+          </a>
+        
+          
+          <a href="/victors-blog/posts/fail-test-when-see-error-in-console/" class="post-card" data-post
+            data-title="Видим ошибку в консоли -&gt; роняем тест"
+            data-category="interesting"
+            data-featured="0"
+            >
+            
+              <div class="post-card-media"><img
+      class="cover-image"
+      src="/victors-blog/images/fifth_hu_3564dd4cd8c64878.webp"
+      width="800"
+      height="800"
+      alt="Видим ошибку в консоли -&gt; роняем тест"
+      loading="lazy"
+      decoding="async"></div>
+            
+            <div class="post-card-meta">
+              <span class="post-card-date">01.04.2026</span>
+              <h2 class="post-card-title">Видим ошибку в консоли -&gt; роняем тест</h2>
+              <span class="post-card-time">1 минута</span>
+            </div>
+          </a>
+        
+          
+          <a href="/victors-blog/posts/about-me/" class="post-card" data-post
+            data-title="Обо мне"
+            data-category="interesting"
+            data-featured="0"
+            >
+            
+              <div class="post-card-media"><img
+      class="cover-image"
+      src="/victors-blog/images/first_hu_e3666f7a80ea890a.webp"
+      width="800"
+      height="800"
+      alt="Обо мне"
+      loading="lazy"
+      decoding="async"></div>
+            
+            <div class="post-card-meta">
+              <span class="post-card-date">31.03.2026</span>
+              <h2 class="post-card-title">Обо мне</h2>
+              <span class="post-card-time">1 минута</span>
+            </div>
+          </a>
+        
+          
+          <a href="/victors-blog/posts/auto-logging-in-playwright/" class="post-card" data-post
+            data-title="Автоматическое логгирование шагов в Playwright"
+            data-category="trash"
+            data-featured="1"
+            hidden>
+            
+              <div class="post-card-media"><img
+      class="cover-image"
+      src="/victors-blog/images/second_hu_2faf420109f8ca60.webp"
+      width="800"
+      height="800"
+      alt="Автоматическое логгирование шагов в Playwright"
+      loading="lazy"
+      decoding="async"></div>
+            
+            <div class="post-card-meta">
+              <span class="post-card-date">29.03.2026</span>
+              <h2 class="post-card-title">Автоматическое логгирование шагов в Playwright</h2>
+              <span class="post-card-time">1 минута</span>
+            </div>
+          </a>
+        
+          
+          <a href="/victors-blog/posts/auto-logging-in-selene/" class="post-card" data-post
+            data-title="Автоматическое логгирование шагов в Selene"
+            data-category="interesting"
+            data-featured="0"
+            >
+            
+              <div class="post-card-media"><img
+      class="cover-image"
+      src="/victors-blog/images/third_hu_7117d67efdc36732.webp"
+      width="800"
+      height="800"
+      alt="Автоматическое логгирование шагов в Selene"
+      loading="lazy"
+      decoding="async"></div>
+            
+            <div class="post-card-meta">
+              <span class="post-card-date">29.03.2026</span>
+              <h2 class="post-card-title">Автоматическое логгирование шагов в Selene</h2>
+              <span class="post-card-time">1 минута</span>
+            </div>
+          </a>
+        
+          
+          <a href="/victors-blog/posts/get-all-data-from-faker/" class="post-card" data-post
+            data-title="Достаем все возможные данные из faker"
+            data-category="interesting"
+            data-featured="1"
+            hidden>
+            
+              <div class="post-card-media"><img
+      class="cover-image"
+      src="/victors-blog/images/sixth_hu_1facc86cdca9cb63.webp"
+      width="800"
+      height="800"
+      alt="Достаем все возможные данные из faker"
+      loading="lazy"
+      decoding="async"></div>
+            
+            <div class="post-card-meta">
+              <span class="post-card-date">29.03.2026</span>
+              <h2 class="post-card-title">Достаем все возможные данные из faker</h2>
+              <span class="post-card-time">1 минута</span>
+            </div>
+          </a>
+        
+          
+          <a href="/victors-blog/posts/different-envs/" class="post-card" data-post
+            data-title="Разные envs под разные окружения"
+            data-category="interesting"
+            data-featured="0"
+            >
+            
+              <div class="post-card-media"><img
+      class="cover-image"
+      src="/victors-blog/images/fourth_hu_c95cee366735dd23.webp"
+      width="800"
+      height="800"
+      alt="Разные envs под разные окружения"
+      loading="lazy"
+      decoding="async"></div>
+            
+            <div class="post-card-meta">
+              <span class="post-card-date">29.03.2026</span>
+              <h2 class="post-card-title">Разные envs под разные окружения</h2>
+              <span class="post-card-time">1 минута</span>
+            </div>
+          </a>
+        
+      </div>
+    </div>
+  </div>
+
+  </main>
+  
+</body>
+</html>

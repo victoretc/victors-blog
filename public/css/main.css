@@ -142,6 +142,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
+    margin-inline: auto;
     border-radius: 0;
     background:
         radial-gradient(
@@ -159,6 +160,20 @@ body {
         );
     pointer-events: none;
     z-index: 1;
+    animation: featured-shade-morph linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 60svh;
+}
+
+@keyframes featured-shade-morph {
+    0% {
+        border-radius: 0;
+        max-width: 100%;
+    }
+    100% {
+        border-radius: clamp(24px, 4vw, 48px);
+        max-width: 1118px;
+    }
 }
 
 .featured-link {
@@ -177,6 +192,22 @@ body {
     min-width: 0;
     overflow: hidden;
     border-radius: 0;
+    margin-inline: auto;
+    will-change: border-radius, max-width;
+    animation: featured-morph linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 60svh;
+}
+
+@keyframes featured-morph {
+    0% {
+        border-radius: 0;
+        max-width: 100%;
+    }
+    100% {
+        border-radius: clamp(24px, 4vw, 48px);
+        max-width: 1118px;
+    }
 }
 
 /* Снимок ровно во весь первый экран: 100svh (small viewport height), чтобы на
@@ -238,13 +269,10 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
-/* Название на снимке набрано Testo — акцидентным кириллическим шрифтом.
-   Латиницы в Testo нет, поэтому английские заголовки посимвольно падают в
-   Handil Pro: стек подобран так, чтобы смешение читалось как часть набора,
-   а не как подмена шрифта. */
+/* Название на снимке — Handil Pro и для русского, и для английского. */
 .featured-title {
     margin: 0;
-    font-family: 'Testo', 'Handil Pro', 'JetBrains Mono', monospace;
+    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
     font-size: clamp(32px, 5.2vw, 60px);
     line-height: 1.1;
     font-weight: 400;

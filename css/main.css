@@ -1,0 +1,1719 @@
+/* ==========================================================================
+   FONTS
+   "Handil Pro" — HandilPro-Medium, (c) 2023 Alifinart Studio.
+   Licence requires crediting the foundry:
+   https://behance.net/alifinart
+   ========================================================================== */
+
+@font-face {
+    font-family: 'Handil Pro';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../fonts/HandilPro-Medium.woff2') format('woff2');
+}
+
+/* "Drabina" — Drabina Solid, © Mark Blondie / Redage Works, бесплатный
+   экспериментальный шрифт (https://fonts.redage.works/en/drabina).
+   В репозитории лежал OTF на 192 глифа; он подрезан до используемых
+   символов (латиница, кириллица, цифры, пунктуация) и сжат в woff2 —
+   6 КБ вместо полного файла. */
+@font-face {
+    font-family: 'Drabina';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../fonts/Drabina-Solid.woff2') format('woff2');
+}
+
+/* "Leporid" — заголовок статьи на обложке. Исходник Leporid/Leporid.ttf
+   (551 глиф, латиница + кириллица + цифры) пережат в woff2, 12 КБ. */
+@font-face {
+    font-family: 'Testo';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/Testo.woff2') format('woff2');
+}
+
+/* "Testo" — название поста на обложке. Исходник testo.otf (100 глифов):
+   полная кириллица и цифры, латиницы нет. Для английских заголовков браузер
+   посимвольно падает в следующий шрифт стека, поэтому в font-family он идёт
+   перед Handil Pro. */
+@font-face {
+    font-family: 'Testo';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/Testo.woff2') format('woff2');
+}
+
+:root {
+    /* One spacing step for every block gap: between columns, between a cover
+       and its heading, and between two posts in the list. */
+    --gap: 24px;
+}
+
+body {
+    margin: 0 auto;
+    padding: 20px 20px 0 20px;
+    max-width: 1400px;
+}
+
+/* ==========================================================================
+   FEATURED — one very large post photo at a time
+   Scroll-snap does the paging: the track scrolls natively, so a swipe works on
+   touch, and the arrows and dots just call scrollTo. Nothing here changes the
+   size of a slide, so paging cannot make the layout jump.
+   ========================================================================== */
+
+/* Блок занимает всю ширину окна, а сама фотография внутри ограничена
+   1118px и отцентрована. Благодаря этому управление можно вынести за края
+   снимка: раньше .featured был шириной ровно с картинку, и стрелки с
+   точками физически некуда было вынести — они лежали поверх фотографии. */
+.featured {
+    margin: 0 0 72px;
+    max-width: none;
+    position: relative;
+}
+
+.featured-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* Фотографию можно листать прямо пальцем или перетаскиванием мыши:
+       grab-курсор подсказывает, что снимок «живой». */
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Во время перетаскивания отключаем scroll-snap, иначе браузер тянет слайд
+   назад к ближайшей границе на каждом кадре и движение «залипает». */
+.featured-track.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+}
+
+/* Нативная перетаскиваемость ссылки и картинки перехватывала бы жест,
+   стартуя HTML5 drag-and-drop и рисуя полупрозрачный призрак снимка — гасим её. */
+.featured-link,
+.featured-media img,
+.featured-link img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.featured-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* Каждый слайд слегка сдвинут и притушен по горизонтали, а центральный —
+   возвращён в исходное состояние. Чистый CSS, без единой строки JS: браузер
+   сам применяет промежуточные состояния при scroll-snap, поэтому карточка
+   «выезжает» из глубины по мере листания и не щёлкает на месте. */
+.featured-slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    opacity: 0.45;
+    transform: scale(0.94);
+    transition: opacity 500ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.featured-slide:target,
+.featured-slide.is-current {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Затемнение рисуется псевдоэлементом поверх фотографии, а не отдельным
+   блоком. Текст стоит по центру, поэтому тень радиальная: она гасит середину
+   снимка и мягко уходит к краям, оставляя углы фотографии чистыми.
+   Радиус повторяет скругление .featured-link, иначе тень вылезла бы за
+   скруглённый угол снимка. */
+.featured-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin-inline: auto;
+    border-radius: 0;
+    background:
+        radial-gradient(
+            ellipse 70% 55% at 50% 50%,
+            rgba(0, 0, 0, 0.72) 0%,
+            rgba(0, 0, 0, 0.45) 45%,
+            rgba(0, 0, 0, 0.12) 72%,
+            rgba(0, 0, 0, 0) 100%
+        ),
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.15) 30%,
+            rgba(0, 0, 0, 0) 52%
+        );
+    pointer-events: none;
+    z-index: 1;
+}
+
+@supports (animation-timeline: scroll()) {
+    .featured-link::after {
+        animation: featured-shade-morph linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 60svh;
+    }
+}
+
+@keyframes featured-shade-morph {
+    0% {
+        border-radius: 0;
+        max-width: 100%;
+    }
+    100% {
+        border-radius: clamp(24px, 4vw, 48px);
+        max-width: 1118px;
+    }
+}
+
+.featured-link {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Полноэкранный снимок — без скругления: картинка упирается в края окна.
+   overflow: hidden оставляю на обёртке, а не на <img>: если позже вернём
+   скругление, обрезаться оно будет одинаково во всех браузерах (у самого
+   заменяемого элемента Safari оставляет волосяную кайму по углам). */
+.featured-media {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 0;
+    margin-inline: auto;
+    will-change: border-radius, max-width;
+}
+
+@supports (animation-timeline: scroll()) {
+    .featured-media {
+        animation: featured-morph linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 60svh;
+    }
+}
+
+@keyframes featured-morph {
+    0% {
+        border-radius: 0;
+        max-width: 100%;
+    }
+    100% {
+        border-radius: clamp(24px, 4vw, 48px);
+        max-width: 1118px;
+    }
+}
+
+/* Снимок ровно во весь первый экран: 100svh (small viewport height), чтобы на
+   мобильном адресная строка не выдавливала нижнюю кромку. object-fit: cover
+   держит композицию и заполняет кадр без пустых полей. Увеличения по
+   наведению нет намеренно — фото и есть главный объект, а масштаб сдвигал
+   рамку и ломал ощущение неподвижной фотографии. */
+.featured-media .cover-image {
+    display: block;
+    width: 100%;
+    height: 100svh;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.featured-link:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 6px;
+}
+
+/* Текст отцентрован по обеим осям: inset: 0 плюс flex-центрирование дают
+   одинаковые отступы со всех сторон без ручных чисел, поэтому заголовок не
+   прижимается ни к низу, ни к верху. Раньше снизу стояли точки и требовалось
+   128px запаса — теперь точки вынесены из картинки, и отступы симметричны. */
+.featured-meta {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: clamp(28px, 5vw, 64px);
+    text-align: center;
+    pointer-events: none;
+}
+
+.featured-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Точка-разделитель между датой и временем чтения. */
+.featured-meta-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.featured-date,
+.featured-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Название на снимке — Handil Pro и для русского, и для английского. */
+.featured-title {
+    margin: 0;
+    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
+    font-size: clamp(32px, 5.2vw, 60px);
+    line-height: 1.1;
+    font-weight: 400;
+    color: #ffffff;
+    max-width: 18ch;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    /* Затемнение симметрично — текст в центре, тень нужна со всех сторон. */
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Управление вынесено целиком за пределы фотографии: контейнер растянут на
+   всю ширину окна, стрелки стоят у краёв, а точки — в поле между краем
+   снимка и стрелкой. Раньше .featured был шириной ровно с картинку, и
+   вынести что-либо было некуда — всё лежало поверх снимка. */
+.featured-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Точки лежат внизу по центру самой фотографии — внутри снимка. Стрелки при
+   этом стоят у краёв окна: контейнер растянут на всю ширину, поэтому стрелки
+   не режут картинку, а точки остаются её частью. */
+.featured-dots {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(28px, 4vw, 48px);
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: auto;
+}
+
+.featured-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border: 1px solid rgba(242, 242, 242, 0.3);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    color: #f2f2f2;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: border-color 180ms ease, background 180ms ease;
+    pointer-events: auto;
+}
+
+/* Стрелка назад у левого края окна, вперёд — у правого: они симметричны
+   фотографии и не наезжают на её содержимое. */
+.featured-arrow[data-featured-prev] {
+    left: clamp(8px, 2vw, 28px);
+}
+
+.featured-arrow[data-featured-next] {
+    right: clamp(8px, 2vw, 28px);
+}
+
+.featured-arrow svg {
+    width: 20px;
+    height: 20px;
+}
+
+.featured-arrow:hover:not(:disabled) {
+    border-color: #f2f2f2;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.featured-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+    border-color: rgba(242, 242, 242, 0.3);
+}
+
+.featured-dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.featured-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(242, 242, 242, 0.35);
+    cursor: pointer;
+    transition: background 180ms ease, transform 180ms ease;
+}
+
+.featured-dot.is-active {
+    background: #f2f2f2;
+    transform: scale(1.25);
+}
+
+/* На узких экранах управление уходит под текст, иначе стрелки наезжают на
+   длинный заголовок. */
+@media (max-width: 900px) {
+    .featured {
+        margin-bottom: 56px;
+    }
+
+    .featured-meta {
+        padding-bottom: 132px;
+    }
+
+    .featured-controls {
+        bottom: 32px;
+    }
+
+    .featured-title {
+        font-size: clamp(28px, 7vw, 40px);
+        max-width: none;
+    }
+}
+
+@media (max-width: 560px) {
+    .featured-arrow {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* ==========================================================================
+   HERO NAV — хэдер поверх полноэкранного снимка
+
+   Повторяет верхнюю панель референса (ManyChat COM): полупрозрачная плашка
+   с backdrop-blur, вписанная в поля 16px, с логотипом по центру. Содержимое
+   живёт в .hero-nav-bar; сейчас там только логотип шрифтом Drabina, остальные
+   слоты добавим позже.
+   ========================================================================== */
+
+.hero-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    padding: 16px;
+    pointer-events: none;
+}
+
+/* Плашка ловит клики, а прозрачная полоса вокруг — нет: иначе палец по краю
+   снимка попадал бы в панель, а не в ссылку-слайд. Ширина по содержимому,
+   поэтому панель не растягивается на весь экран, а жмётся к логотипу. */
+.hero-nav-bar {
+    width: fit-content;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    padding: 0 26px;
+    border-radius: 18px;
+    /* Дымчатое стекло: лёгкая тёмная подложка всего в 0.24 альфы, поэтому
+       кадр под панелью читается цветом, а не тонет в чёрном. Сильный blur
+       (24px) со saturate делает фон мягким и насыщенным, hairline-рамка и
+       верхний внутренний блик дают кромке объём — панель «стоит» на фото,
+       а не приклеена к нему. */
+    background: rgba(16, 16, 20, 0.24);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(24px) saturate(170%);
+    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    pointer-events: auto;
+}
+
+.hero-nav-logo {
+    font-family: 'Drabina', 'Handil Pro', monospace;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: #f2f2f2;
+    text-decoration: none;
+}
+
+.hero-nav-logo:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 4px;
+}
+
+/* ==========================================================================
+   SEARCH · FILTERS · CATEGORIES
+
+   Design copied verbatim from the frontend app (components ClubFilters.vue and
+   CategorySidebar.vue): same 30px pills, same 48px controls, same brand blue,
+   same sticky behaviour and the same fade-out gradient under the search bar
+   once it detaches.
+
+   The only deliberate change is the surface colour. The frontend sits on a
+   light grey page; this page is black, so the white surfaces are swapped for
+   #16161a to keep the same contrast relationships instead of punching two
+   white slabs into a dark page. Every other value is the frontend's.
+   ========================================================================== */
+
+.home-layout {
+    --surface: #16161a;
+    --surface-hover: #1f1f24;
+    --brand: #3B3EFF;
+    --brand-soft: rgba(59, 62, 255, 0.14);
+    --brand-ring: rgba(59, 62, 255, 0.35);
+    --stroke: rgba(242, 242, 242, 0.08);
+    --text: #f2f2f2;
+    --text-secondary: #9a9a9a;
+
+    /* Categories on the left, posts on the right — the DOM order is the same,
+       so there is nothing to keep in sync between markup and CSS here. */
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 26px;
+    max-width: 1118px;
+    margin: 0 auto;
+    align-items: start;
+    /* Боковые поля, которые раньше стояли на body. Теперь у body их нет —
+       снимок на первом экране должен упираться в края окна. */
+    padding: 0 40px;
+}
+
+.home-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+}
+
+/* --- search bar ---------------------------------------------------------- */
+
+.filters-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* align-items: flex-start, а не center. В колонке .search-col под поиском
+   живёт .no-results; когда он появляется, колонка становится выше строки, и
+   при center переключатель вида уезжал вниз — к середине выросшей строки.
+   По верху он остаётся на одной линии с поиском: обе плашки высотой 64px. */
+.search-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+}
+
+.search-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Поиск и пустой результат сидят в одной колонке и растягиваются на её
+   ширину (align-items: stretch по умолчанию) — ни один из них не может стать
+   шире колонки и наехать на переключатель вида справа. box-sizing нужен,
+   потому что паддинг поиска — 34px по горизонтали: без border-box он
+   прибавлялся сверху и поле вылезало под кнопки. */
+.search-bar {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    box-sizing: border-box;
+    background: var(--surface);
+    border-radius: 30px;
+    padding: 8px 10px 8px 24px;
+    gap: 8px;
+}
+
+.search-input {
+    flex: 1;
+    box-sizing: border-box;
+    background: none;
+    border: none;
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.21;
+    color: var(--text);
+    outline: none;
+    min-width: 0;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-btn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid rgba(59, 62, 255, 0.4);
+    border-radius: 30px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--brand);
+    color: #FFFFFF;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(59, 62, 255, 0.25);
+    transition: background 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-btn:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 16px rgba(59, 62, 255, 0.25);
+}
+
+.search-btn:active {
+    filter: brightness(0.92);
+}
+
+.search-icon {
+    display: block;
+}
+
+/* --- view toggle --------------------------------------------------------- */
+
+.view-toggle {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    background: var(--surface);
+    border-radius: 30px;
+}
+
+.view-toggle-btn {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 30px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.view-toggle-btn:hover {
+    background: var(--brand-soft);
+    color: var(--brand);
+}
+
+.view-toggle-btn.is-active {
+    background: var(--brand);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(59, 62, 255, 0.25);
+}
+
+
+/* --- sticky search and categories -----------------------------------------
+   Both panels stick, and both are pinned to the same offset so they travel
+   together at the same speed and never separate. The search is the taller of
+   the two — 12px of padding plus one 64px row — so its own height is the
+   offset the categories need, and the two lines below have to stay in step:
+   change one and change the other.
+
+   The search fades in a soft gradient underneath itself once it detaches, so
+   the cards scrolling past do not collide with it. */
+
+@media (min-width: 901px) {
+    .filters-section {
+        position: sticky;
+        /* Небольшой отступ от верхней кромки окна: иначе при скролле панель
+           прилипает вплотную и выглядит приклеенной к краю. */
+        top: 12px;
+        z-index: 30;
+        padding-top: 12px;
+        margin-top: -12px;
+        background: #000;
+        /* Панель прилипает на 12px ниже кромки, и этот зазор над ней должен
+           оставаться чёрным, а не подсвечивать проезжающие карточки. Тень с
+           нулевым размытием закрашивает ровно полосу 0–12px над панелью и
+           едет вместе с ней; в обычном потоке над панелью тоже чёрный фон,
+           поэтому тень не видна. */
+        box-shadow: 0 -12px 0 #000;
+    }
+
+    .filters-section::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -40px;
+        height: 40px;
+        background: linear-gradient(to bottom, #000, transparent);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .filters-section.is-sticky::after {
+        opacity: 1;
+    }
+
+    /* Оба блока прилипают к одной и той же кромке — top: 12px — поэтому при
+       скролле они стоят на одной высоте и едут вместе, сохраняя зазор до верха
+       окна. Раньше здесь стоял top: 76px «по высоте поиска», но у категорий
+       свой padding-top: 12px, из-за чего они уезжали на 76px ниже поиска и
+       разъезжались по вертикали. Чтобы скруглённый угол панели не срезался
+       краем окна, компенсирую его отрицательным отступом — визуально блок
+       остаётся на месте. */
+    .cat-panel {
+        position: sticky;
+        top: 12px;
+        z-index: 20;
+        margin-top: -12px;
+        padding-top: 12px;
+    }
+}
+
+/* --- categories ---------------------------------------------------------- */
+
+.cat-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--surface);
+    border-radius: 32px;
+    padding: 20px 16px;
+}
+
+.cat-panel-title {
+    margin: 0;
+    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text);
+    padding: 12px 12px 8px;
+}
+
+.cat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+/* No hover state on purpose. The active pill already says which category is
+   selected, and a hover tint on top of it just adds a second thing changing. */
+.cat-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cat-item.is-active {
+    background: var(--brand);
+    color: #FFFFFF;
+}
+
+/* --- nothing found -------------------------------------------------------
+   The source image carries its own opaque white background, which on a black
+   page looks like a rectangular hole. Giving it the same rounded dark panel
+   the search bar uses turns that plate into part of the design: the image is
+   inset on #16161a, and only the artwork's own white shows through. */
+
+.no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 34px 24px;
+    background: var(--surface);
+    border-radius: 32px;
+    text-align: center;
+}
+
+.no-results[hidden] {
+    display: none;
+}
+
+/* «404» набрано Drabina — тем же шрифтом, что и заголовок слайда. Ниже —
+   уже Handil Pro: он держит подпись, поэтому цифры и текст не спорят. */
+.no-results-code {
+    margin: 0;
+    font-family: 'Drabina', 'Handil Pro', 'JetBrains Mono', monospace;
+    font-size: clamp(72px, 12vw, 132px);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--text);
+}
+
+.no-results-title {
+    margin: 0;
+    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+/* ==========================================================================
+   HOME — black gallery
+   Three square photos in a row, with the categories panel standing in the
+   fourth column. Each item is a photograph with rounded corners and nothing
+   else: no card surface, no border, no shadow. The date, title and reading
+   time sit under the photo as plain text.
+   ========================================================================== */
+
+body.kind-home {
+    max-width: none;
+    background: #000;
+    color: #f2f2f2;
+    /* Внешних полей у страницы нет: снимок на первом экране прижат к краям
+       окна со всех сторон. Боковые отступы контента живут на .home-layout,
+       поэтому картинка может быть шире сетки, не ломая раскладку ниже. */
+    padding: 0 0 120px;
+}
+
+/* Three equal columns: 1118 - 300 (categories) - 26 (gap) leaves 792px,
+   minus two gaps of 26 leaves 740px, so 3 x ~246px per card. */
+.post-grid {
+    --grid-gap: 26px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 32px var(--grid-gap);
+    width: 100%;
+}
+
+/* Подложка появляется на наведении и объединяет фотографию с текстом в один
+   блок: padding даёт фону место снаружи скруглённых углов снимка, а тот же
+   радиус, что у фото, делает внешний контур ровным. Раньше фона здесь не было
+   намеренно — серая заливка на чёрном читалась как «дыра» в странице, но в
+   паре с padding она становится нормальной поверхностью карточки. */
+.post-card {
+    min-width: 0;
+    padding: 10px;
+    margin: -10px;
+    /* Серая подложка при наведении скруглена только сверху: снизу карточка
+       «врастает» в соседний ряд, и закруглённый низ висел бы в воздухе. */
+    border-radius: 45px 45px 0 0;
+    text-decoration: none;
+    color: inherit;
+    transition: background 240ms ease;
+}
+
+.post-card[hidden] {
+    display: none;
+}
+
+.post-card:hover,
+.post-card:focus-visible {
+    background: var(--surface);
+}
+
+.post-card:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 2px;
+}
+
+/* Радиус — на обёртке: тот же приём, что у hero. Снимок клипает контейнер,
+   поэтому углы чистые в любом браузере, а не только там, где border-radius на
+   replaced-элементе сглаживается без каймы. */
+.post-card-media {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 35px;
+}
+
+.post-card-media .cover-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 0;
+}
+
+.post-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 2px 6px;
+}
+
+.post-card-date,
+.post-card-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.3;
+    color: #7a7a7a;
+}
+
+.post-card-title {
+    margin: 0;
+    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
+    font-size: 26px;
+    line-height: 1.25;
+    font-weight: 500;
+    color: #ffffff;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* --- list view -----------------------------------------------------------
+   The frontend's view toggle has two modes. In list mode the photo becomes a
+   small square beside the text instead of sitting on top of it. */
+
+.home-layout.is-list .post-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+}
+
+.home-layout.is-list .post-card {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    /* В списке фото и текст стоят рядом, поэтому подложке нужен меньший
+       радиус — по краям карточки больше не пустого места. Скругление, как и
+       в сетке, только сверху. */
+    border-radius: 34px 34px 0 0;
+}
+
+.home-layout.is-list .post-card-media {
+    border-radius: 24px;
+}
+
+.home-layout.is-list .post-card-meta {
+    padding: 0;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   The categories panel is a fourth column on a wide screen only. Below that it
+   drops under the posts and stops sticking, because there is no room left to
+   pin it to anything.
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+    .home-layout {
+        grid-template-columns: 260px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .home-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .post-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cat-panel {
+        position: static;
+        top: auto;
+        padding-top: 0;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .view-toggle {
+        display: none;
+    }
+
+    .search-bar {
+        padding: 6px 6px 6px 16px;
+        gap: 6px;
+    }
+
+    .search-input {
+        font-size: 16px;
+    }
+
+    .search-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 560px) {
+    .post-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .search-bar {
+        padding: 4px 4px 4px 12px;
+        gap: 4px;
+    }
+
+    .search-input {
+        font-size: 16px;
+    }
+
+    .search-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .search-icon {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* The post list is narrower still and centred, so the heading column keeps a
+   comfortable line length. */
+body.kind-home .posts-header--list,
+body.kind-home .posts-container {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.header-container a {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    height: 40px;
+    border-radius: 0 30px 30px 0;
+    border: 2px dashed black;
+    text-decoration: none;
+    padding: 0 20px;
+    transition: 0.15s linear;
+    cursor: pointer;
+}
+
+.telegram-button { background: #D3FFC0; color: black; }
+.about-button     { background: #FFC5C5; color: black; }
+.yet-button       { background: #FFFFC0; color: black; }
+
+.lang-switcher--term {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    color: #333;
+    margin-left: auto;
+    padding: 0 4px;
+    white-space: nowrap;
+}
+.lang-switcher--term .term-sep { color: #ccc; }
+
+.lang-switcher--term a.term-opt,
+.lang-switcher--term span.term-opt {
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    font-size: 15px;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.4;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+.lang-switcher--term a.term-opt {
+    color: #2F6FED;
+    border-bottom: 1px dotted #2F6FED;
+}
+.lang-switcher--term a.term-opt:hover {
+    filter: none;
+    transform: none;
+    color: #1a4fc0;
+}
+.lang-switcher--term .term-opt--current {
+    color: #111;
+    font-weight: 700;
+    border-bottom: none;
+}
+
+.header-container a:hover {
+    filter: brightness(0.95);
+    transform: translateX(2px);
+}
+
+.search-button {
+    --pf-background: #D3FFC0;
+    --pf-text: black;
+    --pf-border: dashed 2px black;
+    --pf-border-radius: 0 30px 30px 0;
+    --pf-input-height: 40px;
+    --pf-input-font-size: 20px;
+    --pf-font: 'JetBrains Mono', monospace;
+    display: inline-flex;
+    align-items: center;
+}
+
+.search-button:hover {
+    --pf-background: #b7ee9e;
+}
+
+pagefind-modal {
+    --pf-font: 'JetBrains Mono', monospace;
+    --pf-text: #111;
+    --pf-text-secondary: #555;
+    --pf-border: #cde8bd;
+    --pf-border-focus: #2E7D32;
+    --pf-mark: #2F6FED;
+    --pf-outline-focus: #2E7D32;
+    --pf-outline-width: 2px;
+    --pf-hover: #ecf8e4;
+    --pf-modal-max-width: 640px;
+    --pf-border-radius: 8px;
+}
+
+@media (max-width: 600px) {
+    .header-container a {
+        font-size: 20px;
+        height: 35px;
+        padding: 0 16px;
+    }
+}
+
+
+.posts-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.posts-header,
+.posts-header--list {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) 400px;
+    gap: 24px;
+    margin: 40px 0 24px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 2px dashed #ddd;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: black;
+}
+
+/* Three columns: DATE | TITLE | READING TIME.
+   The title cell is itself a grid: a small 145x90 cover on the left, the
+   heading to its right, matching the reference list. */
+.posts-header--list {
+    grid-template-columns: 130px minmax(0, 1fr) 140px;
+}
+
+.posts-header-right {
+    text-align: right;
+}
+
+.post-item {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) 400px;
+    grid-template-rows: auto auto;
+    gap: var(--gap);
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-item--list {
+    grid-template-columns: 130px minmax(0, 1fr) 140px;
+    grid-template-rows: auto;
+    align-items: start;
+    padding: calc(var(--gap) / 2) 0;
+}
+
+.post-item--list:first-child {
+    padding-top: 0;
+}
+
+/* Title cell: cover on the left, heading beside it. The heading starts at the
+   top of the cover, aligned with its first line. */
+.post-item--list .post-body {
+    display: grid;
+    grid-template-columns: 145px minmax(0, 1fr);
+    gap: 0 var(--gap);
+    align-items: start;
+    min-width: 0;
+}
+
+.post-item--list .post-cover {
+    grid-column: 1;
+    margin-bottom: 0;
+}
+
+.post-item--list h2 {
+    grid-column: 2;
+    min-width: 0;
+}
+
+/* Covers are authored at 1600x1000 and always cropped to 1.6:1. */
+.cover-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.6 / 1;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #eee;
+}
+
+.post-cover-placeholder {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1.6 / 1;
+    border-radius: 6px;
+    background: #eee;
+}
+
+/* The shared `.post-data` / `.post-body` / `.post-meta` rules further down put
+   the date in column 1, the title in column 2 and the reading time in column 3.
+   Rows must not span two tracks on the list, so reset them. */
+.post-item--list .post-data,
+.post-item--list .post-body,
+.post-item--list .post-meta {
+    grid-row: 1;
+}
+
+/* The cover, the date, the heading and the reading time all start at the same
+   y. Any padding-top here would stair-step the row, so they all stay at 0 and
+   the three text elements share one size and one line height instead. */
+.post-item--list .post-data {
+    padding-top: 0;
+}
+
+.post-item--list .post-meta {
+    justify-content: flex-start;
+    padding-top: 0;
+}
+
+/* Article body: DATE | TITLE/CONTENT | COMPOSITION, as before.
+   The date column comes from the base .post-item .post-data rule. */
+.post-item--page {
+    grid-template-columns: 140px minmax(0, 1fr) 400px;
+}
+
+/* Заголовок и текст поста — две разные строки сетки, а не одна ячейка.
+   Раньше и .post-hero-panel, и .post-content стояли в grid-row: 1, поэтому
+   текст ложился прямо на заголовок: обе строки накладывались друг на друга,
+   а вторая строка сетки оставалась пустой (0px). Содержимое уезжает во
+   вторую строку и отделяется от заголовка обычным gap. */
+.post-item--page .post-content {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+/* Оглавление тянется на обе строки — колонка с ним начинается от верха
+   заголовка и заканчивается вместе с текстом поста. */
+.post-item--page .post-composition {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+}
+
+.post-item .post-data {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    padding-top: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 400;
+    color: #5E5E5E;
+}
+
+.post-body {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    min-width: 0;
+}
+
+.post-item h1,
+.post-item h2 {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #0c7cff;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.post-item h1 {
+    font-size: 40px;
+}
+
+.post-item > h2 {
+    font-size: 28px;
+}
+
+/* Must come after .post-item h1, .post-item h2: the list heading is black, not
+   the blue accent. Both selectors weigh (0,1,1), so source order decides. */
+.post-item--list h2 {
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 400;
+    color: #212121;
+    margin-bottom: 0;
+    /* JetBrains Mono is monospace, so 1ch is exactly one character. 46ch is the
+       measure of the longest title in the list: it stays on one line, and
+       anything longer wraps at a word boundary. */
+    max-width: 46ch;
+}
+
+.post-content {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #5E5E5E;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.post-meta {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    min-width: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 400;
+    color: #5E5E5E;
+    white-space: nowrap;
+}
+
+.post-reading-time {
+    padding-top: 0;
+}
+
+.post-item--list:focus-visible {
+    outline: 3px solid #0c7cff;
+    outline-offset: 4px;
+}
+
+.post-composition {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    position: relative;
+    min-width: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1d1d1f80;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Заголовок поста — обычный текст в потоке второй колонки. Раньше здесь была
+   фиолетовая панель с обложкой справа; обе сняты, панель держала цветную
+   заливку и радиус, а колонка — пустое место под картинку. */
+.post-hero-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+}
+
+.post-hero-body {
+    min-width: 0;
+}
+
+.post-hero-body h1 {
+    margin: 0;
+    font-size: 40px;
+    line-height: 1.2;
+    color: #14102B;
+}
+
+h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 40px;
+    font-weight: 500;
+    color: #0c7cff;
+    margin: 0 0 24px 0;
+    line-height: 1;
+}
+
+.p {
+    color: #1d1d1f;
+    font-size: 18px;
+}
+
+@media (max-width: 1100px) {
+    .posts-header {
+        grid-template-columns: 120px minmax(0, 1fr) 240px;
+    }
+
+    .posts-header--list,
+    .post-item--list {
+        grid-template-columns: 120px minmax(0, 1fr) 110px;
+    }
+
+    .post-item--page {
+        grid-template-columns: 120px minmax(0, 1fr) 240px;
+    }
+
+    .post-hero-body h1 {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .posts-header,
+    .posts-header--list {
+        display: none;
+    }
+
+    .post-item,
+    .post-item--list {
+        display: block;
+    }
+
+    .post-item--list {
+        padding: calc(var(--gap) / 2) 0;
+    }
+
+    /* The row stacks: date, then a narrower cover beside the heading,
+       then the reading time. */
+    .post-item--list .post-body {
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 0 var(--gap);
+    }
+
+    .post-item--list .post-data,
+    .post-item--list .post-meta {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    .post-item--list .post-data {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .post-item--list .post-meta {
+        display: block;
+        margin-top: 8px;
+        padding-top: 0;
+    }
+
+    .post-item--list h2 {
+        font-size: 18px;
+    }
+
+    .post-item .post-data {
+        display: inline-block;
+        margin-bottom: 8px;
+    }
+
+    .post-hero-body h1 {
+        font-size: 23px;
+    }
+
+    .post-composition {
+        margin-top: 20px;
+    }
+
+    .toc-nav {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .posts-container {
+        margin-top: 20px;
+    }
+}
+
+img {
+    max-width: 100%;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 60px 0 40px 0;
+    font-family: 'JetBrains Mono', monospace;
+    border-top: 2px dashed #ddd;
+    padding-top: 30px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-button {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    height: 40px;
+    border-radius: 0 30px 30px 0;
+    border: 2px dashed black;
+    text-decoration: none;
+    padding: 0 20px;
+    transition: 0.15s linear;
+    cursor: pointer;
+}
+
+.telegram-button { background: #D3FFC0; color: black; }
+.about-button     { background: #FFC5C5; color: black; }
+.yet-button       { background: #FFFFC0; color: black; }
+
+.footer-button:hover {
+    filter: brightness(0.95);
+    transform: translateX(2px);
+}
+
+.footer-copyright {
+    font-size: 16px;
+    color: #5E5E5E;
+}
+
+.footer-copyright p {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .footer-links {
+        justify-content: center;
+    }
+
+    .footer-button {
+        font-size: 18px;
+        height: 35px;
+        padding: 0 16px;
+    }
+
+    .footer-copyright {
+        text-align: center;
+    }
+}
+
+.read-more-container {
+    margin: 60px 0 40px 0;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.read-more-header {
+    font-size: 20px;
+    font-weight: 500;
+    color: black;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 10px;
+}
+
+.read-more-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.read-more-post {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 20px;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.read-more-post {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: #5E5E5E;
+}
+
+p a {
+    color: inherit;
+}
+
+.read-more-post h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: black;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.read-more-post:hover {
+    filter: brightness(0.95);
+}
+
+@media (max-width: 768px) {
+    .read-more-post {
+        display: block;
+    }
+
+    .read-more-post .post-data {
+        display: none;
+    }
+
+    .read-more-post h4 {
+        font-size: 18px;
+    }
+}
+
+.highlight,
+.highlight pre,
+.highlight code {
+    max-width: 100%;
+    overflow-x: auto;
+    box-sizing: border-box;
+    font-size: 18px;
+    
+}
+
+code {
+    padding: 15px;
+    display: inline-block;
+}
+
+pre {
+    border-radius: 10px;
+}
+
+.toc-nav {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    position: sticky;
+    top: 20px;
+    border-left: 1px solid #E5E5EA;
+}
+
+.toc-nav ul {
+    margin: 0;
+    padding-left: 20px;
+    list-style: none;
+}
+
+.toc-nav li {
+    margin: 12px 0;
+    line-height: 1.4;
+}
+
+.toc-nav a {
+    color: #5E5E5E;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.toc-nav a:hover {
+    color: black;
+}
+
+.toc-nav ul ul {
+    padding-left: 16px;
+    margin-top: 4px;
+    border-left: 1px dashed #E5E5EA;
+}
+
+.toc-nav ul ul li {
+    margin: 6px 0;
+}
+
+.toc-nav ul ul a {
+    font-size: 12px;
+    color: #7A7A7E;
+}
+
+@media (max-width: 1024px) {
+    .toc-nav {
+        display: none;
+    }
+}
+
+.post-content h2 + h3 {
+    margin-top: 20px;  /* отступ когда h3 идет сразу после h2 */
+}
+
+img[src*="portrait-1-resize.webp"] {
+    height: 500px;
+    object-fit: cover;
+    border-radius: 30px;
+}

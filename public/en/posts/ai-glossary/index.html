@@ -19,11 +19,95 @@
       <script src="/victors-blog/js/main.js" defer></script>
 
 
+<link rel="alternate" hreflang="ru" href="http://localhost:1313/victors-blog/posts/ai-glossary/">
+
+<link rel="alternate" hreflang="en" href="http://localhost:1313/victors-blog/en/posts/ai-glossary/">
+
+<script>
+(function () {
+  var STORE = 'preferred-lang'
+  var current = 'en'
+
+  
+  function browserLanguages() {
+    var nav = window.navigator
+    if (nav.languages && nav.languages.length) return nav.languages
+    var single = nav.language || nav.browserLanguage || nav.systemLanguage || nav.userLanguage
+    return single ? [single] : []
+  }
+
+  
+  
+  
+  function desiredLanguage(stored) {
+    if (stored === 'ru' || stored === 'en') return stored
+    var list = browserLanguages()
+    for (var i = 0; i < list.length; i++) {
+      var code = String(list[i] || '').toLowerCase()
+      if (code.indexOf('ru') === 0) return 'ru'
+      if (code.indexOf('en') === 0) return 'en'
+    }
+    return 'en'
+  }
+
+  
+  document.addEventListener('click', function (e) {
+    var el = e.target
+    while (el && el.getAttribute) {
+      var lang = el.getAttribute('data-set-lang')
+      if (lang) {
+        try { localStorage.setItem(STORE, lang) } catch (err) {}
+        return
+      }
+      el = el.parentNode
+    }
+  })
+
+  
+  if (/(bot|crawl|spider|slurp|preview|facebookexternalhit)/i.test(navigator.userAgent)) return
+
+  var stored = ''
+  try { stored = localStorage.getItem(STORE) || '' } catch (err) {}
+
+  var target = desiredLanguage(stored)
+  if (target === current) return
+
+  var alt = document.querySelector('link[rel="alternate"][hreflang="' + target + '"]')
+  if (!alt) return
+
+  
+  if (!stored) {
+    try { localStorage.setItem(STORE, target) } catch (err) {}
+  }
+
+  var url = new URL(alt.href, window.location.href)
+  url.search = window.location.search
+  url.hash = window.location.hash
+  
+  
+  window.location.replace(url.pathname + url.search + url.hash)
+})()
+</script>
+
+
 </head>
 <body class="kind-page">
   
   <main>
     
+  
+  <header class="post-nav">
+    <a class="post-nav-back" href="/victors-blog/en/" aria-label="Home">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <div class="post-nav-bar">
+      <a class="hero-nav-logo" href="/victors-blog/en/" aria-label="">QS</a>
+    </div>
+  </header>
+
   <div class="posts-header posts-header--page">
     <span>Date</span>
     <span>Title</span>
@@ -115,16 +199,16 @@
         
         
             
-            <a href="/victors-blog/en/posts/auto-logging-in-playwright/" class="read-more-post">
+            <a href="/victors-blog/en/posts/eval-agent-skill/" class="read-more-post">
                 <div class="post-data">29.03.2026</div>
-                <h4>Automatic step logging in Playwright</h4>
+                <h4>Different envs for different environments</h4>
             </a>
             
         
             
-            <a href="/victors-blog/en/posts/get-all-data-from-faker/" class="read-more-post">
+            <a href="/victors-blog/en/posts/auto-logging-in-playwright/" class="read-more-post">
                 <div class="post-data">29.03.2026</div>
-                <h4>Getting all possible data from faker</h4>
+                <h4>Automatic step logging in Playwright</h4>
             </a>
             
         

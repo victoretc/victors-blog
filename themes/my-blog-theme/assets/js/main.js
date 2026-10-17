@@ -306,3 +306,49 @@
     }, { passive: true });
   }
 })();
+
+// Featured morph fallback.
+//
+// The rounding of the hero photo is a scroll-driven animation
+// (animation-timeline: scroll(), see main.css). Firefox before 156, Safari
+// before 26 and browsers built on older engines (e.g. Zen) fail the
+// @supports check there, so the photo stays full-bleed with square corners.
+// Here the same 0..1 progress over the first 60svh of scroll is computed on
+// the main thread and written to --featured-morph, which the base CSS rules
+// already consume. Where the native animation exists this script does
+// nothing, so the two paths never fight over the same properties.
+
+(() => {
+  if (
+    typeof CSS !== 'undefined' &&
+    typeof CSS.supports === 'function' &&
+    CSS.supports('animation-timeline', 'scroll()')
+  ) {
+    return;
+  }
+
+  if (!document.querySelector('.featured-media')) return;
+
+  // animation-range: 0 60svh in CSS; innerHeight is the closest JS
+  // equivalent of svh and the few-pixel difference never shows.
+  const RANGE = 0.6;
+
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    const limit = window.innerHeight * RANGE;
+    const progress = limit > 0 ? window.scrollY / limit : 0;
+    const clamped = Math.min(Math.max(progress, 0), 1);
+    document.documentElement.style.setProperty('--featured-morph', String(clamped));
+  };
+
+  const schedule = () => {
+    if (frame) return;
+    frame = requestAnimationFrame(update);
+  };
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+
+  update();
+})();

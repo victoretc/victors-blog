@@ -13,7 +13,7 @@
           {{ end }}
         {{ end }}
       {{ end }}
-      <a class="term-opt" href="{{ $target }}" lang="{{ $lang.Language.Lang }}">{{ $lang.Language.Lang }}</a>
+      <a class="term-opt" data-set-lang="{{ $lang.Language.Lang }}" href="{{ $target }}" lang="{{ $lang.Language.Lang }}">{{ $lang.Language.Lang }}</a>
     {{ end }}
     {{ if lt (add $i 1) (len $langs) }}<span class="term-sep">/</span>{{ end }}
   {{ end }}

@@ -204,4 +204,26 @@
       }, { passive: true });
     }
   })();
+  (() => {
+    if (typeof CSS !== "undefined" && typeof CSS.supports === "function" && CSS.supports("animation-timeline", "scroll()")) {
+      return;
+    }
+    if (!document.querySelector(".featured-media")) return;
+    const RANGE = 0.6;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const limit = window.innerHeight * RANGE;
+      const progress = limit > 0 ? window.scrollY / limit : 0;
+      const clamped = Math.min(Math.max(progress, 0), 1);
+      document.documentElement.style.setProperty("--featured-morph", String(clamped));
+    };
+    const schedule = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    update();
+  })();
 })();

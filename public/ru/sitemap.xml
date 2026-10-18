@@ -2,119 +2,145 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1314/posts/</loc>
+    <loc>http://localhost:1313/victors-blog/posts/</loc>
     <lastmod>2026-08-01T20:21:37+03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/posts/"
+                href="http://localhost:1313/victors-blog/en/posts/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/posts/"
+                href="http://localhost:1313/victors-blog/posts/"
                 />
   </url><url>
-    <loc>http://localhost:1314/</loc>
+    <loc>http://localhost:1313/victors-blog/</loc>
     <lastmod>2026-08-01T20:21:37+03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/"
+                href="http://localhost:1313/victors-blog/en/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/"
+                href="http://localhost:1313/victors-blog/"
                 />
   </url><url>
-    <loc>http://localhost:1314/posts/fail-test-when-see-error-in-console/</loc>
+    <loc>http://localhost:1313/victors-blog/posts/ai-glossary/</loc>
+    <lastmod>2026-08-01T20:21:37+03:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/victors-blog/en/posts/ai-glossary/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ru-ru"
+                href="http://localhost:1313/victors-blog/posts/ai-glossary/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/victors-blog/posts/fail-test-when-see-error-in-console/</loc>
     <lastmod>2026-04-01T09:42:22+03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/posts/fail-test-when-see-error-in-console/"
+                href="http://localhost:1313/victors-blog/en/posts/fail-test-when-see-error-in-console/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/posts/fail-test-when-see-error-in-console/"
+                href="http://localhost:1313/victors-blog/posts/fail-test-when-see-error-in-console/"
                 />
   </url><url>
-    <loc>http://localhost:1314/posts/auto-logging-in-playwright/</loc>
+    <loc>http://localhost:1313/victors-blog/posts/about-me/</loc>
+    <lastmod>2026-03-31T19:38:29+03:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="http://localhost:1313/victors-blog/en/posts/about-me/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="ru-ru"
+                href="http://localhost:1313/victors-blog/posts/about-me/"
+                />
+  </url><url>
+    <loc>http://localhost:1313/victors-blog/posts/auto-logging-in-playwright/</loc>
     <lastmod>2026-03-29T21:17:52+03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/posts/auto-logging-in-playwright/"
+                href="http://localhost:1313/victors-blog/en/posts/auto-logging-in-playwright/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/posts/auto-logging-in-playwright/"
+                href="http://localhost:1313/victors-blog/posts/auto-logging-in-playwright/"
                 />
   </url><url>
-    <loc>http://localhost:1314/posts/auto-logging-in-selene/</loc>
+    <loc>http://localhost:1313/victors-blog/posts/auto-logging-in-selene/</loc>
     <lastmod>2026-03-29T21:17:52+03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/posts/auto-logging-in-selene/"
+                href="http://localhost:1313/victors-blog/en/posts/auto-logging-in-selene/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/posts/auto-logging-in-selene/"
+                href="http://localhost:1313/victors-blog/posts/auto-logging-in-selene/"
                 />
   </url><url>
-    <loc>http://localhost:1314/posts/get-all-data-from-faker/</loc>
+    <loc>http://localhost:1313/victors-blog/posts/get-all-data-from-faker/</loc>
     <lastmod>2026-03-29T21:17:52+03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/posts/get-all-data-from-faker/"
+                href="http://localhost:1313/victors-blog/en/posts/get-all-data-from-faker/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/posts/get-all-data-from-faker/"
+                href="http://localhost:1313/victors-blog/posts/get-all-data-from-faker/"
                 />
   </url><url>
-    <loc>http://localhost:1314/posts/different-envs/</loc>
+    <loc>http://localhost:1313/victors-blog/posts/different-envs/</loc>
     <lastmod>2026-03-29T21:17:52+03:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/posts/different-envs/"
+                href="http://localhost:1313/victors-blog/en/posts/different-envs/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/posts/different-envs/"
+                href="http://localhost:1313/victors-blog/posts/different-envs/"
                 />
   </url><url>
-    <loc>http://localhost:1314/categories/</loc>
+    <loc>http://localhost:1313/victors-blog/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/categories/"
+                href="http://localhost:1313/victors-blog/en/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/categories/"
+                href="http://localhost:1313/victors-blog/categories/"
                 />
   </url><url>
-    <loc>http://localhost:1314/tags/</loc>
+    <loc>http://localhost:1313/victors-blog/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en-us"
-                href="http://localhost:1314/en/tags/"
+                href="http://localhost:1313/victors-blog/en/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="ru-ru"
-                href="http://localhost:1314/tags/"
+                href="http://localhost:1313/victors-blog/tags/"
                 />
   </url>
 </urlset>

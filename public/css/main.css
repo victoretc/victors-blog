@@ -1081,6 +1081,13 @@ body.kind-page .site-nav {
     fill: currentColor;
 }
 
+/* Таблетка избранного в ленте категорий — мобильный двойник .fav-toggle.
+   На десктопе фильтр несёт кнопка рядом с поиском, таблетка скрыта, чтобы
+   фильтр не появлялся дважды; показывает её max-width: 900px. */
+.fav-chip {
+    display: none;
+}
+
 .fav-empty {
     display: flex;
     align-items: center;
@@ -1292,43 +1299,57 @@ body.kind-home {
    собственно inset — итог 22px от края слота до края сердечка. Сердечко
    всплывает при наведении на карточку (или пока на нём фокус с клавиатуры)
    и всегда остаётся нейтральным: сохранённость поста не подсвечивается
-   постоянно — о добавлении говорит всплывающая надпись .fav-toast. Само
-   шоу — только на ≥901px, как и кнопка в строке поиска. */
+    постоянно — о добавлении говорит всплывающая надпись .fav-toast. На
+    тач-устройствах hover не бывает, поэтому там сердечко видно всегда;
+    десктоп (min-width: 901px) возвращает привычное «всплывает при
+    наведении». Кнопка в строке поиска при этом остаётся только десктопной —
+    на мобилке фильтр несёт таблетка .fav-chip после категорий. */
 
 .post-card-fav {
-    display: none;
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 50%;
+    /* Полупрозрачная подложка + blur: сердечко читается и на светлом
+       снимке, и на тёмном, не закрашивая углы картинки сплошным. */
+    background: rgba(16, 16, 20, 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #f2f2f2;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.18s ease, background 0.18s ease, color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.post-card-fav .heart-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+/* В списке картинка — квадрат 120px слева, а не вся ширина карточки,
+   поэтому кнопка должна стоять в ЕЁ правом верхнем углу, а не в углу
+   карточки. right уходит в auto, левый край считается так: 10 (padding
+   слота) + 120 (картинка) − 12 (отступ до края) − 40 (кнопка) = 78. */
+.home-layout.is-list .post-card-fav {
+    right: auto;
+    left: 78px;
 }
 
 @media (min-width: 901px) {
+    /* Десктоп: постоянное сердечко на картинке шумит — прячем до
+       наведения на карточку (или фокуса с клавиатуры). */
     .post-card-fav {
-        position: absolute;
-        top: 22px;
-        right: 22px;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        border-radius: 50%;
-        /* Полупрозрачная подложка + blur: сердечко читается и на светлом
-           снимке, и на тёмном, не закрашивая углы картинки сплошным. */
-        background: rgba(16, 16, 20, 0.55);
-        -webkit-backdrop-filter: blur(8px);
-        backdrop-filter: blur(8px);
-        color: #f2f2f2;
-        cursor: pointer;
         opacity: 0;
-        transition: opacity 0.18s ease, background 0.18s ease, color 0.18s ease,
-            border-color 0.18s ease;
-    }
-
-    .post-card-fav .heart-icon {
-        display: block;
-        width: 20px;
-        height: 20px;
     }
 
     .post-card-slot:hover .post-card-fav,
@@ -1338,15 +1359,6 @@ body.kind-home {
 
     .post-card-fav:hover {
         background: rgba(16, 16, 20, 0.85);
-    }
-
-    /* В списке картинка — квадрат 120px слева, а не вся ширина карточки,
-       поэтому кнопка должна стоять в ЕЁ правом верхнем углу, а не в углу
-       карточки. right уходит в auto, левый край считается так: 10 (padding
-       слота) + 120 (картинка) − 12 (отступ до края) − 40 (кнопка) = 78. */
-    .home-layout.is-list .post-card-fav {
-        right: auto;
-        left: 78px;
     }
 }
 
@@ -1471,6 +1483,25 @@ body.kind-home {
         border-radius: 999px;
         background: var(--surface);
         font-size: 14px;
+    }
+
+    /* Таблетка избранного: тот же pill, что и категории, плюс сердечко
+       слева. Активность наследуется от .cat-item.is-active (фон brand),
+       сердечко заливается, как у .fav-toggle.is-active. */
+    .fav-chip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .fav-chip .heart-icon {
+        display: block;
+        width: 16px;
+        height: 16px;
+    }
+
+    .fav-chip.is-active .heart-icon path {
+        fill: currentColor;
     }
 
     /* Пустые состояния (404 и «избранное пусто») — между фишками и сеткой:

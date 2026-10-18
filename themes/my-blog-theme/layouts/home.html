@@ -109,6 +109,21 @@
     <aside class="cat-panel" data-cat-panel>
       <h2 class="cat-panel-title">{{ i18n "categories" }}</h2>
       <div class="cat-list">
+        {{/* Таблетка «Избранное» — мобильный двойник .fav-toggle из строки
+             поиска. На телефоне та кнопка скрыта, и весь фильтр живёт здесь,
+             первой таблеткой — до категорий, чтобы не прятаться в конце
+             прокручиваемого ряда. data-fav-toggle общий — JS переключает
+             обе кнопки синхронно. data-category намеренно нет: обработчик
+             категорий её не видит. */}}
+        <button type="button" class="cat-item fav-chip" aria-pressed="false" data-fav-toggle>
+          <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round"/>
+          </svg>
+          <span class="cat-name">{{ i18n "favorites" }}</span>
+        </button>
+
         <button type="button" class="cat-item is-active" aria-pressed="true" data-category="">
           <span class="cat-name">{{ i18n "category_all" }}</span>
         </button>

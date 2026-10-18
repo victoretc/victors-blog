@@ -182,9 +182,14 @@
   const submit = document.querySelector('[data-search-submit]');
   const empty = document.querySelector('[data-no-results]');
   const favEmpty = document.querySelector('[data-fav-empty]');
-  const favToggle = document.querySelector('[data-fav-toggle]');
+  // Избранное переключают две кнопки: .fav-toggle в строке поиска (десктоп)
+  // и таблетка .fav-chip после категорий (мобилка). Это один фильтр, поэтому
+  // клик по любой из них синхронизирует обе.
+  const favToggles = Array.from(document.querySelectorAll('[data-fav-toggle]'));
   const favButtons = Array.from(grid.querySelectorAll('[data-fav-btn]'));
-  const catItems = Array.from(document.querySelectorAll('.cat-item'));
+  // data-category есть у настоящих категорий (включая «Все» с пустым
+  // значением); таблетка избранного его не носит и в этот список не попадает.
+  const catItems = Array.from(document.querySelectorAll('.cat-item[data-category]'));
   const viewButtons = Array.from(document.querySelectorAll('[data-view]'));
 
   // An em dash is what Hugo writes for a missing value, so a post without a
@@ -413,11 +418,15 @@
     if (state.favorites) apply();
   });
 
-  favToggle?.addEventListener('click', () => {
-    state.favorites = !state.favorites;
-    favToggle.classList.toggle('is-active', state.favorites);
-    favToggle.setAttribute('aria-pressed', state.favorites ? 'true' : 'false');
-    apply();
+  favToggles.forEach((button) => {
+    button.addEventListener('click', () => {
+      state.favorites = !state.favorites;
+      favToggles.forEach((other) => {
+        other.classList.toggle('is-active', state.favorites);
+        other.setAttribute('aria-pressed', state.favorites ? 'true' : 'false');
+      });
+      apply();
+    });
   });
 
   renderFavorites();

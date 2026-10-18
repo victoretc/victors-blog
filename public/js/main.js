@@ -120,9 +120,9 @@
     const submit = document.querySelector("[data-search-submit]");
     const empty = document.querySelector("[data-no-results]");
     const favEmpty = document.querySelector("[data-fav-empty]");
-    const favToggle = document.querySelector("[data-fav-toggle]");
+    const favToggles = Array.from(document.querySelectorAll("[data-fav-toggle]"));
     const favButtons = Array.from(grid.querySelectorAll("[data-fav-btn]"));
-    const catItems = Array.from(document.querySelectorAll(".cat-item"));
+    const catItems = Array.from(document.querySelectorAll(".cat-item[data-category]"));
     const viewButtons = Array.from(document.querySelectorAll("[data-view]"));
     const normalise = (value) => (value || "").replace(/^—+$/, "").trim().toLocaleLowerCase();
     const STORAGE_KEY = "victors_blog_favorites";
@@ -259,11 +259,15 @@
       showFavToast(wasFavorite ? "remove" : "add");
       if (state.favorites) apply();
     });
-    favToggle?.addEventListener("click", () => {
-      state.favorites = !state.favorites;
-      favToggle.classList.toggle("is-active", state.favorites);
-      favToggle.setAttribute("aria-pressed", state.favorites ? "true" : "false");
-      apply();
+    favToggles.forEach((button) => {
+      button.addEventListener("click", () => {
+        state.favorites = !state.favorites;
+        favToggles.forEach((other) => {
+          other.classList.toggle("is-active", state.favorites);
+          other.setAttribute("aria-pressed", state.favorites ? "true" : "false");
+        });
+        apply();
+      });
     });
     renderFavorites();
     if (filters) {

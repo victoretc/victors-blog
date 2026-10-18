@@ -73,11 +73,26 @@ other = "Интересное"
 [category_trash]
 other = "Мусор"
 
+[category_ai]
+other = "ЭЙ АЙ!"
+
 [category_all]
 other = "Все категории"
 
 [no_results]
 other = "Ничего не найдено"
+
+[favorites]
+other = "Избранное"
+
+[fav_add]
+other = "Добавить в избранное"
+
+[fav_remove]
+other = "Убрать из избранного"
+
+[fav_empty]
+other = "В избранном пока пусто"
 
 [current_language]
 other = "Вы читаете на русском"

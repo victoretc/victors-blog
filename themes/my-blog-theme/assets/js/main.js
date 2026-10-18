@@ -181,6 +181,9 @@
   const input = document.querySelector('[data-search-input]');
   const submit = document.querySelector('[data-search-submit]');
   const empty = document.querySelector('[data-no-results]');
+  const favEmpty = document.querySelector('[data-fav-empty]');
+  const favToggle = document.querySelector('[data-fav-toggle]');
+  const favButtons = Array.from(grid.querySelectorAll('[data-fav-btn]'));
   const catItems = Array.from(document.querySelectorAll('.cat-item'));
   const viewButtons = Array.from(document.querySelectorAll('[data-view]'));
 
@@ -192,9 +195,41 @@
       .trim()
       .toLocaleLowerCase();
 
+  // --- favorites storage ----------------------------------------------------
+  // localStorage, не сервер: избранное принадлежит браузеру читателя. В
+  // хранилище лежит список RelPermalink — по ним же кнопки находят свой пост.
+  // Обёртки try/catch: в приватном режиме запись запрещена, и фильтр должен
+  // продолжать работать в рамках сессии, просто не переживая перезагрузку.
+
+  const STORAGE_KEY = 'victors_blog_favorites';
+
+  const loadFavorites = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      return Array.isArray(parsed)
+        ? parsed.filter((item) => typeof item === 'string')
+        : [];
+    } catch {
+      return [];
+    }
+  };
+
+  let favorites = loadFavorites();
+
+  const saveFavorites = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+    } catch {
+      // Ничего: сессионное избранное всё равно работает.
+    }
+  };
+
   const state = {
     query: '',
     category: '',
+    // Режим «только избранное» — третий, независимый от категории и запроса
+    // фильтр: включённая кнопка в строке поиска показывает лишь сохранённые.
+    favorites: false,
   };
 
   const matches = (card) => {
@@ -205,6 +240,8 @@
     // Featured posts stay in the slider, never in the grid, so they are out of
     // scope for the filters entirely — no tab brings them back here.
     if (card.dataset.featured === '1') return false;
+
+    if (state.favorites && !favorites.includes(card.dataset.url)) return false;
 
     if (state.query) {
       const haystack = normalise(card.dataset.title);
@@ -226,7 +263,10 @@
       if (show) visible += 1;
     });
 
-    if (empty) empty.hidden = visible > 0;
+    // В режиме избранного пустая лента — это «ещё ничего не сохранили», а не
+    // «ничего не найдено»: 404 здесь врал бы, поэтому показывается свой блок.
+    if (empty) empty.hidden = visible > 0 || state.favorites;
+    if (favEmpty) favEmpty.hidden = visible > 0 || !state.favorites;
   };
 
   // --- typing ---------------------------------------------------------------
@@ -284,6 +324,54 @@
       });
     });
   });
+
+  // --- favorites ------------------------------------------------------------
+  // Кнопки избранного — соседи ссылок внутри карточек, поэтому клик вешается
+  // делегированием на сетку: разметку обходить не нужно. Ссылка при этом не
+  // открывается только потому, что кнопка лежит рядом с ней, а не внутри —
+  // preventDefault/stopPropagation оставлены как страховка на случай
+  // переезда кнопки обратно внутрь <a>.
+
+  const renderFavorites = () => {
+    favButtons.forEach((button) => {
+      const active = favorites.includes(button.dataset.url);
+      button.classList.toggle('is-fav', active);
+      button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      button.setAttribute(
+        'aria-label',
+        active ? button.dataset.labelRemove : button.dataset.labelAdd,
+      );
+    });
+  };
+
+  grid.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-fav-btn]');
+    if (!button) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const url = button.dataset.url;
+    favorites = favorites.includes(url)
+      ? favorites.filter((item) => item !== url)
+      : [...favorites, url];
+
+    saveFavorites();
+    renderFavorites();
+
+    // В режиме избранного снятие сердечка должно сразу убрать карточку —
+    // иначе она останется в ленте до следующего фильтра.
+    if (state.favorites) apply();
+  });
+
+  favToggle?.addEventListener('click', () => {
+    state.favorites = !state.favorites;
+    favToggle.classList.toggle('is-active', state.favorites);
+    favToggle.setAttribute('aria-pressed', state.favorites ? 'true' : 'false');
+    apply();
+  });
+
+  renderFavorites();
 
   // --- sticky search --------------------------------------------------------
   // The gradient under the bar only fades in once it has actually detached,

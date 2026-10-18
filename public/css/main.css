@@ -705,7 +705,8 @@ body.kind-page .site-nav {
 /* align-items: flex-start, а не center. В колонке .search-col под поиском
    живёт .no-results; когда он появляется, колонка становится выше строки, и
    при center переключатель вида уезжал вниз — к середине выросшей строки.
-   По верху он остаётся на одной линии с поиском: обе плашки высотой 64px. */
+   По верху он остаётся на одной линии с поиском: обе плашки высотой 56px
+   (44px кнопка + 12px паддинг; у переключателя 48px кнопка + 8px паддинг). */
 .search-row {
     display: flex;
     align-items: flex-start;
@@ -725,8 +726,10 @@ body.kind-page .site-nav {
 /* Поиск и пустой результат сидят в одной колонке и растягиваются на её
    ширину (align-items: stretch по умолчанию) — ни один из них не может стать
    шире колонки и наехать на переключатель вида справа. box-sizing нужен,
-   потому что паддинг поиска — 34px по горизонтали: без border-box он
-   прибавлялся сверху и поле вылезало под кнопки. */
+   потому что паддинг поиска — 30px по горизонтали: без border-box он
+   прибавлялся сверху и поле вылезало под кнопки. Высота плашки — 56px:
+   поле сознательно меньше прежних 64px, чтобы рядом поместилась кнопка
+   избранного (только на больших экранах, см. .fav-toggle). */
 .search-bar {
     display: flex;
     align-items: center;
@@ -734,7 +737,7 @@ body.kind-page .site-nav {
     box-sizing: border-box;
     background: var(--surface);
     border-radius: 30px;
-    padding: 8px 10px 8px 24px;
+    padding: 6px 8px 6px 22px;
     gap: 8px;
 }
 
@@ -757,8 +760,8 @@ body.kind-page .site-nav {
 }
 
 .search-btn {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 1px solid rgba(59, 62, 255, 0.4);
     border-radius: 30px;
@@ -788,12 +791,14 @@ body.kind-page .site-nav {
 
 /* --- view toggle --------------------------------------------------------- */
 
+/* padding 8 → 4: высота плашки должна совпадать с уменьшенным поиском
+   (48px кнопка + 8px паддинг = 56px), иначе кнопки висели бы на 8px ниже. */
 .view-toggle {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 4px;
-    padding: 8px;
+    padding: 4px;
     background: var(--surface);
     border-radius: 30px;
 }
@@ -827,7 +832,7 @@ body.kind-page .site-nav {
 /* --- sticky search and categories -----------------------------------------
    Both panels stick, and both are pinned to the same offset so they travel
    together at the same speed and never separate. The search is the taller of
-   the two — 12px of padding plus one 64px row — so its own height is the
+   the two — 12px of padding plus one 56px row — so its own height is the
    offset the categories need, and the two lines below have to stay in step:
    change one and change the other.
 
@@ -980,6 +985,102 @@ body.kind-page .site-nav {
     color: var(--text);
 }
 
+/* --- favorites ------------------------------------------------------------
+   Избранное живёт в localStorage браузера: кнопка ничего не отправляет на
+   сервер, она только переключает фильтр ленты. Всё — и кнопка в строке
+   поиска, и сердечки на карточках, и пустой экран режима — показывается
+   лишь на больших экранах (min-width: 901px): на телефоне и планшете места
+   в строке поиска под эту кнопку нет, а скрытые сердечки были бы мёртвым
+   грузом разметки. */
+
+/* Структура та же, что у переключателя вида: серая плашка 56px, внутри неё
+   с 4px отступа — синий круг 48px с иконкой. Раньше сердечко лежало прямо
+   на плашке без внутреннего элемента, поэтому отступа до иконки не было. */
+.fav-toggle {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    padding: 4px;
+    border: none;
+    border-radius: 30px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.fav-toggle-ico {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 30px;
+    background: var(--brand);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(59, 62, 255, 0.25);
+    transition: filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fav-toggle .heart-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.fav-toggle:hover .fav-toggle-ico {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 16px rgba(59, 62, 255, 0.25);
+}
+
+.fav-toggle:active .fav-toggle-ico {
+    filter: brightness(0.92);
+}
+
+/* Режим избранного включён: плашка подсвечивается мягким брендом (круг
+   остаётся синим и не сливается с фоном), а сердечко заливается — как у
+   сохранённых карточек. */
+.fav-toggle.is-active {
+    background: var(--brand-soft);
+}
+
+.fav-toggle.is-active .heart-icon path {
+    fill: currentColor;
+}
+
+.fav-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 34px 24px;
+    background: var(--surface);
+    border-radius: 32px;
+    text-align: center;
+}
+
+.fav-empty[hidden] {
+    display: none;
+}
+
+.fav-empty-title {
+    margin: 0;
+    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text);
+}
+
+@media (min-width: 901px) {
+    .fav-toggle {
+        display: inline-flex;
+    }
+}
+
 /* ==========================================================================
    HOME — black gallery
    Three square photos in a row, with the categories panel standing in the
@@ -1011,33 +1112,51 @@ body.kind-home {
 
 /* Подложка появляется на наведении и объединяет фотографию с текстом в один
    блок: padding даёт фону место снаружи скруглённых углов снимка, а тот же
-   радиус, что у фото, делает внешний контур ровным. Раньше фона здесь не было
-   намеренно — серая заливка на чёрном читалась как «дыра» в странице, но в
-   паре с padding она становится нормальной поверхностью карточки. */
-.post-card {
+   радиус, что у фото, делает внешний контур ровным. Фон лежит на обёртке
+   .post-card-slot, а не на ссылке: она же даёт position: relative для
+   кнопки избранного, которая стоит рядом со ссылкой (кнопка внутри <a> —
+   невалидный HTML), и её подложка при наведении освещает всю карточку.
+   Геометрия не изменилась: padding 10 + margin -10 у обёртки даёт тот же
+   grid-элемент и тот же вылет фона на 10px, что раньше были у самой
+   ссылки. Раньше фона здесь не было намеренно — серая заливка на чёрном
+   читалась как «дыра» в странице, но в паре с padding она становится
+   нормальной поверхностью карточки. */
+.post-card-slot {
     min-width: 0;
+    position: relative;
     padding: 10px;
     margin: -10px;
     /* Серая подложка при наведении скруглена только сверху: снизу карточка
        «врастает» в соседний ряд, и закруглённый низ висел бы в воздухе. */
     border-radius: 45px 45px 0 0;
-    text-decoration: none;
-    color: inherit;
     transition: background 240ms ease;
 }
 
-.post-card[hidden] {
+/* hidden ставится и шаблоном (featured), и фильтром в JS — на обёртке, чтобы
+   вместе с карточкой пропала и ячейка сетки, и кнопка избранного. */
+.post-card-slot[hidden] {
     display: none;
 }
 
-.post-card:hover,
-.post-card:focus-visible {
+.post-card-slot:hover,
+.post-card-slot:has(:focus-visible) {
     background: var(--surface);
 }
 
-.post-card:focus-visible {
+/* Раньше outline висел на :focus-visible ссылки; теперь рамка рисуется по
+   краю обёртки — это ровно тот же прямоугольник, что была у ссылки с её
+   padding и margin, так что вид клавиатурной навигации не сдвинулся. :has
+   ловит и фокус на кнопке избранного. */
+.post-card-slot:has(:focus-visible) {
     outline: 2px solid #f2f2f2;
     outline-offset: 2px;
+}
+
+.post-card {
+    display: block;
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
 }
 
 /* Радиус — на обёртке: тот же приём, что у hero. Снимок клипает контейнер,
@@ -1084,6 +1203,80 @@ body.kind-home {
     word-break: break-word;
 }
 
+/* --- favorite button on the card ------------------------------------------
+   Кнопка лежит НЕ в ссылке, а рядом с ней в .post-card-slot и позиционируется
+   от обёртки. Отступ до края картинки складывается из двух чисел: 10px
+   padding слота (он же обводит фон карточки вокруг скруглений) и 12px
+   собственно inset — итог 22px от края слота до края сердечка. Сердечко
+   всплывает при наведении на карточку; сохранённое и то, что держит фокус
+   с клавиатуры, остаётся видимым всегда. Само шоу — только на ≥901px, как
+   и кнопка в строке поиска. */
+
+.post-card-fav {
+    display: none;
+}
+
+@media (min-width: 901px) {
+    .post-card-fav {
+        position: absolute;
+        top: 22px;
+        right: 22px;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        border-radius: 50%;
+        /* Полупрозрачная подложка + blur: сердечко читается и на светлом
+           снимке, и на тёмном, не закрашивая углы картинки сплошным. */
+        background: rgba(16, 16, 20, 0.55);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        color: #f2f2f2;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.18s ease, background 0.18s ease, color 0.18s ease,
+            border-color 0.18s ease;
+    }
+
+    .post-card-fav .heart-icon {
+        display: block;
+        width: 20px;
+        height: 20px;
+    }
+
+    .post-card-slot:hover .post-card-fav,
+    .post-card-fav:focus-visible,
+    .post-card-fav.is-fav {
+        opacity: 1;
+    }
+
+    .post-card-fav:hover {
+        background: rgba(16, 16, 20, 0.85);
+    }
+
+    .post-card-fav.is-fav {
+        color: #ff5d7a;
+        border-color: rgba(255, 93, 122, 0.55);
+    }
+
+    .post-card-fav.is-fav .heart-icon path {
+        fill: currentColor;
+    }
+
+    /* В списке картинка — квадрат 120px слева, а не вся ширина карточки,
+       поэтому кнопка должна стоять в ЕЁ правом верхнем углу, а не в углу
+       карточки. right уходит в auto, левый край считается так: 10 (padding
+       слота) + 120 (картинка) − 12 (отступ до края) − 40 (кнопка) = 78. */
+    .home-layout.is-list .post-card-fav {
+        right: auto;
+        left: 78px;
+    }
+}
+
 /* --- list view -----------------------------------------------------------
    The frontend's view toggle has two modes. In list mode the photo becomes a
    small square beside the text instead of sitting on top of it. */
@@ -1093,22 +1286,24 @@ body.kind-home {
     gap: 26px;
 }
 
+.home-layout.is-list .post-card-slot {
+    /* В списке фото и текст стоят рядом, поэтому подложке нужен меньший
+       радиус — по краям карточки больше не пустого места. Скругление, как и
+       в сетке, только сверху; фон и подложка-наведение тоже живут здесь. */
+    border-radius: 34px 34px 0 0;
+}
+
 .home-layout.is-list .post-card {
     display: grid;
     grid-template-columns: 120px minmax(0, 1fr);
     gap: 20px;
     align-items: start;
-    /* В списке фото и текст стоят рядом, поэтому подложке нужен меньший
-       радиус — по краям карточки больше не пустого места. Скругление, как и
-       в сетке, только сверху. */
-    border-radius: 34px 34px 0 0;
 }
 
-/* Скрытие обязано идти после display:grid выше: специфичность у правил
-   одинаковая, и порядок решает — иначе карточки без совпадений (и
-   featured-посты, отрендеренные с атрибутом hidden) остаются видимыми
-   в списке и появляются под блоком 404. */
-.home-layout.is-list .post-card[hidden] {
+/* Скрытие идёт на обёртке, у которой нет display-правил, поэтому обычный
+   .post-card-slot[hidden] выше работает и в списке. Явное правило здесь —
+   страховка, если display когда-нибудь вернут на саму ссылку. */
+.home-layout.is-list .post-card-slot[hidden] {
     display: none;
 }
 

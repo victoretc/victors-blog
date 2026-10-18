@@ -99,8 +99,8 @@
   {{/* Поиск, фильтры и категории. Смысл раскладки: три колонки занимает лента
        постов, четвёртую — панель категорий. Поэтому поиск по ширине равен
        трём карточкам, а категории «ездят» за ним при скролле. */}}
-  {{ $cats := slice "interesting" "trash" }}
-  {{ $catLabel := dict "interesting" (i18n "category_interesting") "trash" (i18n "category_trash") }}
+  {{ $cats := slice "interesting" "trash" "ai" }}
+  {{ $catLabel := dict "interesting" (i18n "category_interesting") "trash" (i18n "category_trash") "ai" (i18n "category_ai") }}
 
   <div class="home-layout">
     {{/* Категории стоят слева, поиск справа: раньше они стояли наоборот, и
@@ -152,7 +152,28 @@
               <p class="no-results-code">404</p>
               <p class="no-results-title">{{ i18n "no_results" }}</p>
             </div>
+
+            {{/* Отдельный пустой экран для режима избранного: «404» врал бы
+                 здесь — посты не потерялись, их просто ещё не сохранили. */}}
+            <div class="fav-empty" data-fav-empty hidden>
+              <p class="fav-empty-title">{{ i18n "fav_empty" }}</p>
+            </div>
           </div>
+
+          {{/* Кнопка избранного справа от поиска (только большие экраны —
+               видимость задаёт CSS по min-width: 901px). Она ничего не
+               отправляет: переключает фильтр ленты на сохранённые посты,
+               хранящиеся в localStorage. */}}
+          <button type="button" class="fav-toggle" data-fav-toggle aria-pressed="false"
+            aria-label="{{ i18n "favorites" }}">
+            <span class="fav-toggle-ico">
+              <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
 
           <div class="view-toggle" role="group" aria-label="{{ i18n "search_view" }}">
             <button type="button" class="view-toggle-btn is-active" aria-label="{{ i18n "search_view_grid" }}"
@@ -182,20 +203,42 @@
       <div class="post-grid" data-post-grid>
         {{ range $posts }}
           {{ $cover := partial "cover.html" (dict "page" . "width" 800 "height" 800 "variant" "list") }}
-          <a href="{{ .RelPermalink }}" class="post-card" data-post
+          {{/* data-post и hidden живут на обёртке, а не на ссылке: фильтр
+               скрывает grid-элемент целиком (ячейка сетки исчезает), а кнопка
+               избранного остаётся соседом ссылки — кнопка внутри <a> была бы
+               невалидным HTML. */}}
+          <div class="post-card-slot" data-post
             data-title="{{ .LinkTitle }}"
             data-category="{{ with .Params.category }}{{ . }}{{ end }}"
             data-featured="{{ if .Params.featured }}1{{ else }}0{{ end }}"
+            data-url="{{ .RelPermalink }}"
             {{ if .Params.featured }}hidden{{ end }}>
-            {{ with $cover }}
-              <div class="post-card-media">{{ . }}</div>
-            {{ end }}
-            <div class="post-card-meta">
-              <span class="post-card-date">{{ .Date.Format "02.01.2006" }}</span>
-              <h2 class="post-card-title">{{ .LinkTitle }}</h2>
-              <span class="post-card-time">{{ .ReadingTime }} {{ i18n "minutes" .ReadingTime }}</span>
-            </div>
-          </a>
+            <a href="{{ .RelPermalink }}" class="post-card">
+              {{ with $cover }}
+                <div class="post-card-media">{{ . }}</div>
+              {{ end }}
+              <div class="post-card-meta">
+                <span class="post-card-date">{{ .Date.Format "02.01.2006" }}</span>
+                <h2 class="post-card-title">{{ .LinkTitle }}</h2>
+                <span class="post-card-time">{{ .ReadingTime }} {{ i18n "minutes" .ReadingTime }}</span>
+              </div>
+            </a>
+
+            {{/* Сердечко появляется на наведении на карточку (только ≥901px).
+                 aria-pressed и подпись меняет JS по data-label-*. */}}
+            <button type="button" class="post-card-fav" data-fav-btn
+              data-url="{{ .RelPermalink }}"
+              aria-pressed="false"
+              aria-label="{{ i18n "fav_add" }}"
+              data-label-add="{{ i18n "fav_add" }}"
+              data-label-remove="{{ i18n "fav_remove" }}">
+              <svg class="heart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
         {{ end }}
       </div>
     </div>

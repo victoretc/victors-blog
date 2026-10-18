@@ -71,11 +71,26 @@ other = "Interesting"
 [category_trash]
 other = "Trash"
 
+[category_ai]
+other = "AI!"
+
 [category_all]
 other = "All categories"
 
 [no_results]
 other = "Nothing found"
+
+[favorites]
+other = "Favorites"
+
+[fav_add]
+other = "Add to favorites"
+
+[fav_remove]
+other = "Remove from favorites"
+
+[fav_empty]
+other = "No favorites yet"
 
 [current_language]
 other = "You are reading in English"

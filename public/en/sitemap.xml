@@ -2,19 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://johnmakarov.github.io/victors-blog/en/</loc>
-    <lastmod>2026-08-01T20:21:37+03:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="ru-ru"
-                href="https://johnmakarov.github.io/victors-blog/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en-us"
-                href="https://johnmakarov.github.io/victors-blog/en/"
-                />
-  </url><url>
     <loc>https://johnmakarov.github.io/victors-blog/en/posts/</loc>
     <lastmod>2026-08-01T20:21:37+03:00</lastmod>
     <xhtml:link
@@ -26,6 +13,19 @@
                 rel="alternate"
                 hreflang="en-us"
                 href="https://johnmakarov.github.io/victors-blog/en/posts/"
+                />
+  </url><url>
+    <loc>https://johnmakarov.github.io/victors-blog/en/</loc>
+    <lastmod>2026-08-01T20:21:37+03:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="ru-ru"
+                href="https://johnmakarov.github.io/victors-blog/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en-us"
+                href="https://johnmakarov.github.io/victors-blog/en/"
                 />
   </url><url>
     <loc>https://johnmakarov.github.io/victors-blog/en/posts/fail-test-when-see-error-in-console/</loc>

@@ -5,6 +5,7 @@
      а meta-тег переживает сборку и не влияет на внешний вид страницы. */}}
 <meta name="font-credits" content="Handil Pro by Alifinart Studio — https://behance.net/alifinart">
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
+{{ partial "head/seo.html" . }}
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 {{ $css := resources.Get "css/syntax.css" }}
 {{ if $css }}

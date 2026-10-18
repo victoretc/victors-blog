@@ -5,22 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <meta name="font-credits" content="Handil Pro by Alifinart Studio — https://behance.net/alifinart">
-<title>Автоматическое логгирование шагов в Selene | </title>
+<title>Автоматическое логгирование шагов в Selene | Spoon of Quality</title>
+<meta name="description" content="Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в">
+<link rel="canonical" href="https://johnmakarov.github.io/victors-blog/posts/auto-logging-in-selene/">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Spoon of Quality">
+<meta property="og:title" content="Автоматическое логгирование шагов в Selene">
+<meta property="og:description" content="Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в">
+<meta property="og:url" content="https://johnmakarov.github.io/victors-blog/posts/auto-logging-in-selene/">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://johnmakarov.github.io/victors-blog/images/third.jpg">
+<meta property="og:image:alt" content="Автоматическое логгирование шагов в Selene">
+<meta property="article:published_time" content="2026-03-29T21:17:52&#43;03:00">
+<meta property="article:modified_time" content="2026-03-29T21:17:52&#43;03:00">
+<meta property="article:section" content="Интересное">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Автоматическое логгирование шагов в Selene">
+<meta name="twitter:description" content="Selene - прекрасная библиотека, которая позволяет писать прекрасные автотесты. Ниже представлен рецепт приготовления автоматичесского логгирования шагов в">
+<meta name="twitter:image" content="https://johnmakarov.github.io/victors-blog/images/third.jpg"><link rel="alternate" hreflang="ru" href="https://johnmakarov.github.io/victors-blog/posts/auto-logging-in-selene/">
+<link rel="alternate" hreflang="en" href="https://johnmakarov.github.io/victors-blog/en/posts/auto-logging-in-selene/"><link rel="alternate" hreflang="x-default" href="https://johnmakarov.github.io/victors-blog/posts/auto-logging-in-selene/">
+
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 
 <link href="/victors-blog/pagefind/pagefind-component-ui.css" rel="stylesheet">
 <script src="/victors-blog/pagefind/pagefind-component-ui.js" type="module"></script>
 
-      <link rel="stylesheet" href="/victors-blog/css/main.min.95246849fa873f61a902f5a31ad0915844bd2e17a1e1ff7b0298edadebc36bdf.css" integrity="sha256-lSRoSfqHP2GpAvWjGtCRWES9Lheh4f97ApjtrevDa98=" crossorigin="anonymous">
+      <link rel="stylesheet" href="/victors-blog/css/main.min.7992068c031b860593ebb384aa5400b35fd8f4b26d89f6f080b2407e760634aa.css" integrity="sha256-eZIGjAMbhgWT67OEqlQAs1/Y9LJtifbwgLJAfnYGNKo=" crossorigin="anonymous">
 
 
-        <script src="/victors-blog/js/main.62aec56fe82a8e53b8696cbb73bc5ca89db425123d371883f1cfcfe5071df1e1.js" integrity="sha256-Yq7Fb&#43;gqjlO4aWy7c7xcqJ20JRI9NxiD8c/P5Qcd8eE=" crossorigin="anonymous" defer></script>
-
-
-<link rel="alternate" hreflang="ru" href="https://johnmakarov.github.io/victors-blog/posts/auto-logging-in-selene/">
-
-<link rel="alternate" hreflang="en" href="https://johnmakarov.github.io/victors-blog/en/posts/auto-logging-in-selene/">
+        <script src="/victors-blog/js/main.68fb9dac0fe108dcd78a0ec1f7fd588c3d6138276e5c2fbb0a985e23cafb232d.js" integrity="sha256-aPudrA/hCNzXig7B9/1YjD1hOCduXC&#43;7CpheI8r7Iy0=" crossorigin="anonymous" defer></script>
 
 <script>
 (function () {
@@ -107,7 +123,7 @@
     </svg>
   </a>
   
-  <a class="site-nav-logo" href="/victors-blog/" aria-label="">ЛК</a>
+  <a class="site-nav-logo" href="/victors-blog/" aria-label="Spoon of Quality">ЛК</a>
   <span class="site-nav-side" aria-hidden="true"></span>
 </header>
 
@@ -160,6 +176,32 @@
 
       </div>
 
+      
+      <div class="share-block">
+        <span class="share-label">Поделиться</span>
+        <div class="share-row">
+          <a class="share-btn"
+             href="https://t.me/share/url?url=https%3A%2F%2Fjohnmakarov.github.io%2Fvictors-blog%2Fposts%2Fauto-logging-in-selene%2F&amp;text=%D0%90%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5&#43;%D0%BB%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5&#43;%D1%88%D0%B0%D0%B3%D0%BE%D0%B2&#43;%D0%B2&#43;Selene"
+             target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M22 2 11 13"></path>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+            <span>Telegram</span>
+          </a>
+          <button type="button" class="share-btn" data-copy-link
+                  data-url="https://johnmakarov.github.io/victors-blog/posts/auto-logging-in-selene/" data-copied="Скопировано!">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <span data-copy-label>Скопировать ссылку</span>
+          </button>
+        </div>
+      </div>
+
       <div class="post-composition">
         <nav class="toc-nav">
           <nav id="TableOfContents">
@@ -182,23 +224,33 @@
         
         
             
-            <a href="/victors-blog/posts/fail-test-when-see-error-in-console/" class="read-more-post">
-                <div class="post-data">01.04.2026</div>
-                <h4>Видим ошибку в консоли -&gt; роняем тест</h4>
-            </a>
-            
         
             
-            <a href="/victors-blog/posts/get-all-data-from-faker/" class="read-more-post">
+            <a href="/victors-blog/posts/auto-logging-in-playwright/" class="read-more-post">
                 <div class="post-data">29.03.2026</div>
-                <h4>Достаем все возможные данные из faker</h4>
+                <h4>Автоматическое логгирование шагов в Playwright</h4>
             </a>
             
         
+            
+            <a href="/victors-blog/posts/different-envs/" class="read-more-post">
+                <div class="post-data">29.03.2026</div>
+                <h4>Разные envs под разные окружения</h4>
+            </a>
             
         
     </div>
 </div>
+
+
+<button type="button" class="to-top" data-to-top>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+    </svg>
+    <span>Вверх!</span>
+</button>
 
   </main>
   

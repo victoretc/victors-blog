@@ -1,5 +1,5 @@
 baseURL = 'https://johnmakarov.github.io/victors-blog/'
-title = ''
+title = 'Spoon of Quality'
 theme = 'my-blog-theme'
 
 defaultContentLanguage = 'ru'
@@ -13,6 +13,7 @@ defaultContentLanguageInSubdir = false
 
   [languages.ru.params]
     flag = '🇷🇺'
+    description = 'Блог о качестве ПО: тестирование, автоматизация и AI-эксперименты.'
 
 [languages.en]
   contentDir = 'content/en'
@@ -22,6 +23,7 @@ defaultContentLanguageInSubdir = false
 
   [languages.en.params]
     flag = '🇬🇧'
+    description = 'A software quality blog: testing, automation and AI experiments.'
 
 [markup]
   [markup.tableOfContents]

@@ -589,9 +589,18 @@ body.kind-page {
     padding-top: 0;
 }
 
+/* На постах плашка без фона: подложка, рамка, blur и тень выключаются —
+   остаются только логотип и стрелка «назад» прямо на чёрном фоне страницы.
+   border-color: transparent (а не border: none) сохраняет геометрию grid,
+   чтобы логотип не дёргался на 2px. */
 body.kind-page .site-nav {
     position: static;
     margin: 16px auto 4px;
+    background: none;
+    border-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
 }
 
 /* Стрелка «назад» внутри плашки — без кружка и рамки, просто стрелка:
@@ -613,6 +622,9 @@ body.kind-page .site-nav {
     cursor: pointer;
     opacity: 0.65;
     transition: opacity 180ms ease;
+    /* Чуть левее колонки grid: сдвиг через transform не влияет на раскладку,
+       поэтому логотип остаётся в центре страницы. */
+    transform: translateX(-8px);
 }
 
 .site-nav-back svg {
@@ -994,8 +1006,10 @@ body.kind-page .site-nav {
    грузом разметки. */
 
 /* Структура та же, что у переключателя вида: серая плашка 56px, внутри неё
-   с 4px отступа — синий круг 48px с иконкой. Раньше сердечко лежало прямо
-   на плашке без внутреннего элемента, поэтому отступа до иконки не было. */
+   с 4px отступа — круг 48px. Пока фильтр не включён, круг прозрачный:
+   сердечко лежит прямо на сером фоне, никакого синего. Синий появляется
+   только после клика — круг заливается брендом, сердечко становится белым
+   и залитым. */
 .fav-toggle {
     display: none;
     flex-shrink: 0;
@@ -1018,10 +1032,9 @@ body.kind-page .site-nav {
     width: 48px;
     height: 48px;
     border-radius: 30px;
-    background: var(--brand);
-    color: #FFFFFF;
-    box-shadow: 0 2px 8px rgba(59, 62, 255, 0.25);
-    transition: filter 0.2s ease, box-shadow 0.2s ease;
+    background: transparent;
+    color: var(--text-secondary);
+    transition: background 0.2s ease, color 0.2s ease, filter 0.2s ease;
 }
 
 .fav-toggle .heart-icon {
@@ -1030,20 +1043,30 @@ body.kind-page .site-nav {
     height: 24px;
 }
 
+/* Наведение тоже без синего: обычная серая подсветка, как у кнопок вида. */
 .fav-toggle:hover .fav-toggle-ico {
-    filter: brightness(1.08);
-    box-shadow: 0 4px 16px rgba(59, 62, 255, 0.25);
+    background: var(--surface-hover);
+    color: var(--text);
 }
 
 .fav-toggle:active .fav-toggle-ico {
     filter: brightness(0.92);
 }
 
-/* Режим избранного включён: плашка подсвечивается мягким брендом (круг
-   остаётся синим и не сливается с фоном), а сердечко заливается — как у
-   сохранённых карточек. */
+/* Режим избранного включён: мягкая брендовая подложка у плашки и синий круг
+   с залитым сердечком — синий появляется ровно после клика. */
 .fav-toggle.is-active {
     background: var(--brand-soft);
+}
+
+.fav-toggle.is-active .fav-toggle-ico {
+    background: var(--brand);
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(59, 62, 255, 0.25);
+}
+
+.fav-toggle.is-active:hover .fav-toggle-ico {
+    filter: brightness(1.08);
 }
 
 .fav-toggle.is-active .heart-icon path {
@@ -1073,6 +1096,55 @@ body.kind-page .site-nav {
     font-weight: 500;
     line-height: 1.2;
     color: var(--text);
+}
+
+/* --- favorites toast ------------------------------------------------------
+   Надпись о результате клика («добавлено» / «удалено») на том же дымчатом
+   стекле, что у хэдер-плашки с логотипом: полупрозрачная подложка 0.24,
+   сильный blur, hairline рамка и верхний блик. Стоит под логотипом по центру
+   окна, слева от текста — круглая иконка-информация. Живёт ~2.6 секунды,
+   дальше гаснет сама; поверх всего (z-index выше липкого поиска), но клики
+   сквозь неё не проходят. */
+.fav-toast {
+    position: fixed;
+    top: 88px;
+    left: 50%;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
+    padding: 12px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    background: rgba(16, 16, 20, 0.24);
+    -webkit-backdrop-filter: blur(24px) saturate(170%);
+    backdrop-filter: blur(24px) saturate(170%);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    color: #f2f2f2;
+    font-family: 'Handil Pro', 'JetBrains Mono', monospace;
+    font-size: 16px;
+    line-height: 1.2;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+    pointer-events: none;
+}
+
+.fav-toast.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fav-toast-ico {
+    flex-shrink: 0;
+    display: block;
+    width: 20px;
+    height: 20px;
 }
 
 @media (min-width: 901px) {
@@ -1208,9 +1280,10 @@ body.kind-home {
    от обёртки. Отступ до края картинки складывается из двух чисел: 10px
    padding слота (он же обводит фон карточки вокруг скруглений) и 12px
    собственно inset — итог 22px от края слота до края сердечка. Сердечко
-   всплывает при наведении на карточку; сохранённое и то, что держит фокус
-   с клавиатуры, остаётся видимым всегда. Само шоу — только на ≥901px, как
-   и кнопка в строке поиска. */
+   всплывает при наведении на карточку (или пока на нём фокус с клавиатуры)
+   и всегда остаётся нейтральным: сохранённость поста не подсвечивается
+   постоянно — о добавлении говорит всплывающая надпись .fav-toast. Само
+   шоу — только на ≥901px, как и кнопка в строке поиска. */
 
 .post-card-fav {
     display: none;
@@ -1249,22 +1322,12 @@ body.kind-home {
     }
 
     .post-card-slot:hover .post-card-fav,
-    .post-card-fav:focus-visible,
-    .post-card-fav.is-fav {
+    .post-card-fav:focus-visible {
         opacity: 1;
     }
 
     .post-card-fav:hover {
         background: rgba(16, 16, 20, 0.85);
-    }
-
-    .post-card-fav.is-fav {
-        color: #ff5d7a;
-        border-color: rgba(255, 93, 122, 0.55);
-    }
-
-    .post-card-fav.is-fav .heart-icon path {
-        fill: currentColor;
     }
 
     /* В списке картинка — квадрат 120px слева, а не вся ширина карточки,
@@ -2043,6 +2106,125 @@ img {
 
     .footer-copyright {
         text-align: center;
+    }
+}
+
+/* --- share ---------------------------------------------------------------
+   «Поделиться» под текстом статьи. Переменные --brand/--surface объявлены
+   на .home-layout, а пост — отдельная страница, поэтому значения здесь
+   продублированы напрямую. */
+.share-block {
+    grid-column: 2;
+    grid-row: 3;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 36px;
+}
+
+.share-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #9a9a9a;
+}
+
+.share-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    background: #16161a;
+    color: #f2f2f2;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.share-btn svg {
+    display: block;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+}
+
+.share-btn:hover {
+    background: rgba(59, 62, 255, 0.14);
+    color: #3B3EFF;
+}
+
+.share-btn.is-copied {
+    background: #3B3EFF;
+    color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(59, 62, 255, 0.25);
+}
+
+/* --- to-top ---------------------------------------------------------------
+   Плавающая кнопка «наверх» на странице поста. Скрыта, пока читатель в
+   верхней части статьи; появляется после 400px прокрутки (main.js). */
+.to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 30px;
+    background: #16161a;
+    color: #f2f2f2;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transform: translateY(12px);
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s,
+        background 0.15s ease, color 0.15s ease;
+}
+
+.to-top.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.to-top:hover {
+    background: #3B3EFF;
+    color: #FFFFFF;
+}
+
+.to-top svg {
+    display: block;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}
+
+@media (max-width: 560px) {
+    .to-top {
+        right: 16px;
+        bottom: 16px;
+        padding: 10px 14px;
     }
 }
 

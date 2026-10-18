@@ -92,8 +92,23 @@ other = "Remove from favorites"
 [fav_empty]
 other = "No favorites yet"
 
+[fav_added]
+other = "Post added to favorites"
+
+[fav_removed]
+other = "Post removed from favorites"
+
 [current_language]
 other = "You are reading in English"
 
 [switch_to]
 other = "Switch to"
+
+[share]
+other = "Share"
+
+[copy_link]
+other = "Copy link"
+
+[copied]
+other = "Copied!"

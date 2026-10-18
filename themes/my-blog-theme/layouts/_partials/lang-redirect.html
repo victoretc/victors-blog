@@ -1,8 +1,5 @@
-{{- /* Alternate language links for SEO; the redirect script below uses them
-     to resolve the translated URL of the current page. */ -}}
-{{ range .AllTranslations }}
-<link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}">
-{{ end }}
+{{- /* Ссылки hreflang рисует head/seo.html — скрипту ниже они нужны только
+     как источник переведённого URL (селектор [hreflang="ru"|"en"]). */ -}}
 <script>
 (function () {
   var STORE = 'preferred-lang'

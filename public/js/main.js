@@ -211,10 +211,19 @@
         });
       });
     });
+    const toast = document.querySelector("[data-fav-toast]");
+    const toastText = toast ? toast.querySelector("[data-toast-text]") : null;
+    let toastTimer = 0;
+    const showFavToast = (kind) => {
+      if (!toast || !toastText) return;
+      toastText.textContent = kind === "remove" ? toast.dataset.textRemoved : toast.dataset.textAdded;
+      toast.classList.add("is-visible");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 2600);
+    };
     const renderFavorites = () => {
       favButtons.forEach((button) => {
         const active = favorites.includes(button.dataset.url);
-        button.classList.toggle("is-fav", active);
         button.setAttribute("aria-pressed", active ? "true" : "false");
         button.setAttribute(
           "aria-label",
@@ -228,9 +237,11 @@
       event.preventDefault();
       event.stopPropagation();
       const url = button.dataset.url;
-      favorites = favorites.includes(url) ? favorites.filter((item) => item !== url) : [...favorites, url];
+      const wasFavorite = favorites.includes(url);
+      favorites = wasFavorite ? favorites.filter((item) => item !== url) : [...favorites, url];
       saveFavorites();
       renderFavorites();
+      showFavToast(wasFavorite ? "remove" : "add");
       if (state.favorites) apply();
     });
     favToggle?.addEventListener("click", () => {
@@ -257,6 +268,63 @@
         onScroll();
       }, { passive: true });
     }
+  })();
+  (() => {
+    const button = document.querySelector("[data-copy-link]");
+    if (!button) return;
+    const label = button.querySelector("[data-copy-label]");
+    const original = label ? label.textContent : "";
+    const copied = button.dataset.copied || "Copied!";
+    let reset = 0;
+    const fallbackCopy = (text) => {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.appendChild(area);
+      area.select();
+      try {
+        document.execCommand("copy");
+      } catch {
+      }
+      area.remove();
+    };
+    button.addEventListener("click", async () => {
+      const url = button.dataset.url || window.location.href;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        fallbackCopy(url);
+      }
+      if (label) label.textContent = copied;
+      button.classList.add("is-copied");
+      clearTimeout(reset);
+      reset = setTimeout(() => {
+        button.classList.remove("is-copied");
+        if (label) label.textContent = original;
+      }, 2e3);
+    });
+  })();
+  (() => {
+    const button = document.querySelector("[data-to-top]");
+    if (!button) return;
+    const LIMIT = 400;
+    let ticking = false;
+    const sync = () => {
+      ticking = false;
+      button.classList.toggle("is-visible", window.scrollY > LIMIT);
+    };
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(sync);
+    }, { passive: true });
+    sync();
+    button.addEventListener("click", () => {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    });
   })();
   (() => {
     if (typeof CSS !== "undefined" && typeof CSS.supports === "function" && CSS.supports("animation-timeline", "scroll()")) {

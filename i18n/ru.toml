@@ -94,8 +94,23 @@ other = "Убрать из избранного"
 [fav_empty]
 other = "В избранном пока пусто"
 
+[fav_added]
+other = "Пост добавлен в избранное"
+
+[fav_removed]
+other = "Пост удалён из избранного"
+
 [current_language]
 other = "Вы читаете на русском"
 
 [switch_to]
 other = "Переключиться на"
+
+[share]
+other = "Поделиться"
+
+[copy_link]
+other = "Скопировать ссылку"
+
+[copied]
+other = "Скопировано!"

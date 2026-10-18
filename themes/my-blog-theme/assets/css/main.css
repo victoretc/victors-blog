@@ -1123,8 +1123,8 @@ body.kind-home {
 /* ==========================================================================
    RESPONSIVE
    The categories panel is a fourth column on a wide screen only. Below that it
-   drops under the posts and stops sticking, because there is no room left to
-   pin it to anything.
+   becomes a row of chips under the search and stops sticking, because there is
+   no room left to pin it to anything.
    ========================================================================== */
 
 @media (max-width: 1100px) {
@@ -1136,17 +1136,77 @@ body.kind-home {
 @media (max-width: 900px) {
     .home-layout {
         grid-template-columns: minmax(0, 1fr);
+        /* Один столбец из трёх элементов: шаг задают отступы самих элементов,
+           а не gap сетки — так поиск и фишки под ним встают вплотную (12px),
+           а лента отделена стандартными 24px. Равный gap 26px размывал
+           связь «поиск + категории» как одного блока управления. */
+        gap: 0;
+    }
+
+    /* На узком экране колонок нет, и .home-main растворяется (display: contents),
+       чтобы его дети стали прямыми элементами сетки. Тогда порядок задаёт
+       order: сначала поиск, потом категории компактной строкой фишек под ним,
+       потом лента. Без этого категории (первый ребёнок в DOM) вставали бы
+       над поиском и занимали пол-экрана панелью. */
+    .home-main {
+        display: contents;
+    }
+
+    .filters-section {
+        order: 1;
+        margin-bottom: 12px;
+    }
+
+    /* Категории под поиском: без панели-плашки и заголовка — только строка
+       фишек, которая листается пальцем по горизонтали и не ест высоту
+       страницы. Каждая фишка сама себе «поверхность», активная — бренд.
+       min-width: 0 обязателен: без него, как у grid-элемента, auto-minimum
+       растянул бы панель до суммы фишек, и они вылезали бы за экран вместо
+       того, чтобы скроллиться внутри .cat-list. */
+    .cat-panel {
+        order: 2;
+        position: static;
+        top: auto;
+        min-width: 0;
+        margin-top: 0;
+        margin-bottom: 24px;
+        padding: 0;
+        background: none;
+        border-radius: 0;
+        gap: 0;
+    }
+
+    .cat-panel-title {
+        display: none;
+    }
+
+    .cat-list {
+        flex-direction: row;
+        gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 2px;
+    }
+
+    .cat-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    .cat-item {
+        width: auto;
+        flex-shrink: 0;
+        white-space: nowrap;
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: var(--surface);
+        font-size: 14px;
     }
 
     .post-grid {
+        order: 3;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .cat-panel {
-        position: static;
-        top: auto;
-        padding-top: 0;
-        margin-top: 0;
     }
 }
 
@@ -1155,18 +1215,22 @@ body.kind-home {
         display: none;
     }
 
+    /* Поиск на телефоне — главный контроль, поэтому он не мельчает, а
+       остаётся почти как на десктопе: поле растёт до 60px (44px кнопка +
+       12px паддинг), шрифт 17px. Раньше здесь были 40px кнопка и паддинг 6 —
+       поле проседало и выглядело мелким рядом с карточками. */
     .search-bar {
-        padding: 6px 6px 6px 16px;
-        gap: 6px;
+        padding: 8px 8px 8px 18px;
+        gap: 8px;
     }
 
     .search-input {
-        font-size: 16px;
+        font-size: 17px;
     }
 
     .search-btn {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
     }
 }
 
@@ -1177,23 +1241,25 @@ body.kind-home {
 }
 
 @media (max-width: 480px) {
+    /* Самый узкий экран: высота пола — 56px (44px кнопка + 12px паддинг).
+       Кнопка больше не сжимается до 34px, иначе поле снова становится низким. */
     .search-bar {
-        padding: 4px 4px 4px 12px;
-        gap: 4px;
+        padding: 6px 6px 6px 16px;
+        gap: 8px;
     }
 
     .search-input {
-        font-size: 16px;
+        font-size: 17px;
     }
 
     .search-btn {
-        width: 34px;
-        height: 34px;
+        width: 44px;
+        height: 44px;
     }
 
     .search-icon {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
     }
 }
 

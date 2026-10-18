@@ -52,6 +52,12 @@
     /* One spacing step for every block gap: between columns, between a cover
        and its heading, and between two posts in the list. */
     --gap: 24px;
+
+    /* Side inset of the content column (.home-layout) and the scroll morph
+       of the featured photo. Desktop values; media queries further down
+       shrink both on tablets and phones. */
+    --layout-inset: 40px;
+    --featured-inset: 80px;
 }
 
 body {
@@ -145,17 +151,18 @@ body {
    расчётные значения, поэтому оба механизма не конфликтуют.
 
    Конечная ширина снимка равна контентной колонке .home-layout:
-   min(100% - 80px, 1118px) — его max-width (1118px) либо ширина окна
-   меньше полей по 40px с каждой стороны. На широком экране снимок
+   min(100% - var(--featured-inset), 1118px) — его max-width (1118px) либо
+   ширина окна меньше полей на var(--featured-inset) (80px на десктопе,
+   меньше на мобильных — см. медиа-запросы). На широком экране снимок
    останавливается ровно на 1118px, как и лента постов; на телефоне
-   сужается на те же 80px, а не только скругляется. */
+   сужается на тот же inset, а не только скругляется. */
 .featured-link::after {
     content: '';
     position: absolute;
     inset: 0;
     margin-inline: auto;
     border-radius: calc(var(--featured-morph, 0) * clamp(24px, 4vw, 48px));
-    max-width: calc(100% + (min(100% - 80px, 1118px) - 100%) * var(--featured-morph, 0));
+    max-width: calc(100% + (min(100% - var(--featured-inset), 1118px) - 100%) * var(--featured-morph, 0));
     background:
         radial-gradient(
             ellipse 70% 55% at 50% 50%,
@@ -189,7 +196,7 @@ body {
     }
     100% {
         border-radius: clamp(24px, 4vw, 48px);
-        max-width: min(100% - 80px, 1118px);
+        max-width: min(100% - var(--featured-inset), 1118px);
     }
 }
 
@@ -210,7 +217,7 @@ body {
     min-width: 0;
     overflow: hidden;
     border-radius: calc(var(--featured-morph, 0) * clamp(24px, 4vw, 48px));
-    max-width: calc(100% + (min(100% - 80px, 1118px) - 100%) * var(--featured-morph, 0));
+    max-width: calc(100% + (min(100% - var(--featured-inset), 1118px) - 100%) * var(--featured-morph, 0));
     margin-inline: auto;
     will-change: border-radius, max-width;
 }
@@ -230,7 +237,7 @@ body {
     }
     100% {
         border-radius: clamp(24px, 4vw, 48px);
-        max-width: min(100% - 80px, 1118px);
+        max-width: min(100% - var(--featured-inset), 1118px);
     }
 }
 
@@ -679,8 +686,9 @@ body.kind-page {
     margin: 0 auto;
     align-items: start;
     /* Боковые поля, которые раньше стояли на body. Теперь у body их нет —
-       снимок на первом экране должен упираться в края окна. */
-    padding: 0 40px;
+       снимок на первом экране должен упираться в края окна. На мобильных
+       inset уменьшается через --layout-inset в медиа-запросах ниже. */
+    padding: 0 var(--layout-inset);
 }
 
 .home-main {
@@ -1184,6 +1192,29 @@ body.kind-home {
     .search-icon {
         width: 18px;
         height: 18px;
+    }
+}
+
+/* Side insets shrink with the viewport: the content column and the featured
+   morph both used fixed desktop values (40px / 80px), which left ~310px of
+   content on a 390px phone. Body side padding applies to the non-home pages
+   (posts, taxonomies): body.kind-home has higher specificity and keeps its
+   own full-bleed padding. */
+@media (max-width: 900px) {
+    :root {
+        --layout-inset: 24px;
+        --featured-inset: 48px;
+    }
+}
+
+@media (max-width: 560px) {
+    :root {
+        --layout-inset: 16px;
+        --featured-inset: 32px;
+    }
+
+    body {
+        padding-inline: 16px;
     }
 }
 
@@ -1811,6 +1842,9 @@ p a {
 @media (max-width: 768px) {
     .read-more-post {
         display: block;
+        /* The desktop -16px bleed would run past the shrunken page inset on
+           phones; the row stays flush with the content column instead. */
+        margin: 0;
     }
 
     .read-more-post .post-data {

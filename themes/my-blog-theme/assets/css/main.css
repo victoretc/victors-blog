@@ -58,11 +58,16 @@
        shrink both on tablets and phones. */
     --layout-inset: 40px;
     --featured-inset: 80px;
+
+    /* Боковой отступ body. Липкая полоса хэдера поста измеряется от него
+       (margin: 0 calc(var(--body-pad) * -1)), поэтому при смене отступа на
+       телефонах полоса ужимается вместе с body и не вылезает за экран. */
+    --body-pad: 20px;
 }
 
 body {
     margin: 0 auto;
-    padding: 20px 20px 0 20px;
+    padding: 20px var(--body-pad) 0;
     max-width: 1400px;
 }
 
@@ -355,6 +360,11 @@ body {
     pointer-events: auto;
 }
 
+/* Стрелки — то же дымчатое стекло, что у хэдер-плашки и тоста избранного,
+   но плотнее (0.42 вместо 0.24): круг стоит на произвольном снимке, и
+   лёгкая подложка не везде держит контраст шеврона. 56px круг, шеврон 22px
+   со скруглёнными концами — стрелка читается как кнопка, а не как тонкая
+   глиф-надпись на стекле. */
 .featured-arrow {
     position: absolute;
     top: 50%;
@@ -362,17 +372,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
+    width: 56px;
+    height: 56px;
     padding: 0;
-    border: 1px solid rgba(242, 242, 242, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(16, 16, 20, 0.42);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
     color: #f2f2f2;
     cursor: pointer;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: border-color 180ms ease, background 180ms ease;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    transition: transform 180ms ease, border-color 180ms ease, background 180ms ease,
+        box-shadow 180ms ease;
     pointer-events: auto;
 }
 
@@ -387,19 +399,44 @@ body {
 }
 
 .featured-arrow svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
+    /* Шеврон подрастает и уезжает на 2px в свою сторону — движение подсказывает
+       направление листания. transform на svg, а не на кнопке: кнопка сама
+       участвует в центрировании и hover-масштабе. */
+    transition: transform 180ms ease;
 }
 
 .featured-arrow:hover:not(:disabled) {
-    border-color: #f2f2f2;
-    background: rgba(0, 0, 0, 0.5);
+    transform: translateY(-50%) scale(1.06);
+    border-color: rgba(255, 255, 255, 0.36);
+    background: rgba(16, 16, 20, 0.6);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
+.featured-arrow[data-featured-prev]:hover:not(:disabled) svg {
+    transform: translateX(-2px);
+}
+
+.featured-arrow[data-featured-next]:hover:not(:disabled) svg {
+    transform: translateX(2px);
+}
+
+.featured-arrow:active:not(:disabled) {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.featured-arrow:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 3px;
+}
+
+/* На концах ленты листать некуда: круг гаснет, но остаётся на месте — форма
+   не прыгает, просто кнопка «залипает». */
 .featured-arrow:disabled {
     opacity: 0.35;
     cursor: default;
-    border-color: rgba(242, 242, 242, 0.3);
+    box-shadow: none;
 }
 
 .featured-dots {
@@ -474,7 +511,8 @@ body {
     }
 
     /* Стрелки — только глифы: тень под ними заменяет подложку и держит
-       контраст на светлом снимке, рамка и blur больше не нужны. */
+       контраст на светлом снимке, рамка, blur и box-shadow десктопа
+       больше не нужны. */
     .featured-arrow {
         position: static;
         width: 40px;
@@ -483,17 +521,26 @@ body {
         background: none;
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
+        box-shadow: none;
         filter: drop-shadow(0 1px 10px rgba(0, 0, 0, 0.55));
     }
 
     .featured-arrow svg {
-        width: 22px;
-        height: 22px;
+        width: 24px;
+        height: 24px;
     }
 
+    /* translateY(-50%) десктопа здесь неуместен — кнопка в потоке, сдвиг
+       увёл бы её вверх из ряда. Оставляем только лёгкое сжатие. */
     .featured-arrow:hover:not(:disabled) {
+        transform: none;
         border-color: transparent;
         background: none;
+        box-shadow: none;
+    }
+
+    .featured-arrow:active:not(:disabled) {
+        transform: scale(0.92);
     }
 }
 
@@ -508,16 +555,21 @@ body {
 
    Плашка — grid из трёх колонок `1fr auto 1fr`: боковые колонки одинаковой
    ширины, поэтому логотип (средняя колонка) остаётся в центре плашки,
-   даже когда колонки заполнены неравномерно. Слева — переключатель языка
-   (код другого языка: ru → en, en → ru), на посте рядом с ним стрелка
-   «назад»; справа — бургер-меню. На главной плашка компактная
-   (min(360px, ...)) и лежит поверх фотографии; на посте она
-   разворачивается в липкую чёрную полосу во всю ширину контента.
+   даже когда колонки заполнены неравномерно. Слева — на главной
+   переключатель языка (код другого языка: ru → en, en → ru), на посте —
+   только стрелка «назад»; справа — бургер-меню. На главной плашка
+   компактная (fit-content: обе боковые колонки по 36px, поэтому логотип
+   в центре и без заданной ширины) и лежит поверх фотографии; на посте
+   она разворачивается в липкую чёрную полосу во всю ширину контента.
    ========================================================================== */
 
 .site-nav {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
+    /* Отступ между логотипом и боковыми колонками. Без него fit-content
+       схлопывал плашку до 170px: бургер и код языка прилипали к логотипу.
+       Колонки по 36px симметричны, поэтому gap не смещает центр. */
+    column-gap: 20px;
     align-items: center;
     width: fit-content;
     margin: 0 auto;
@@ -555,10 +607,9 @@ body {
     outline-offset: 4px;
 }
 
-/* Левая колонка: переключатель языка, на посте — ещё и стрелка «назад».
-   justify-self: start прижимает группу к левому краю колонки, но сама
-   колонка остаётся 1fr, поэтому логотип не съезжает. На посте сюда же
-   ложится стрелка — она остаётся самой левой, ровно на линии слова Date. */
+/* Левая колонка: на главной переключатель языка, на посте — только стрелка
+   «назад». justify-self: start прижимает содержимое к левому краю колонки,
+   но сама колонка остаётся 1fr, поэтому логотип не съезжает от центра. */
 .site-nav-left {
     grid-column: 1;
     display: flex;
@@ -574,9 +625,12 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 36px;
+    /* Ровно 36px без padding: бургер справа 36px, боковые колонки
+       симметричны, логотип остаётся в центре плашки. padding: 0 4px
+       в content-box дал бы 44px и увёл центр на 4px. */
+    width: 36px;
     height: 36px;
-    padding: 0 4px;
+    padding: 0;
     font-family: 'JetBrains Mono', monospace;
     font-size: 16px;
     line-height: 1;
@@ -601,11 +655,14 @@ body {
    (body.kind-home без верхнего padding). left/right + margin auto центрируют
    её по ширине окна.
 
-   Ширина задана явно и в разы меньше, чем на посте (там полоса во всю
-   ширину контента, до 1400px): min(360px, ...) даёт компактную плашку и не
-   даёт ей вылезти за экран на телефоне. Без фиксированной ширины fit-content
-   отдал бы колонке с бургером 36px, а пустой левой — 0, и логотип уехал бы
-   от центра: 1fr распределяют свободное место только при известной ширине.
+   Ширина — fit-content с ограничениями: min(320px, ...) держит плашку
+   широкой на десктопе, но никогда не даёт ей вырасти до габарита экрана —
+   min-ограничение само ужимается вместе с max-width на узких телефонах
+   (обычный min-width: 320px на iPhone SE 320px побеждал бы max-width
+   по спецификации и ставил плашку в упор к краям). max-width не даёт
+   ей стать шире экрана. Центр логотипа держат равные боковые
+   колонки: слева код языка (36px), справа бургер (36px), column-gap 20px
+   разводит их от логотипа, сетка 1fr auto 1fr делит остаток поровну.
 
    z-index 40 — выше липкого блока поиска (30), чтобы открытая панель меню
    не пряталась под него. */
@@ -614,8 +671,9 @@ body.kind-home .site-nav {
     top: 16px;
     left: 0;
     right: 0;
-    width: min(360px, calc(100% - 32px));
     margin: 0 auto;
+    min-width: min(320px, calc(100% - 64px));
+    max-width: calc(100% - 32px);
     z-index: 40;
 }
 
@@ -624,10 +682,11 @@ body.kind-home .site-nav {
    ездит за пользователем, поэтому колонки контента уезжают под него.
 
    Ширина полосы = ширина контента страницы (body, максимум 1400px):
-   margin: 0 -20px выводит её за боковой padding body до самого края,
-   padding: 0 20px по бокам возвращает содержимое на линию контента — стрелка
-   «назад» и бургер оказываются ровно там, где начинается колонка Date и
-   где заканчивается третья колонка, то есть зеркально друг другу.
+   margin: 0 calc(var(--body-pad) * -1) выводит её за боковой padding body
+   до самого края, padding: 17px var(--body-pad) 0 возвращает содержимое на
+   линию контента — стрелка «назад» и бургер оказываются ровно там, где
+   начинается колонка Date и где заканчивается третья колонка, то есть
+   зеркально друг другу.
    padding-top: 17px держит логотип на той же высоте, что и на главной.
    ========================================================================== */
 
@@ -643,21 +702,23 @@ body.kind-page {
    выключаются — остаётся плотный чёрный фон, чтобы текст страницы пропадал
    под хэдером, а не просвечивал сквозь него. Три колонки 1fr auto 1fr:
    логотип в центре, стрелка и бургер прижаты к краям контента.
-   border: 0 (а не border-color: transparent) обязателен: на content-box
-   рамка съедала бы по пикселю с каждой стороны и стрелка уезжала бы
-   относительно слова Date. */
+   Боковые margin и padding берутся из --body-pad: на телефонах body имеет
+   padding 16px, а не 20px, и захардкоженные 20px делали полосу на 8px
+   шире экрана — отсюда горизонтальный скролл. border: 0 обязателен:
+   рамка в 1px съела бы пиксель отступа и стрелка уехала бы относительно
+   слова Date. */
 body.kind-page .site-nav {
     position: sticky;
     top: 0;
     z-index: 40;
     width: auto;
-    margin: 0 -20px;
+    margin: 0 calc(var(--body-pad) * -1);
     /* padding-top подобран так, чтобы логотип стоял ровно на той же высоте,
        что и на главной. Там плашка начинается на 16px от верха документа и
        имеет рамку в 1px: её центр = 16 + 1 + 56/2 = 45px. Здесь полоса
        прилипает к самому краю окна, поэтому те же 45px задаются отступом
        сверху: 17 + 56/2 = 45. Стрелка и бургер едут вместе с логотипом. */
-    padding: 17px 20px 0;
+    padding: 17px var(--body-pad) 0;
     height: 56px;
     grid-template-columns: 1fr auto 1fr;
     column-gap: 16px;
@@ -1771,10 +1832,9 @@ body.kind-home {
     :root {
         --layout-inset: 16px;
         --featured-inset: 32px;
-    }
-
-    body {
-        padding-inline: 16px;
+        /* Боковой отступ body. Меняется только переменная — padding у body
+           и липкая полоса хэдера поста берут её отсюда и ужимаются вместе. */
+        --body-pad: 16px;
     }
 }
 
@@ -2575,6 +2635,10 @@ p a {
 }
 
 code {
+    /* padding внутри ширины: в content-box инлайновый code расширял строку
+       на 30px и давал горизонтальный скролл на посте. Глобального сброса
+       box-sizing в теме нет, поэтому фиксируем только здесь. */
+    box-sizing: border-box;
     padding: 15px;
     display: inline-block;
 }

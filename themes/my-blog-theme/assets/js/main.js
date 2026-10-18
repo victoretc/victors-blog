@@ -18,8 +18,8 @@
 
   const single = slides.length === 1;
 
-  // Scroll-snap centres each slide, so the nearest slide boundary is a more
-  // reliable "one slide back" target than the slide's own offsetLeft.
+  // Snap alignment is `start`, so a slide's snap position is exactly its
+  // offsetLeft — that is the scrollTo target.
   const goTo = (index) => {
     const clamped = Math.min(Math.max(index, 0), slides.length - 1);
     track.scrollTo({
@@ -96,6 +96,11 @@
       render(closestIndex());
     });
   }, { passive: true });
+
+  // На iOS финальный снап иногда досаживается в UI-процессе уже после
+  // последнего scroll-события: scrollend добивает render(), чтобы точки
+  // и is-current гарантированно совпали с видимым слайдом.
+  track.addEventListener('scrollend', () => render(closestIndex()));
 
   // Листание прямо по фотографии: на тач-экранах трек уже скроллится нативно
   // (overflow-x + scroll-snap), а на десктопе тот же жест эмулируем мышью.

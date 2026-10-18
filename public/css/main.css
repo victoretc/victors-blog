@@ -117,24 +117,29 @@ body {
     display: none;
 }
 
-/* Каждый слайд слегка сдвинут и притушен по горизонтали, а центральный —
-   возвращён в исходное состояние. Чистый CSS, без единой строки JS: браузер
-   сам применяет промежуточные состояния при scroll-snap, поэтому карточка
-   «выезжает» из глубины по мере листания и не щёлкает на месте. */
+/* Глубина и притушение живут на внутренней ссылке, а не на самом слайде.
+   По спецификации scroll-snap snap area снап-таргета — это его transformed
+   border box: анимация transform на .featured-slide меняла бы позиции снапа
+   прямо во время свайпа, а на iOS snap-геометрией управляет UI-процесс
+   WebKit и пересчитывает её при изменении геометрии снап-таргетов — отсюда
+   «слайд не доезжает» на iPhone. Ссылка лежит внутри слайда, на снап не
+   влияет, поэтому промежуточные состояния безопасны. Применение — по-прежнему
+   чистый CSS: браузер сам интерполирует состояния, карточка «выезжает» из
+   глубины по мере листания и не щёлкает на месте.
+
+   scroll-snap-align: start, а не center: при ширине слайда ровно с снаппорт
+   координаты снапа те же, но start исторически самый обкатанный вариант
+   на iOS. */
 .featured-slide {
     position: relative;
     flex: 0 0 100%;
     min-width: 0;
-    scroll-snap-align: center;
+    scroll-snap-align: start;
     scroll-snap-stop: always;
-    opacity: 0.45;
-    transform: scale(0.94);
-    transition: opacity 500ms cubic-bezier(0.22, 1, 0.36, 1),
-        transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.featured-slide:target,
-.featured-slide.is-current {
+.featured-slide:target .featured-link,
+.featured-slide.is-current .featured-link {
     opacity: 1;
     transform: scale(1);
 }
@@ -206,6 +211,12 @@ body {
     width: 100%;
     text-decoration: none;
     color: inherit;
+    /* Базовое состояние «уехавшего» слайда; .is-current / :target возвращает
+       масштаб и непрозрачность — см. комментарий над .featured-slide. */
+    opacity: 0.45;
+    transform: scale(0.94);
+    transition: opacity 500ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Полноэкранный снимок — без скругления: картинка упирается в края окна.
@@ -487,33 +498,29 @@ body {
 }
 
 /* ==========================================================================
-   HERO NAV — хэдер поверх полноэкранного снимка
+   SITE NAV — единая хэдер-плашка главной и страницы поста
 
-   Повторяет верхнюю панель референса (ManyChat COM): полупрозрачная плашка
-   с backdrop-blur, вписанная в поля 16px, с логотипом по центру. Содержимое
-   живёт в .hero-nav-bar; сейчас там только логотип шрифтом Drabina, остальные
-   слоты добавим позже.
+   Один partial (site-nav.html) и один набор стилей вместо пары
+   .hero-nav / .post-nav, которые разъехались: логотип стоял на 16px от верха
+   на главной и на 40px на постах, а хэдер поста был sticky и ездил за
+   скроллом. Теперь плашка одна: дымчатое стекло, логотип Drabina ровно по
+   центру страницы.
+
+   Плашка — grid из трёх колонок `var(--nav-side) auto var(--nav-side)`:
+   боковые колонки одинаковой ширины, поэтому логотип (средняя колонка)
+   остаётся в центре при любой ширине. На главной --nav-side: 0 и плашка
+   компактная; на посте --nav-side: 52px, в левой колонке живёт круглая
+   кнопка «назад», правая — зеркальный пустой отступ, чтобы кнопка была на
+   общем фоне, а логотип не смещался.
    ========================================================================== */
 
-.hero-nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 4;
-    padding: 16px;
-    pointer-events: none;
-}
-
-/* Плашка ловит клики, а прозрачная полоса вокруг — нет: иначе палец по краю
-   снимка попадал бы в панель, а не в ссылку-слайд. Ширина по содержимому,
-   поэтому панель не растягивается на весь экран, а жмётся к логотипу. */
-.hero-nav-bar {
+.site-nav {
+    --nav-side: 0px;
+    display: grid;
+    grid-template-columns: var(--nav-side) auto var(--nav-side);
+    align-items: center;
     width: fit-content;
     margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     height: 56px;
     padding: 0 26px;
     border-radius: 18px;
@@ -527,10 +534,17 @@ body {
     backdrop-filter: blur(24px) saturate(170%);
     -webkit-backdrop-filter: blur(24px) saturate(170%);
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    pointer-events: auto;
 }
 
-.hero-nav-logo {
+/* На странице поста: левая колонка занята стрелкой «назад», зеркальная
+   правая держит симметрию — логотип остаётся в центре страницы. */
+.site-nav--back {
+    --nav-side: 36px;
+    column-gap: 24px;
+}
+
+.site-nav-logo {
+    grid-column: 2;
     font-family: 'Drabina', 'Handil Pro', monospace;
     font-weight: 500;
     font-size: 28px;
@@ -540,116 +554,96 @@ body {
     text-decoration: none;
 }
 
-.hero-nav-logo:focus-visible {
+.site-nav-side {
+    grid-column: 3;
+    width: var(--nav-side);
+}
+
+.site-nav-logo:focus-visible {
     outline: 2px solid #f2f2f2;
     outline-offset: 4px;
 }
 
-/* ==========================================================================
-   POST NAV — возврат на главную со страницы поста
+/* Главная: плашка лежит поверх фотографии, отступ 16px от верха окна
+   (body.kind-home без верхнего padding). left/right + width: fit-content +
+   margin auto центрируют её по ширине окна — ровно как на странице поста. */
+body.kind-home .site-nav {
+    position: absolute;
+    top: 16px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 4;
+}
 
-   Повторяет язык первого экрана главной: по центру — та же дымчатая
-   плашка с логотипом Drabina (двойник .hero-nav-bar), слева у края —
-   отдельная круглая кнопка «назад» в стиле стрелок слайдера
-   (.featured-arrow): hairline-рамка, лёгкий blur, шеврон. Липнет
-   к верху окна, чтобы кнопка и логотип были доступны в любой точке
-   статьи.
+/* ==========================================================================
+   Страница поста: та же плашка в потоке документа, не липкая — хэдер не
+   ездит за пользователем, а уезжает вместе со страницей, как на главной.
    ========================================================================== */
 
 body.kind-page {
     background: #000;
     color: #f2f2f2;
+    /* Общий body даёт верхний padding 20px — он сбивал плашку с той высоты,
+       что на главной (16px от верха окна). Здесь его убираем. */
+    padding-top: 0;
 }
 
-.post-nav {
-    position: sticky;
-    top: 16px;
-    z-index: 10;
+body.kind-page .site-nav {
+    position: static;
+    margin: 16px auto 4px;
+}
+
+/* Стрелка «назад» внутри плашки — без кружка и рамки, просто стрелка:
+   прозрачная зона нажатия 36×36, сама стрелка чуть приглушена и на
+   наведении становится ярче. Лежит в левой колонке grid, поэтому не
+   двигает логотип от центра. */
+.site-nav-back {
+    grid-column: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px 0 4px;
-    pointer-events: none;
-}
-
-/* Плашка по центру — копия .hero-nav-bar с главной. */
-.post-nav-bar {
-    display: flex;
-    align-items: center;
-    height: 56px;
-    padding: 0 26px;
-    border-radius: 18px;
-    background: rgba(16, 16, 20, 0.24);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(24px) saturate(170%);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    pointer-events: auto;
-}
-
-/* Кнопка «назад» у левого края — двойник .featured-arrow с главной. */
-.post-nav-back {
-    position: absolute;
-    left: clamp(8px, 2vw, 28px);
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
+    width: 36px;
+    height: 36px;
     padding: 0;
-    border: 1px solid rgba(242, 242, 242, 0.3);
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.3);
+    border: 0;
+    background: none;
     color: #f2f2f2;
     text-decoration: none;
     cursor: pointer;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    transition: border-color 180ms ease, background 180ms ease;
-    pointer-events: auto;
+    opacity: 0.65;
+    transition: opacity 180ms ease;
 }
 
-.post-nav-back svg {
-    width: 20px;
-    height: 20px;
+.site-nav-back svg {
+    width: 22px;
+    height: 22px;
 }
 
-.post-nav-back:hover {
-    border-color: #f2f2f2;
-    background: rgba(0, 0, 0, 0.5);
+.site-nav-back:hover {
+    opacity: 1;
 }
 
-.post-nav-back:focus-visible,
-.post-nav .hero-nav-logo:focus-visible {
+.site-nav-back:focus-visible {
     outline: 2px solid #f2f2f2;
     outline-offset: 4px;
+    border-radius: 6px;
 }
 
 @media (max-width: 560px) {
-    .post-nav {
-        top: 12px;
-        margin-top: 12px;
+    .site-nav--back {
+        --nav-side: 32px;
+        column-gap: 16px;
     }
 
-    .post-nav-bar {
-        height: 46px;
-        padding: 0 20px;
+    .site-nav-back {
+        width: 32px;
+        height: 32px;
     }
 
-    .post-nav .hero-nav-logo {
-        font-size: 24px;
-    }
-
-    .post-nav-back {
-        width: 40px;
-        height: 40px;
-    }
-
-    .post-nav-back svg {
-        width: 18px;
-        height: 18px;
+    .site-nav-back svg {
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -1108,6 +1102,14 @@ body.kind-home {
        радиус — по краям карточки больше не пустого места. Скругление, как и
        в сетке, только сверху. */
     border-radius: 34px 34px 0 0;
+}
+
+/* Скрытие обязано идти после display:grid выше: специфичность у правил
+   одинаковая, и порядок решает — иначе карточки без совпадений (и
+   featured-посты, отрендеренные с атрибутом hidden) остаются видимыми
+   в списке и появляются под блоком 404. */
+.home-layout.is-list .post-card[hidden] {
+    display: none;
 }
 
 .home-layout.is-list .post-card-media {

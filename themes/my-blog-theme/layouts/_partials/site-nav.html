@@ -1,0 +1,19 @@
+{{/* Единая хэдер-плашка для главной и страницы поста: дымчатое стекло,
+     логотип Drabina ровно по центру страницы. На постах слева внутри плашки
+     живёт круглая кнопка «назад», справа — зеркальная пустая колонка той же
+     ширины (--nav-side), чтобы логотип оставался в центре, а кнопка — на
+     общем фоне. */}}
+<header class="site-nav{{ if .IsPage }} site-nav--back{{ end }}">
+  {{ if .IsPage }}
+  <a class="site-nav-back" href="{{ site.Home.RelPermalink }}" aria-label="{{ i18n "home" }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M19 12H5" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="m12 19-7-7 7-7" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  {{ end }}
+  <a class="site-nav-logo" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }}">{{ i18n "logo" }}</a>
+  <span class="site-nav-side" aria-hidden="true"></span>
+</header>

@@ -65,6 +65,7 @@
         render(closestIndex());
       });
     }, { passive: true });
+    track.addEventListener("scrollend", () => render(closestIndex()));
     let drag = null;
     let draggedRecently = false;
     track.addEventListener("pointerdown", (event) => {

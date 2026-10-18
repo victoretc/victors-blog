@@ -1,23 +1,48 @@
-{{/* Единая хэдер-плашка главной и страницы поста: дымчатое стекло,
-     логотип Drabina ровно по центру страницы.
+{{/* Единая хэдер-плашка главной и страницы поста: логотип Drabina ровно по
+     центру плашки, слева переключатель языка (и стрелка «назад» на посте),
+     справа бургер-меню.
 
-     На главной плашка лежит поверх фотографии. На посте она превращается
-     в липкую чёрную полосу во всю ширину контента: слева стрелка «назад»
-     начинается ровно там, где начинается колонка Date, справа — бургер
-     (две полоски) на том же расстоянии от правого края. Между ними логотип. */}}
+     На главной это компактная дымчатая плашка (min(360px, ...)) поверх
+     фотографии. На посте та же плашка разворачивается в липкую чёрную
+     полосу во всю ширину контента: левая колонка начинается ровно там,
+     где начинается колонка Date, а бургер занимает зеркальное место справа.
+
+     Переключатель языка показывает КОД ДРУГОГО языка (на русской версии —
+     «en», на английской — «ru»), ведёт на перевод текущей страницы, а если
+     перевода нет — на главную того языка. data-set-lang отдаёт выбор в
+     localStorage, чтобы авто-редирект по Accept-Language не откатывал его. */}}
+{{- $otherLang := "" -}}
+{{- $target := site.Home.RelPermalink -}}
+{{- range site.Home.AllTranslations -}}
+  {{- if ne .Language.Lang site.Language.Lang -}}
+    {{- $otherLang = .Language.Lang -}}
+    {{- $target = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+{{- with .Translations -}}
+  {{- range . -}}
+    {{- if eq .Language.Lang $otherLang -}}
+      {{- $target = .RelPermalink -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
 <header class="site-nav{{ if .IsPage }} site-nav--back{{ end }}">
-  {{ if .IsPage }}
-  <a class="site-nav-back" href="{{ site.Home.RelPermalink }}" aria-label="{{ i18n "home" }}">
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M19 12H5" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="m12 19-7-7 7-7" fill="none" stroke="currentColor" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </a>
-  {{ end }}
+  <div class="site-nav-left">
+    {{ if .IsPage }}
+    <a class="site-nav-back" href="{{ site.Home.RelPermalink }}" aria-label="{{ i18n "home" }}">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M19 12H5" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="m12 19-7-7 7-7" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    {{ end }}
+    <a class="site-nav-lang" href="{{ $target }}" data-set-lang="{{ $otherLang }}"
+       lang="{{ $otherLang }}" hreflang="{{ $otherLang }}"
+       aria-label="{{ i18n "switch_to" }} {{ $otherLang }}">{{ $otherLang }}</a>
+  </div>
   <a class="site-nav-logo" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }}">{{ i18n "logo" }}</a>
-  {{ if .IsPage }}
   <div class="site-nav-menu" data-site-menu>
     <button type="button" class="site-nav-burger" data-burger
             aria-expanded="false" aria-controls="site-menu-panel"
@@ -29,6 +54,4 @@
       <a href="https://t.me/spoon_of_quality" target="_blank" rel="noopener">{{ i18n "telegram_menu" }}</a>
     </nav>
   </div>
-  {{ end }}
-  <span class="site-nav-side" aria-hidden="true"></span>
 </header>

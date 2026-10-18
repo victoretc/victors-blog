@@ -49,3 +49,4 @@ Sources:
 2. https://a16z.com/ai-glossary/
 3. https://en.wikipedia.org/wiki/Glossary_of_artificial_intelligence 
 4. https://www.zendesk.com/blog/ai/generative-ai/generative-ai-glossary/ 
+

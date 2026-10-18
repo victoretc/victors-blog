@@ -125,9 +125,6 @@
     <div class="home-main">
       <section class="filters-section" data-filters aria-label="{{ i18n "search" }}">
         <div class="search-row">
-          {{/* Поиск и пустой результат держатся в одной колонке: так 404 стоит
-               ровно под полем поиска и не выходит за его ширину, потому что
-               обе вещи получают ширину этой колонки. */}}
           <div class="search-col">
             <div class="search-bar">
               <input
@@ -146,17 +143,6 @@
                   <path d="M21 21l-4.35-4.35" />
                 </svg>
               </button>
-            </div>
-
-            <div class="no-results" data-no-results hidden>
-              <p class="no-results-code">404</p>
-              <p class="no-results-title">{{ i18n "no_results" }}</p>
-            </div>
-
-            {{/* Отдельный пустой экран для режима избранного: «404» врал бы
-                 здесь — посты не потерялись, их просто ещё не сохранили. */}}
-            <div class="fav-empty" data-fav-empty hidden>
-              <p class="fav-empty-title">{{ i18n "fav_empty" }}</p>
             </div>
           </div>
 
@@ -196,6 +182,21 @@
           </div>
         </div>
       </section>
+
+      {{/* Пустые состояния лежат ПОД панелью поиска, а не внутри неё. Внутри
+           панели 404 на мобильном оказывался выше фишек-категорий (порядок
+           задаёт order в CSS), а липкая панель на десктопе раздувалась вниз.
+           Ширина «как у поля поиска» задаётся max-width в CSS. */}}
+      <div class="no-results" data-no-results hidden>
+        <p class="no-results-code">404</p>
+        <p class="no-results-title">{{ i18n "no_results" }}</p>
+      </div>
+
+      {{/* Отдельный пустой экран для режима избранного: «404» врал бы
+           здесь — посты не потерялись, их просто ещё не сохранили. */}}
+      <div class="fav-empty" data-fav-empty hidden>
+        <p class="fav-empty-title">{{ i18n "fav_empty" }}</p>
+      </div>
 
       {{/* Featured posts live in the slider above and never repeat in the grid,
            so they are rendered hidden and JS leaves them that way. The whole

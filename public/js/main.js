@@ -162,6 +162,11 @@
       return true;
     };
     const apply = () => {
+      const anchorTop = filters ? filters.getBoundingClientRect().top : null;
+      if (!grid.style.minHeight && !grid.dataset.holdHeight) {
+        const height = grid.getBoundingClientRect().height;
+        if (height > 0) grid.dataset.holdHeight = String(Math.round(height));
+      }
       let visible = 0;
       cards.forEach((card) => {
         const show = matches(card);
@@ -170,6 +175,16 @@
       });
       if (empty) empty.hidden = visible > 0 || state.favorites;
       if (favEmpty) favEmpty.hidden = visible > 0 || !state.favorites;
+      if (visible === 0 && grid.dataset.holdHeight) {
+        grid.style.minHeight = grid.dataset.holdHeight + "px";
+      } else {
+        grid.style.minHeight = "";
+        delete grid.dataset.holdHeight;
+      }
+      if (filters && anchorTop !== null) {
+        const delta = filters.getBoundingClientRect().top - anchorTop;
+        if (delta) window.scrollTo(0, window.scrollY + delta);
+      }
     };
     let debounce = 0;
     const onQueryChange = () => {
@@ -270,12 +285,8 @@
     }
   })();
   (() => {
-    const button = document.querySelector("[data-copy-link]");
-    if (!button) return;
-    const label = button.querySelector("[data-copy-label]");
-    const original = label ? label.textContent : "";
-    const copied = button.dataset.copied || "Copied!";
-    let reset = 0;
+    const block = document.querySelector("[data-share]");
+    if (!block) return;
     const fallbackCopy = (text) => {
       const area = document.createElement("textarea");
       area.value = text;
@@ -290,21 +301,46 @@
       }
       area.remove();
     };
-    button.addEventListener("click", async () => {
-      const url = button.dataset.url || window.location.href;
+    const copy = async (text) => {
       try {
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard.writeText(text);
       } catch {
-        fallbackCopy(url);
+        fallbackCopy(text);
       }
-      if (label) label.textContent = copied;
-      button.classList.add("is-copied");
-      clearTimeout(reset);
-      reset = setTimeout(() => {
-        button.classList.remove("is-copied");
-        if (label) label.textContent = original;
-      }, 2e3);
+    };
+    block.querySelectorAll("[data-copy-link]").forEach((button) => {
+      const label = button.querySelector("[data-copy-label]");
+      const original = label ? label.textContent : "";
+      const copied = button.dataset.copied || "Copied!";
+      let reset = 0;
+      button.addEventListener("click", async () => {
+        await copy(button.dataset.url || block.dataset.url || window.location.href);
+        if (label) label.textContent = copied;
+        button.classList.add("is-copied");
+        clearTimeout(reset);
+        reset = setTimeout(() => {
+          button.classList.remove("is-copied");
+          if (label) label.textContent = original;
+        }, 2400);
+      });
     });
+    const native = block.querySelector("[data-native-share]");
+    if (native) {
+      if (typeof navigator.share === "function") {
+        native.hidden = false;
+        native.addEventListener("click", async () => {
+          try {
+            await navigator.share({
+              title: block.dataset.title || document.title,
+              url: block.dataset.url || window.location.href
+            });
+          } catch {
+          }
+        });
+      } else {
+        native.remove();
+      }
+    }
   })();
   (() => {
     const button = document.querySelector("[data-to-top]");

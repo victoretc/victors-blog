@@ -27,38 +27,46 @@
         {{ .Content }}
       </div>
 
-      {{/* Шаринг в конце статьи. Telegram — обычная ссылка (открывается без
-           JS), копирование — кнопка; текст ссылки берём из .Permalink, а не
-           location.href, чтобы копировался канонический URL. */}}
-      <div class="share-block">
-        <span class="share-label">{{ i18n "share" }}</span>
-        <div class="share-row">
-          <a class="share-btn"
-             href="https://t.me/share/url?url={{ .Permalink | urlquery }}&amp;text={{ .Title | urlquery }}"
-             target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-              <path d="M22 2 11 13"></path>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-            <span>Telegram</span>
-          </a>
-          <button type="button" class="share-btn" data-copy-link
-                  data-url="{{ .Permalink }}" data-copied="{{ i18n "copied" }}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-            </svg>
-            <span data-copy-label>{{ i18n "copy_link" }}</span>
-          </button>
-        </div>
-      </div>
 
       <div class="post-composition">
         <nav class="toc-nav">
           {{ .TableOfContents }}
         </nav>
+      {{/* Шаринг живёт в правой колонке под оглавлением и липнет к краю
+           экрана, поэтому кнопки видны, пока читатель листает статью.
+           Две иконки: Telegram — обычная ссылка, копирование — кнопка
+           со сменой иконки; берём .Permalink, а не location.href. */}}
+      {{- $shareUrl := .Permalink -}}
+      {{- $shareText := .Title -}}
+      <div class="share" data-share data-url="{{ $shareUrl }}">
+        <span class="share-label" id="share-title">{{ i18n "share" }}</span>
+        <div class="share-icons">
+          <a class="share-ico-btn" aria-label="Telegram"
+             href="https://t.me/share/url?url={{ $shareUrl | urlquery }}&amp;text={{ $shareText | urlquery }}"
+             target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M22 2 11 13"></path>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </a>
+          <button type="button" class="share-ico-btn" data-copy-link
+                  aria-label="{{ i18n "copy_link" }}"
+                  data-url="{{ $shareUrl }}" data-copied="{{ i18n "copied" }}">
+            <svg class="share-copy-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" focusable="false">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <svg class="share-check-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true" focusable="false">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
       </div>
     </div>
   </div>

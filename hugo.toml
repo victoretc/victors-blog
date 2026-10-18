@@ -1,4 +1,4 @@
-baseURL = 'https://johnmakarov.github.io/victors-blog/'
+baseURL = 'https://victoretc.github.io/victors-blog/'
 title = 'Spoon of Quality'
 theme = 'my-blog-theme'
 

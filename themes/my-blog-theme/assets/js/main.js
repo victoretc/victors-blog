@@ -255,6 +255,20 @@
   };
 
   const apply = () => {
+    // «Якорь» по панели поиска: скрытие карточек схлопывает ленту, высота
+    // страницы падает, и браузер обрезает scrollY до нового максимума — экран
+    // прыгает вверх, из-под панели выезжает герой. Две страховки работают
+    // вместе: высота пустой сетки удерживается прежней (документ не схлопывается),
+    // а панель возвращается на место в экране, если страница всё же подвинулась.
+    const anchorTop = filters ? filters.getBoundingClientRect().top : null;
+
+    // Запоминаем высоту сетки с результатами, пока она ещё не пустая: при нуле
+    // совпадений она станет min-height и удержит место под лентой.
+    if (!grid.style.minHeight && !grid.dataset.holdHeight) {
+      const height = grid.getBoundingClientRect().height;
+      if (height > 0) grid.dataset.holdHeight = String(Math.round(height));
+    }
+
     let visible = 0;
 
     cards.forEach((card) => {
@@ -267,6 +281,18 @@
     // «ничего не найдено»: 404 здесь врал бы, поэтому показывается свой блок.
     if (empty) empty.hidden = visible > 0 || state.favorites;
     if (favEmpty) favEmpty.hidden = visible > 0 || !state.favorites;
+
+    if (visible === 0 && grid.dataset.holdHeight) {
+      grid.style.minHeight = grid.dataset.holdHeight + 'px';
+    } else {
+      grid.style.minHeight = '';
+      delete grid.dataset.holdHeight;
+    }
+
+    if (filters && anchorTop !== null) {
+      const delta = filters.getBoundingClientRect().top - anchorTop;
+      if (delta) window.scrollTo(0, window.scrollY + delta);
+    }
   };
 
   // --- typing ---------------------------------------------------------------
@@ -423,18 +449,14 @@
   }
 })();
 
-// Share row on post pages. The Telegram button is a plain link; "copy link"
-// uses the clipboard API, falls back to execCommand on older/insecure
-// contexts, and swaps its label for a couple of seconds as feedback.
+// Share panel on post pages: network tiles are plain links, "copy link"
+// uses the clipboard API (with an execCommand fallback for older or
+// insecure contexts), and the native sheet button appears only where
+// navigator.share exists. Every copy button gets its own label swap.
 
 (() => {
-  const button = document.querySelector('[data-copy-link]');
-  if (!button) return;
-
-  const label = button.querySelector('[data-copy-label]');
-  const original = label ? label.textContent : '';
-  const copied = button.dataset.copied || 'Copied!';
-  let reset = 0;
+  const block = document.querySelector('[data-share]');
+  if (!block) return;
 
   const fallbackCopy = (text) => {
     const area = document.createElement('textarea');
@@ -447,27 +469,56 @@
     try {
       document.execCommand('copy');
     } catch {
-      // Браузер отказал — остаётся ручное копирование из адресной строки.
+      // Браузер отказал — остаётся ручное выделение ссылки выше.
     }
     area.remove();
   };
 
-  button.addEventListener('click', async () => {
-    const url = button.dataset.url || window.location.href;
+  const copy = async (text) => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(text);
     } catch {
-      fallbackCopy(url);
+      fallbackCopy(text);
     }
+  };
 
-    if (label) label.textContent = copied;
-    button.classList.add('is-copied');
-    clearTimeout(reset);
-    reset = setTimeout(() => {
-      button.classList.remove('is-copied');
-      if (label) label.textContent = original;
-    }, 2000);
+  block.querySelectorAll('[data-copy-link]').forEach((button) => {
+    const label = button.querySelector('[data-copy-label]');
+    const original = label ? label.textContent : '';
+    const copied = button.dataset.copied || 'Copied!';
+    let reset = 0;
+
+    button.addEventListener('click', async () => {
+      await copy(button.dataset.url || block.dataset.url || window.location.href);
+
+      if (label) label.textContent = copied;
+      button.classList.add('is-copied');
+      clearTimeout(reset);
+      reset = setTimeout(() => {
+        button.classList.remove('is-copied');
+        if (label) label.textContent = original;
+      }, 2400);
+    });
   });
+
+  const native = block.querySelector('[data-native-share]');
+  if (native) {
+    if (typeof navigator.share === 'function') {
+      native.hidden = false;
+      native.addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: block.dataset.title || document.title,
+            url: block.dataset.url || window.location.href,
+          });
+        } catch {
+          // Закрытая шторка — не ошибка.
+        }
+      });
+    } else {
+      native.remove();
+    }
+  }
 })();
 
 // Floating "back to top" button on post pages: appears once the reader is

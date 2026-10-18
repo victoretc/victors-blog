@@ -112,3 +112,9 @@ other = "Copy link"
 
 [copied]
 other = "Copied!"
+
+[menu]
+other = "Menu"
+
+[telegram_menu]
+other = "We are on Telegram"

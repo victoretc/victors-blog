@@ -605,3 +605,39 @@
 
   update();
 })();
+// Бургер-меню в шапке страницы поста: две полоски, при клике — одна ссылка
+// на канал. Состояние живёт в aria-expanded (вид крестика задаёт CSS), панель
+// показывается классом is-open, поэтому она остаётся в расчёте перехода.
+// Закрывается по клику мимо, по Escape и по повторному клику.
+
+(() => {
+  const menu = document.querySelector('[data-site-menu]');
+  if (!menu) return;
+
+  const button = menu.querySelector('[data-burger]');
+  const panel = menu.querySelector('[data-burger-panel]');
+  if (!button || !panel) return;
+
+  const setOpen = (open) => {
+    panel.classList.toggle('is-open', open);
+    button.setAttribute('aria-expanded', String(open));
+  };
+
+  const isOpen = () => panel.classList.contains('is-open');
+
+  button.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setOpen(!isOpen());
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!menu.contains(event.target)) setOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isOpen()) {
+      setOpen(false);
+      button.focus();
+    }
+  });
+})();

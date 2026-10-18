@@ -114,3 +114,9 @@ other = "Скопировать ссылку"
 
 [copied]
 other = "Скопировано!"
+
+[menu]
+other = "Меню"
+
+[telegram_menu]
+other = "Мы в Telegram"

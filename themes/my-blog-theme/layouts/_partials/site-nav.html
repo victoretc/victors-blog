@@ -1,8 +1,10 @@
-{{/* Единая хэдер-плашка для главной и страницы поста: дымчатое стекло,
-     логотип Drabina ровно по центру страницы. На постах слева внутри плашки
-     живёт круглая кнопка «назад», справа — зеркальная пустая колонка той же
-     ширины (--nav-side), чтобы логотип оставался в центре, а кнопка — на
-     общем фоне. */}}
+{{/* Единая хэдер-плашка главной и страницы поста: дымчатое стекло,
+     логотип Drabina ровно по центру страницы.
+
+     На главной плашка лежит поверх фотографии. На посте она превращается
+     в липкую чёрную полосу во всю ширину контента: слева стрелка «назад»
+     начинается ровно там, где начинается колонка Date, справа — бургер
+     (две полоски) на том же расстоянии от правого края. Между ними логотип. */}}
 <header class="site-nav{{ if .IsPage }} site-nav--back{{ end }}">
   {{ if .IsPage }}
   <a class="site-nav-back" href="{{ site.Home.RelPermalink }}" aria-label="{{ i18n "home" }}">
@@ -15,5 +17,18 @@
   </a>
   {{ end }}
   <a class="site-nav-logo" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }}">{{ i18n "logo" }}</a>
+  {{ if .IsPage }}
+  <div class="site-nav-menu" data-site-menu>
+    <button type="button" class="site-nav-burger" data-burger
+            aria-expanded="false" aria-controls="site-menu-panel"
+            aria-label="{{ i18n "menu" }}">
+      <span></span>
+      <span></span>
+    </button>
+    <nav class="site-nav-panel" id="site-menu-panel" data-burger-panel>
+      <a href="https://t.me/spoon_of_quality" target="_blank" rel="noopener">{{ i18n "telegram_menu" }}</a>
+    </nav>
+  </div>
+  {{ end }}
   <span class="site-nav-side" aria-hidden="true"></span>
 </header>

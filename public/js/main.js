@@ -388,4 +388,29 @@
     window.addEventListener("resize", schedule, { passive: true });
     update();
   })();
+  (() => {
+    const menu = document.querySelector("[data-site-menu]");
+    if (!menu) return;
+    const button = menu.querySelector("[data-burger]");
+    const panel = menu.querySelector("[data-burger-panel]");
+    if (!button || !panel) return;
+    const setOpen = (open) => {
+      panel.classList.toggle("is-open", open);
+      button.setAttribute("aria-expanded", String(open));
+    };
+    const isOpen = () => panel.classList.contains("is-open");
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      setOpen(!isOpen());
+    });
+    document.addEventListener("click", (event) => {
+      if (!menu.contains(event.target)) setOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOpen()) {
+        setOpen(false);
+        button.focus();
+      }
+    });
+  })();
 })();

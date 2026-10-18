@@ -509,9 +509,9 @@ body {
    Плашка — grid из трёх колонок `var(--nav-side) auto var(--nav-side)`:
    боковые колонки одинаковой ширины, поэтому логотип (средняя колонка)
    остаётся в центре при любой ширине. На главной --nav-side: 0 и плашка
-   компактная; на посте --nav-side: 52px, в левой колонке живёт круглая
-   кнопка «назад», правая — зеркальный пустой отступ, чтобы кнопка была на
-   общем фоне, а логотип не смещался.
+   компактная; на посте сетка перекрывается на `1fr auto 1fr`, левую
+   колонку занимает стрелка «назад», правую — бургер-меню, а сама плашка
+   разворачивается в липкую чёрную полосу во всю ширину контента.
    ========================================================================== */
 
 .site-nav {
@@ -536,8 +536,9 @@ body {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* На странице поста: левая колонка занята стрелкой «назад», зеркальная
-   правая держит симметрию — логотип остаётся в центре страницы. */
+/* Маркер страницы поста: колонки grid здесь перекрываются (см. блок
+   body.kind-page .site-nav), поэтому --nav-side ниже не участвует в
+   раскладке — правило оставлено, чтобы класс не был пустым. */
 .site-nav--back {
     --nav-side: 36px;
     column-gap: 24px;
@@ -577,8 +578,15 @@ body.kind-home .site-nav {
 }
 
 /* ==========================================================================
-   Страница поста: та же плашка в потоке документа, не липкая — хэдер не
-   ездит за пользователем, а уезжает вместе со страницей, как на главной.
+   Страница поста: липкая чёрная полоса во всю ширину контента. Хэдер
+   ездит за пользователем, поэтому колонки контента уезжают под него.
+
+   Ширина полосы = ширина контента страницы (body, максимум 1400px):
+   margin: 0 -20px выводит её за боковой padding body до самого края,
+   padding: 0 20px по бокам возвращает содержимое на линию контента — стрелка
+   «назад» и бургер оказываются ровно там, где начинается колонка Date и
+   где заканчивается третья колонка, то есть зеркально друг другу.
+   padding-top: 17px держит логотип на той же высоте, что и на главной.
    ========================================================================== */
 
 body.kind-page {
@@ -589,18 +597,39 @@ body.kind-page {
     padding-top: 0;
 }
 
-/* На постах плашка без фона: подложка, рамка, blur и тень выключаются —
-   остаются только логотип и стрелка «назад» прямо на чёрном фоне страницы.
-   border-color: transparent (а не border: none) сохраняет геометрию grid,
-   чтобы логотип не дёргался на 2px. */
+/* На постах плашка становится полосой: дымчатое стекло, рамка, blur и тень
+   выключаются — остаётся плотный чёрный фон, чтобы текст страницы пропадал
+   под хэдером, а не просвечивал сквозь него. Три колонки 1fr auto 1fr:
+   логотип в центре, стрелка и бургер прижаты к краям контента.
+   border: 0 (а не border-color: transparent) обязателен: на content-box
+   рамка съедала бы по пикселю с каждой стороны и стрелка уезжала бы
+   относительно слова Date. */
 body.kind-page .site-nav {
-    position: static;
-    margin: 16px auto 4px;
-    background: none;
-    border-color: transparent;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    width: auto;
+    margin: 0 -20px;
+    /* padding-top подобран так, чтобы логотип стоял ровно на той же высоте,
+       что и на главной. Там плашка начинается на 16px от верха документа и
+       имеет рамку в 1px: её центр = 16 + 1 + 56/2 = 45px. Здесь полоса
+       прилипает к самому краю окна, поэтому те же 45px задаются отступом
+       сверху: 17 + 56/2 = 45. Стрелка и бургер едут вместе с логотипом. */
+    padding: 17px 20px 0;
+    height: 56px;
+    grid-template-columns: 1fr auto 1fr;
+    column-gap: 16px;
+    background: #000;
+    border: 0;
+    border-radius: 0;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     box-shadow: none;
+}
+
+/* Зеркальная пустая колонка на посте не нужна: её место занимает бургер. */
+body.kind-page .site-nav-side {
+    display: none;
 }
 
 /* Стрелка «назад» внутри плашки — без кружка и рамки, просто стрелка:
@@ -640,6 +669,126 @@ body.kind-page .site-nav {
     outline: 2px solid #f2f2f2;
     outline-offset: 4px;
     border-radius: 6px;
+}
+
+/* На посте стрелка сидит в колонке 1fr: без justify-self: start кнопка
+   растянулась бы на всю колонку, а с justify-content: flex-start её SVG
+   прижимается к левому краю — так видимая стрелка начинается ровно там,
+   где начинается слово Date (первая колонка сетки контента). Сдвиг
+   translateX(-8px) из общего правила здесь лишний и отключается. */
+body.kind-page .site-nav-back {
+    justify-self: start;
+    justify-content: flex-start;
+    transform: none;
+}
+
+/* ==========================================================================
+   Бургер-меню на странице поста: две полоски в правой колонке, зеркально
+   стрелке «назад». Кнопка 36×36, но сами полоски прижаты вправо
+   (align-items: flex-end), поэтому расстояние от правого края полосы
+   одинаково у бургера и у стрелки слева — оба нулевые, до края контента.
+   ========================================================================== */
+
+.site-nav-menu {
+    grid-column: 3;
+    justify-self: end;
+    position: relative;
+}
+
+.site-nav-burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 7px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.site-nav-burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background: #f2f2f2;
+    opacity: 0.65;
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.site-nav-burger:hover span {
+    opacity: 1;
+}
+
+.site-nav-burger:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 4px;
+    border-radius: 6px;
+}
+
+/* Открытое состояние: две полоски складываются в крестик. Сдвиги равны
+   половине суммы высоты полоски и зазора, поэтому они сходятся в центре. */
+.site-nav-burger[aria-expanded="true"] span:first-child {
+    opacity: 1;
+    transform: translateY(4.5px) rotate(45deg);
+}
+
+.site-nav-burger[aria-expanded="true"] span:last-child {
+    opacity: 1;
+    transform: translateY(-4.5px) rotate(-45deg);
+}
+
+/* Выпадающий список. Позиционируется от кнопки (position: relative на
+   обёртке), поэтому правый край панели совпадает с правым краем полосок.
+   visibility, а не display: панель остаётся в расчёте перехода и при этом
+   не попадает в дерево доступности, пока закрыта. */
+.site-nav-panel {
+    position: absolute;
+    /* Кнопка сдвинута на 10px вниз от верха полосы, поэтому 20px от верха
+       обёртки — это ровно низ полосы плюс 10px зазора над панелью. */
+    top: calc(100% + 20px);
+    right: 0;
+    min-width: 232px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    background: #111114;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms;
+}
+
+.site-nav-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+.site-nav-panel a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #f2f2f2;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 140ms ease;
+}
+
+.site-nav-panel a:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.site-nav-panel a:focus-visible {
+    outline: 2px solid #f2f2f2;
+    outline-offset: -2px;
 }
 
 @media (max-width: 560px) {
@@ -1116,15 +1265,18 @@ body.kind-page .site-nav {
 }
 
 /* --- favorites toast ------------------------------------------------------
-   Надпись о результате клика («добавлено» / «удалено») на том же дымчатом
-   стекле, что у хэдер-плашки с логотипом: полупрозрачная подложка 0.24,
-   сильный blur, hairline рамка и верхний блик. Стоит под логотипом по центру
-   окна, слева от текста — круглая иконка-информация. Живёт ~2.6 секунды,
-   дальше гаснет сама; поверх всего (z-index выше липкого поиска), но клики
-   сквозь неё не проходят. */
+   Надпись о результате клика («добавлено» / «удалено»). Прибита к верхней
+   кромке окна с небольшим отступом (16px) и по центру по горизонтали:
+   раньше она висела на 88px и наезжала на липкую строку поиска, а полупрозрач-
+   ная подложка 0.24 превращала текст в «плавающие буквы». Теперь подложка
+   сплошная (#16161a, тот же --surface), так что надпись читается поверх
+   любой картинки. Слева от текста — круглая иконка-информация, справа ничего.
+   Живёт ~2.6 секунды, дальше гаснет сама; поверх всего (z-index выше липкого
+   поиска), но клики сквозь неё не проходят. Цвет дублируется литералом:
+   тост лежит вне .home-layout и переменную оттуда не наследует. */
 .fav-toast {
     position: fixed;
-    top: 88px;
+    top: 16px;
     left: 50%;
     z-index: 60;
     display: flex;
@@ -1135,10 +1287,8 @@ body.kind-page .site-nav {
     padding: 12px 20px;
     border: 1px solid rgba(255, 255, 255, 0.16);
     border-radius: 18px;
-    background: rgba(16, 16, 20, 0.24);
-    -webkit-backdrop-filter: blur(24px) saturate(170%);
-    backdrop-filter: blur(24px) saturate(170%);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    background: #16161a;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     color: #f2f2f2;
     font-family: 'Handil Pro', 'JetBrains Mono', monospace;
     font-size: 16px;
